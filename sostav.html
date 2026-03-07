@@ -39,6 +39,66 @@
             font-size: 14px;
             color: #666;
         }
+/* Стили для подсветки даббера */
+@keyframes highlightPulse {
+    0% { box-shadow: 0 0 20px #ffaa00; }
+    50% { box-shadow: 0 0 40px #ffaa00, 0 0 60px rgba(255,170,0,0.3); }
+    100% { box-shadow: 0 0 20px #ffaa00; }
+}
+
+.team-card.highlight {
+    animation: highlightPulse 1.5s ease-in-out infinite;
+    border: 2px solid #ffaa00 !important;
+    transform: scale(1.02);
+    position: relative;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.search-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #ffaa00;
+    color: #001a8c;
+    padding: 5px 12px;
+    border-radius: 25px;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 10;
+    white-space: nowrap;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .search-badge {
+        font-size: 10px;
+        padding: 3px 8px;
+        top: -5px;
+        right: -5px;
+    }
+}
+/* Убираем подчёркивание у ссылок */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Чтобы карточка не ломалась внутри ссылки */
+.team-card {
+    transition: transform 0.3s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Ссылка занимает всю карточку */
+a[href^="voice.html"] {
+    display: block;
+    width: fit-content;
+}
     </style>
 </head>
 <body>
@@ -67,377 +127,461 @@
 </div>
 
     <!-- Основной контент -->
-    <div class="container">
-        <div class="header">
-            <a href="index.html">
-                <img src="logo.jpg" alt="Логотип Вата" class="avatar" width="240" height="240">
-            </a>
-            <h1 class="title">Состав команды</h1>
-            <hr>
+<div class="container">
+    <div class="header">
+        <a href="index.html">
+            <img src="logo.jpg" alt="Логотип Вата" class="avatar" width="240" height="240">
+        </a>
+        <h1 class="title">Состав команды</h1>
+        <hr>
+    </div>
+
+    <div class="content-box">
+        <!-- Статистика -->
+        <div class="stats-box">
+            <div class="stat-item">
+                <div class="stat-number">17</div>
+                <div class="stat-label">Основной состав</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">25</div>
+                <div class="stat-label">Доп. состав</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">42</div>
+                <div class="stat-label">Всего дабберов</div>
+            </div>
         </div>
 
-        <div class="content-box">
-            <!-- Статистика -->
-            <div class="stats-box">
-                <div class="stat-item">
-                    <div class="stat-number">17</div>
-                    <div class="stat-label">Основной состав</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">25</div>
-                    <div class="stat-label">Доп. состав</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">42</div>
-                    <div class="stat-label">Всего дабберов</div>
-                </div>
-            </div>
-
-            <!-- Основной состав -->
-            <h2 class="team-section-title">🌟 Основной состав</h2>
-            <div class="team-list">
-                <!-- Miki-angel -->
+        <!-- Основной состав -->
+        <h2 class="team-section-title">🌟 Основной состав</h2>
+        <div class="team-list">
+            <!-- Miki-angel -->
+            <a href="voice.html?id=miki-angel" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/001a8c/ffffff?text=Miki" alt="Miki-angel" class="team-card-avatar">
                     <div class="team-card-name">Miki-angel</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Раскольников -->
+            </a>
+            
+            <!-- Раскольников -->
+            <a href="voice.html?id=raskolnikov" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/320063/ffffff?text=Raskol" alt="Раскольников" class="team-card-avatar">
                     <div class="team-card-name">Раскольников</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- DNT -->
+            </a>
+            
+            <!-- DNT -->
+            <a href="voice.html?id=dnt" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/4a0072/ffffff?text=DNT" alt="DNT" class="team-card-avatar">
                     <div class="team-card-name">DNT</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Nemo -->
+            </a>
+            
+            <!-- Nemo -->
+            <a href="voice.html?id=nemo" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/001a8c/ffffff?text=Nemo" alt="Nemo" class="team-card-avatar">
                     <div class="team-card-name">Nemo</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Atari -->
+            </a>
+            
+            <!-- Atari -->
+            <a href="voice.html?id=atari" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/4a0072/ffffff?text=Atari" alt="Atari" class="team-card-avatar">
                     <div class="team-card-name">Atari</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Миндаль -->
+            </a>
+            
+            <!-- Миндаль -->
+            <a href="voice.html?id=mindal" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/001a8c/ffffff?text=Миндаль" alt="Миндаль" class="team-card-avatar">
                     <div class="team-card-name">Миндаль</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Наталья Тарасюк -->
+            </a>
+            
+            <!-- Наталья Тарасюк -->
+            <a href="voice.html?id=natalya" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/320063/ffffff?text=Наталья" alt="Наталья Тарасюк" class="team-card-avatar">
                     <div class="team-card-name">Наталья Тарасюк</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Руни -->
+            </a>
+            
+            <!-- Руни -->
+            <a href="voice.html?id=runi" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/4a0072/ffffff?text=Руни" alt="Руни" class="team-card-avatar">
                     <div class="team-card-name">Руни</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Amaryllis -->
+            </a>
+            
+            <!-- Amaryllis -->
+            <a href="voice.html?id=amaryllis" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/001a8c/ffffff?text=Ama" alt="Amaryllis" class="team-card-avatar">
                     <div class="team-card-name">Amaryllis</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Алекс Фостер -->
+            </a>
+            
+            <!-- Алекс Фостер -->
+            <a href="voice.html?id=alex" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/320063/ffffff?text=Алекс" alt="Алекс Фостер" class="team-card-avatar">
                     <div class="team-card-name">Алекс Фостер</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Юный Спартанец -->
+            </a>
+            
+            <!-- Юный Спартанец -->
+            <a href="voice.html?id=spartans" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/4a0072/ffffff?text=Спартанец" alt="Юный Спартанец" class="team-card-avatar">
                     <div class="team-card-name">Юный Спартанец</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Fury -->
+            </a>
+            
+            <!-- Fury -->
+            <a href="voice.html?id=fury" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/001a8c/ffffff?text=Fury" alt="Fury" class="team-card-avatar">
                     <div class="team-card-name">Fury</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Titch -->
+            </a>
+            
+            <!-- Titch -->
+            <a href="voice.html?id=titch" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/320063/ffffff?text=Titch" alt="Titch" class="team-card-avatar">
                     <div class="team-card-name">Titch</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Sakura Hashimoto -->
+            </a>
+            
+            <!-- Sakura Hashimoto -->
+            <a href="voice.html?id=sakura" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/4a0072/ffffff?text=Sakura" alt="Sakura Hashimoto" class="team-card-avatar">
                     <div class="team-card-name">Sakura Hashimoto</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Майс -->
+            </a>
+            
+            <!-- Майс -->
+            <a href="voice.html?id=mays" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/001a8c/ffffff?text=Майс" alt="Майс" class="team-card-avatar">
                     <div class="team-card-name">Майс</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Kolli -->
+            </a>
+            
+            <!-- Kolli -->
+            <a href="voice.html?id=kolli" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/320063/ffffff?text=Kolli" alt="Kolli" class="team-card-avatar">
                     <div class="team-card-name">Kolli</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-                
-                <!-- Persik -->
+            </a>
+            
+            <!-- Persik -->
+            <a href="voice.html?id=persik" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/4a0072/ffffff?text=Persik" alt="Persik" class="team-card-avatar">
                     <div class="team-card-name">Persik</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>
-            </div>
+            </a>
+        </div>
 
-            <!-- Дополнительный состав -->
-            <h2 class="team-section-title">✨ Дополнительный состав</h2>
-            <div class="team-list">
-                <!-- Enineke -->
+        <!-- Дополнительный состав -->
+        <h2 class="team-section-title">✨ Дополнительный состав</h2>
+        <div class="team-list">
+            <!-- Enineke -->
+            <a href="voice.html?id=enineke" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/666666/ffffff?text=Eni" alt="Enineke" class="team-card-avatar">
                     <div class="team-card-name">Enineke</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Traxyn -->
+            </a>
+            
+            <!-- Traxyn -->
+            <a href="voice.html?id=traxyn" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/555555/ffffff?text=Trax" alt="Traxyn" class="team-card-avatar">
                     <div class="team-card-name">Traxyn</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- tut_Hini -->
+            </a>
+            
+            <!-- tut_Hini -->
+            <a href="voice.html?id=tut_hini" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/444444/ffffff?text=Hini" alt="tut_Hini" class="team-card-avatar">
                     <div class="team-card-name">tut_Hini</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Денис Груздов -->
+            </a>
+            
+            <!-- Денис Груздов -->
+            <a href="voice.html?id=denis" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/333333/ffffff?text=Груздов" alt="Денис Груздов" class="team-card-avatar">
                     <div class="team-card-name">Денис Груздов</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Тушканчик -->
+            </a>
+            
+            <!-- Тушканчик -->
+            <a href="voice.html?id=tushkan" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/666666/ffffff?text=Тушкан" alt="Тушканчик" class="team-card-avatar">
                     <div class="team-card-name">Тушканчик</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- chep (разраб сайта) -->
+            </a>
+            
+            <!-- chep (разраб сайта) -->
+            <a href="voice.html?id=chep" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/001a8c/ffffff?text=chep" alt="chep" class="team-card-avatar">
                     <div class="team-card-name">chep</div>
                     <div class="team-card-roles">(крутой разраб сайта)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Juri -->
+            </a>
+            
+            <!-- Juri -->
+            <a href="voice.html?id=juri" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/555555/ffffff?text=Juri" alt="Juri" class="team-card-avatar">
                     <div class="team-card-name">Juri</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Doza_Narkoza -->
+            </a>
+            
+            <!-- Doza_Narkoza -->
+            <a href="voice.html?id=doza_narkoza" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/444444/ffffff?text=Doza" alt="Doza_Narkoza" class="team-card-avatar">
                     <div class="team-card-name">Doza_Narkoza</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Пенёк -->
+            </a>
+            
+            <!-- Пенёк -->
+            <a href="voice.html?id=penek" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/333333/ffffff?text=Пенёк" alt="Пенёк" class="team-card-avatar">
                     <div class="team-card-name">Пенёк</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Sirius -->
+            </a>
+            
+            <!-- Sirius -->
+            <a href="voice.html?id=sirius" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/666666/ffffff?text=Sirius" alt="Sirius" class="team-card-avatar">
                     <div class="team-card-name">Sirius</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Генерал Бибизян -->
+            </a>
+            
+            <!-- Генерал Бибизян -->
+            <a href="voice.html?id=general_bibizyan" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/555555/ffffff?text=Бибизян" alt="Генерал Бибизян" class="team-card-avatar">
                     <div class="team-card-name">Генерал Бибизян</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Parz -->
+            </a>
+            
+            <!-- Parz -->
+            <a href="voice.html?id=parz" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/444444/ffffff?text=Parz" alt="Parz" class="team-card-avatar">
                     <div class="team-card-name">Parz</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Evangeline -->
+            </a>
+            
+            <!-- Evangeline -->
+            <a href="voice.html?id=evangeline" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/333333/ffffff?text=Eva" alt="Evangeline" class="team-card-avatar">
                     <div class="team-card-name">Evangeline</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Redmonox -->
+            </a>
+            
+            <!-- Redmonox -->
+            <a href="voice.html?id=redmonox" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/666666/ffffff?text=Red" alt="Redmonox" class="team-card-avatar">
                     <div class="team-card-name">Redmonox</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Hina -->
+            </a>
+            
+            <!-- Hina -->
+            <a href="voice.html?id=hina" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/555555/ffffff?text=Hina" alt="Hina" class="team-card-avatar">
                     <div class="team-card-name">Hina</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Люмин -->
+            </a>
+            
+            <!-- Люмин -->
+            <a href="voice.html?id=lumin" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/444444/ffffff?text=Люмин" alt="Люмин" class="team-card-avatar">
                     <div class="team-card-name">Люмин</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Фемчик -->
+            </a>
+            
+            <!-- Фемчик -->
+            <a href="voice.html?id=femchik" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/333333/ffffff?text=Фемчик" alt="Фемчик" class="team-card-avatar">
                     <div class="team-card-name">Фемчик</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Иф -->
+            </a>
+            
+            <!-- Иф -->
+            <a href="voice.html?id=if" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/666666/ffffff?text=Иф" alt="Иф" class="team-card-avatar">
                     <div class="team-card-name">Иф</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Akva -->
+            </a>
+            
+            <!-- Akva -->
+            <a href="voice.html?id=akva" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/555555/ffffff?text=Akva" alt="Akva" class="team-card-avatar">
                     <div class="team-card-name">Akva</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Dizzel -->
+            </a>
+            
+            <!-- Dizzel -->
+            <a href="voice.html?id=dizzel" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/444444/ffffff?text=Dizzel" alt="Dizzel" class="team-card-avatar">
                     <div class="team-card-name">Dizzel</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Kr9k -->
+            </a>
+            
+            <!-- Kr9k -->
+            <a href="voice.html?id=kr9k" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/333333/ffffff?text=Kr9k" alt="Kr9k" class="team-card-avatar">
                     <div class="team-card-name">Kr9k</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Takoto -->
+            </a>
+            
+            <!-- Takoto -->
+            <a href="voice.html?id=takoto" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/666666/ffffff?text=Takoto" alt="Takoto" class="team-card-avatar">
                     <div class="team-card-name">Takoto</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Never -->
+            </a>
+            
+            <!-- Never -->
+            <a href="voice.html?id=never" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/555555/ffffff?text=Never" alt="Never" class="team-card-avatar">
                     <div class="team-card-name">Never</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Sabal -->
+            </a>
+            
+            <!-- Sabal -->
+            <a href="voice.html?id=sabal" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/444444/ffffff?text=Sabal" alt="Sabal" class="team-card-avatar">
                     <div class="team-card-name">Sabal</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-                
-                <!-- Жека -->
+            </a>
+            
+            <!-- Жека -->
+            <a href="voice.html?id=zheka" style="text-decoration: none; color: inherit;">
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/333333/ffffff?text=Жека" alt="Жека" class="team-card-avatar">
                     <div class="team-card-name">Жека</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🔹 Доп. состав</div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
+</div>
     <!-- Футер (подвал) -->
 <div class="container" style="margin-top: 20px; padding: 20px; text-align: center;">
     <hr style="margin: 20px 0;">
@@ -457,5 +601,63 @@
         Сайт создан фанатами для фанатов. Все видео и материалы принадлежат их законным владельцам.
     </p>
 </div>
+<script>
+    function highlightVoiceActor() {
+        const hash = window.location.hash.substring(1);
+        if (!hash) return;
+        
+        const voiceName = decodeURIComponent(hash);
+        console.log('Ищем даббера:', voiceName); // Для отладки
+        
+        const cards = document.querySelectorAll('.team-card');
+        let found = false;
+        
+        cards.forEach(card => {
+            const nameElement = card.querySelector('.team-card-name');
+            if (nameElement && nameElement.textContent.trim() === voiceName) {
+                // Убираем предыдущую подсветку
+                document.querySelectorAll('.team-card.highlight').forEach(c => {
+                    c.classList.remove('highlight');
+                    const oldBadge = c.querySelector('.search-badge');
+                    if (oldBadge) oldBadge.remove();
+                });
+                
+                // Добавляем подсветку
+                card.classList.add('highlight');
+                
+                // Добавляем бейдж
+                const badge = document.createElement('div');
+                badge.className = 'search-badge';
+                badge.textContent = '🔍 Результат поиска';
+                card.appendChild(badge);
+                
+                // Прокручиваем
+                setTimeout(() => {
+                    card.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }, 100);
+                
+                found = true;
+            }
+        });
+        
+        if (!found) {
+            console.log('Даббер не найден, пробуем ещё раз через 500мс');
+            setTimeout(highlightVoiceActor, 500);
+        }
+    }
+    
+    // Запускаем
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', highlightVoiceActor);
+    } else {
+        highlightVoiceActor();
+    }
+    
+    // Также запускаем после полной загрузки (на случай изображений)
+    window.addEventListener('load', highlightVoiceActor);
+</script>
 </body>
 </html>
