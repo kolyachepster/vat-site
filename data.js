@@ -37,52 +37,43 @@ const voicesDatabase = [
     { 
         id: 'miki-angel',
         name: 'Miki-angel', 
-        image: 'https://via.placeholder.com/200/001a8c/ffffff?text=Miki',
+        image: 'ава-miki.jpg',
         status: 'Основной состав',
-        joinDate: '',
+        joinDate: '2023',
         bio: '',
         social: {}
     },
     { 
         id: 'raskolnikov',
         name: 'Раскольников', 
-        image: 'https://via.placeholder.com/200/320063/ffffff?text=Raskol',
+        image: 'ава-raskolnikov.jpg',
         status: 'Основной состав',
-        joinDate: '',
+        joinDate: '2024',
         bio: '',
         social: {}
     },
     { 
         id: 'dnt',
         name: 'DNT', 
-        image: 'https://via.placeholder.com/200/4a0072/ffffff?text=DNT',
+        image: 'ава-dnt.jpg',
         status: 'Основной состав',
-        joinDate: '',
+        joinDate: '2025',
         bio: '',
         social: {}
     },
     { 
         id: 'nemo',
         name: 'Nemo', 
-        image: 'https://via.placeholder.com/200/001a8c/ffffff?text=Nemo',
+        image: 'ава-nemo.jpg',
         status: 'Основной состав',
-        joinDate: '',
-        bio: '',
-        social: {}
-    },
-    { 
-        id: 'anonym8',
-        name: 'Anonym8', 
-        image: 'https://via.placeholder.com/200/320063/ffffff?text=Anon',
-        status: 'Основной состав',
-        joinDate: '',
+        joinDate: '2025',
         bio: '',
         social: {}
     },
     { 
         id: 'atari',
         name: 'Atari', 
-        image: 'https://via.placeholder.com/200/4a0072/ffffff?text=Atari',
+        image: 'ава-atari.jpg',
         status: 'Основной состав',
         joinDate: '',
         bio: '',
@@ -91,9 +82,9 @@ const voicesDatabase = [
     { 
         id: 'mindal',
         name: 'Миндаль', 
-        image: 'https://via.placeholder.com/200/001a8c/ffffff?text=Миндаль',
+        image: 'ава-mindal.jpg',
         status: 'Основной состав',
-        joinDate: '',
+        joinDate: '2025',
         bio: '',
         social: {}
     },
@@ -109,7 +100,7 @@ const voicesDatabase = [
     { 
         id: 'runi',
         name: 'Руни', 
-        image: 'https://via.placeholder.com/200/4a0072/ffffff?text=Руни',
+        image: 'ава-runi.jpg',
         status: 'Основной состав',
         joinDate: '',
         bio: '',
@@ -127,7 +118,7 @@ const voicesDatabase = [
     { 
         id: 'alex',
         name: 'Алекс Фостер', 
-        image: 'https://via.placeholder.com/200/320063/ffffff?text=Алекс',
+        image: 'ава-alex.jpg',
         status: 'Основной состав',
         joinDate: '',
         bio: '',
@@ -136,7 +127,7 @@ const voicesDatabase = [
     { 
         id: 'spartans',
         name: 'Юный Спартанец', 
-        image: 'https://via.placeholder.com/200/4a0072/ffffff?text=Спартанец',
+        image: 'ава-spart.jpg',
         status: 'Основной состав',
         joinDate: '',
         bio: '',
@@ -145,9 +136,9 @@ const voicesDatabase = [
     { 
         id: 'fury',
         name: 'Fury', 
-        image: 'https://via.placeholder.com/200/001a8c/ffffff?text=Fury',
+        image: 'ава-fury.jpg',
         status: 'Основной состав',
-        joinDate: '',
+        joinDate: '2025',
         bio: '',
         social: {}
     },
@@ -163,9 +154,9 @@ const voicesDatabase = [
     { 
         id: 'sakura',
         name: 'Sakura Hashimoto', 
-        image: 'https://via.placeholder.com/200/4a0072/ffffff?text=Sakura',
+        image: 'ава-sakura.jpg',
         status: 'Основной состав',
-        joinDate: '',
+        joinDate: '2023',
         bio: '',
         social: {}
     },
@@ -174,14 +165,14 @@ const voicesDatabase = [
         name: 'Майс', 
         image: 'https://via.placeholder.com/200/001a8c/ffffff?text=Майс',
         status: 'Основной состав',
-        joinDate: '',
+        joinDate: '2025',
         bio: '',
         social: {}
     },
     { 
         id: 'kolli',
         name: 'Kolli', 
-        image: 'https://via.placeholder.com/200/320063/ffffff?text=Kolli',
+        image: 'ава-kolli.jpg',
         status: 'Основной состав',
         joinDate: '',
         bio: '',
@@ -190,7 +181,7 @@ const voicesDatabase = [
     { 
         id: 'persik',
         name: 'Persik', 
-        image: 'https://via.placeholder.com/200/4a0072/ffffff?text=Persik',
+        image: 'ава-persik.jpg',
         status: 'Основной состав',
         joinDate: '',
         bio: '',
@@ -201,7 +192,7 @@ const voicesDatabase = [
     { 
         id: 'enineke',
         name: 'Enineke', 
-        image: 'https://via.placeholder.com/200/666666/ffffff?text=Eni',
+        image: 'ава-enineke.jpg',
         status: 'Доп. состав',
         joinDate: '',
         bio: '',
@@ -210,18 +201,9 @@ const voicesDatabase = [
     { 
         id: 'traxyn',
         name: 'Traxyn', 
-        image: 'https://via.placeholder.com/200/555555/ffffff?text=Trax',
+        image: 'ава-traxyn.jpg',
         status: 'Доп. состав',
-        joinDate: '',
-        bio: '',
-        social: {}
-    },
-    { 
-        id: 'tut_hini',
-        name: 'tut_Hini', 
-        image: 'https://via.placeholder.com/200/444444/ffffff?text=Hini',
-        status: 'Доп. состав',
-        joinDate: '',
+        joinDate: '2025',
         bio: '',
         social: {}
     },
@@ -237,7 +219,7 @@ const voicesDatabase = [
     { 
         id: 'tushkan',
         name: 'Тушканчик', 
-        image: 'https://via.placeholder.com/200/666666/ffffff?text=Тушкан',
+        image: 'ава-tuchkan.jpg',
         status: 'Доп. состав',
         joinDate: '',
         bio: '',
@@ -246,9 +228,9 @@ const voicesDatabase = [
     { 
         id: 'chep',
         name: 'chep', 
-        image: 'https://via.placeholder.com/200/001a8c/ffffff?text=chep',
+        image: 'ава-chep.jpg',
         status: 'Доп. состав',
-        joinDate: '',
+        joinDate: '2026',
         bio: '',
         social: {}
     },
@@ -282,7 +264,7 @@ const voicesDatabase = [
     { 
         id: 'sirius',
         name: 'Sirius', 
-        image: 'https://via.placeholder.com/200/666666/ffffff?text=Sirius',
+        image: 'ава-sirius.jpg',
         status: 'Доп. состав',
         joinDate: '',
         bio: '',
@@ -291,7 +273,7 @@ const voicesDatabase = [
     { 
         id: 'general_bibizyan',
         name: 'Генерал Бибизян', 
-        image: 'https://via.placeholder.com/200/555555/ffffff?text=Бибизян',
+        image: 'ава-general.jpg',
         status: 'Доп. состав',
         joinDate: '',
         bio: '',
@@ -309,7 +291,7 @@ const voicesDatabase = [
     { 
         id: 'evangeline',
         name: 'Evangeline', 
-        image: 'https://via.placeholder.com/200/333333/ffffff?text=Eva',
+        image: 'ава-evangeline.jpg',
         status: 'Доп. состав',
         joinDate: '',
         bio: '',
@@ -318,7 +300,7 @@ const voicesDatabase = [
     { 
         id: 'redmonox',
         name: 'Redmonox', 
-        image: 'https://via.placeholder.com/200/666666/ffffff?text=Red',
+        image: 'ава-redmonox.jpg',
         status: 'Доп. состав',
         joinDate: '',
         bio: '',
@@ -327,7 +309,7 @@ const voicesDatabase = [
     { 
         id: 'hina',
         name: 'Hina', 
-        image: 'https://via.placeholder.com/200/555555/ffffff?text=Hina',
+        image: 'ава-tut_hini.jpg',
         status: 'Доп. состав',
         joinDate: '',
         bio: '',
@@ -336,7 +318,7 @@ const voicesDatabase = [
     { 
         id: 'lumin',
         name: 'Люмин', 
-        image: 'https://via.placeholder.com/200/444444/ffffff?text=Люмин',
+        image: 'ава-lumin.jpg',
         status: 'Доп. состав',
         joinDate: '',
         bio: '',
@@ -345,7 +327,7 @@ const voicesDatabase = [
     { 
         id: 'femchik',
         name: 'Фемчик', 
-        image: 'https://via.placeholder.com/200/333333/ffffff?text=Фемчик',
+        image: 'ава-фемчик.jpg',
         status: 'Доп. состав',
         joinDate: '',
         bio: '',
@@ -354,9 +336,9 @@ const voicesDatabase = [
     { 
         id: 'if',
         name: 'Иф', 
-        image: 'https://via.placeholder.com/200/666666/ffffff?text=Иф',
+        image: 'ава-if.jpg',
         status: 'Доп. состав',
-        joinDate: '',
+        joinDate: '2026',
         bio: '',
         social: {}
     },
@@ -422,6 +404,15 @@ const voicesDatabase = [
         joinDate: '',
         bio: '',
         social: {}
+    },
+    { 
+        id: 'koffess',
+        name: 'koffess', 
+        image: 'ава-putin.jpg',
+        status: 'Доп. состав',
+        joinDate: '2026',
+        bio: '',
+        social: {}
     }
 ];
 
@@ -429,54 +420,32 @@ const voicesDatabase = [
 const rolesDatabase = [
     // ===== МОЛЧАЛИВАЯ ВЕДЬМА =====
     // Главные роли
-    { titleId: 'molchalivaya_vedma', voiceId: 'miki-angel', character: '', characterImage: 'https://via.placeholder.com/150/001a8c/ffffff?text=角色', episodes: '', type: 'main' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'raskolnikov', character: '', characterImage: 'https://via.placeholder.com/150/320063/ffffff?text=角色', episodes: '', type: 'main' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'dnt', character: '', characterImage: 'https://via.placeholder.com/150/4a0072/ffffff?text=角色', episodes: '', type: 'main' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'nemo', character: '', characterImage: 'https://via.placeholder.com/150/666666/ffffff?text=角色', episodes: '', type: 'recurring' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'mindal', character: 'Моника Эверетт', characterImage: 'https://via.placeholder.com/150/001a8c/ffffff?text=角色', episodes: '1-13', type: 'main' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'dnt', character: 'Феликс Арк Ридилл', characterImage: 'https://via.placeholder.com/150/320063/ffffff?text=角色', episodes: '1-13', type: 'main' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'raskolnikov', character: 'Неро', characterImage: 'https://via.placeholder.com/150/4a0072/ffffff?text=角色', episodes: '1-13', type: 'main' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'raskolnikov', character: 'Сирил Эшли', characterImage: 'https://via.placeholder.com/150/666666/ffffff?text=角色', episodes: '1-13', type: 'main' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'fury', character: 'Луис Миллер', characterImage: 'https://via.placeholder.com/150/666666/ffffff?text=角色', episodes: '1-5,6-7', type: 'main' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'sakura', character: 'Ринзбельфид', characterImage: 'https://via.placeholder.com/150/666666/ffffff?text=角色', episodes: '1,4,7', type: 'main' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'nemo', character: 'Эллиотт Говард', characterImage: 'https://via.placeholder.com/150/666666/ffffff?text=角色', episodes: '3-5', type: 'main' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'mays', character: 'Изабель Нортон', characterImage: 'https://via.placeholder.com/150/666666/ffffff?text=角色', episodes: '1-4,6-7', type: 'main' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'miki-angel', character: 'Лана Колетт', characterImage: 'https://via.placeholder.com/150/666666/ffffff?text=角色', episodes: '2-4,6-7', type: 'main' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'traxyn', character: 'Клаудия Эшли', characterImage: 'https://via.placeholder.com/150/666666/ffffff?text=角色', episodes: '6,7', type: 'main' },
     
     // Второстепенные роли
-    { titleId: 'molchalivaya_vedma', voiceId: 'atari', character: '', episodes: '', type: 'supporting' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'mindal', character: '', episodes: '', type: 'supporting' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'natalya', character: '', episodes: '', type: 'supporting' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'runi', character: '', episodes: '', type: 'supporting' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'amaryllis', character: '', episodes: '', type: 'supporting' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'alex', character: '', episodes: '', type: 'supporting' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'spartans', character: '', episodes: '', type: 'supporting' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'fury', character: '', episodes: '', type: 'supporting' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'titch', character: '', episodes: '', type: 'supporting' },
-    
-    // Эпизодические роли
-    { titleId: 'molchalivaya_vedma', voiceId: 'sakura', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'mays', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'kolli', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'persik', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'chep', character: '', episodes: '', type: 'guest' },
-    
-    // Доп. состав в эпизодических ролях
-    { titleId: 'molchalivaya_vedma', voiceId: 'enineke', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'traxyn', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'tut_hini', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'denis', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'tushkan', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'juri', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'doza_narkoza', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'penek', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'sirius', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'general_bibizyan', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'parz', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'evangeline', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'redmonox', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'hina', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'lumin', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'femchik', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'if', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'akva', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'dizzel', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'kr9k', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'takoto', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'never', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'sabal', character: '', episodes: '', type: 'guest' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'zheka', character: '', episodes: '', type: 'guest' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'titch', character: 'Вильдиан', episodes: '', type: 'supporting' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'titch', character: 'Рассказчик', episodes: '', type: 'supporting' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'atari', character: 'Агата', episodes: '', type: 'supporting' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'miki-angel', character: 'Энни', episodes: '', type: 'supporting' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'nemo', character: 'Аарон', episodes: '', type: 'supporting' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'femchik', character: 'Сельма', episodes: '', type: 'supporting' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'spartans', character: 'Виктор', episodes: '', type: 'supporting' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'titch', character: 'Бриджит', episodes: '', type: 'supporting' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'titch', character: 'Нил', episodes: '', type: 'supporting' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'titch', character: 'Кэролайн', episodes: '', type: 'supporting' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'titch', character: 'Профессор Уильям', episodes: '', type: 'supporting' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'titch', character: 'Учитель Войд', episodes: '', type: 'supporting' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'titch', character: 'Кейси', episodes: '', type: 'supporting' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'titch', character: 'Глен', episodes: '', type: 'supporting' },
     
 ];
 
