@@ -323,93 +323,120 @@
     </div>
 
     <script>
-        // Текущая серия
-        let currentEpisode = 1;
+    // Текущая серия
+    let currentEpisode = 1;
+    
+    // Объект с таймкодами для Skip (для каждой серии свои)
+    const skipTimings = {
+        1: { has: true, text: "Skip Opening (00:00 - 01:30)" },
+        2: { has: true, text: "Skip Opening (00:00 - 01:28)" },
+        3: { has: true, text: "Skip Opening (00:00 - 01:32)" },
+        4: { has: false },
+        5: { has: false },
+        6: { has: true, text: "Skip Opening (00:00 - 01:35)" }
+    };
+    
+    // Функция для плавной прокрутки к плееру
+    function scrollToPlayer() {
+        const playerContainer = document.querySelector('.player-container');
+        const playerTitle = document.querySelector('h2'); // Заголовок "Смотреть онлайн"
         
-        // Объект с таймкодами для Skip (для каждой серии свои)
-        const skipTimings = {
-            1: { has: true, text: "Skip Opening (00:00 - 01:30)" },
-            2: { has: true, text: "Skip Opening (00:00 - 01:28)" },
-            3: { has: true, text: "Skip Opening (00:00 - 01:32)" },
-            4: { has: false },
-            5: { has: false },
-            6: { has: true, text: "Skip Opening (00:00 - 01:35)" }
-        };
-        
-        // Функция переключения серии
-        function playEpisode(episodeNumber, videoUrl, isFirstLoad = false) {
-            // Меняем видео в плеере
-            document.getElementById('video-iframe').src = videoUrl;
-            
-            // Обновляем текущую серию
-            currentEpisode = episodeNumber;
-            
-            // Обновляем подпись над плеером
-            document.getElementById('current-episode-label').textContent = `(Серия ${episodeNumber})`;
-            
-            // Убираем класс active у всех кнопок
-            const allButtons = document.querySelectorAll('.episode-button');
-            allButtons.forEach(btn => {
-                btn.classList.remove('active');
+        if (playerContainer) {
+            // Плавная прокрутка к плееру
+            playerContainer.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
             });
             
-            // Добавляем класс active нажатой кнопке (кроме isFirstLoad)
-            if (!isFirstLoad) {
-                event.target.classList.add('active');
-            } else {
-                // При первой загрузке активна первая кнопка
-                const firstButton = document.querySelector('#episode-1 .episode-button');
-                if (firstButton) firstButton.classList.add('active');
-            }
+            // Добавляем небольшую подсветку для плеера
+            playerContainer.style.transition = 'box-shadow 0.5s';
+            playerContainer.style.boxShadow = '0 0 20px #ffaa00';
             
-            // Проверяем, есть ли Skip для этой серии
-            if (skipTimings[episodeNumber] && skipTimings[episodeNumber].has) {
-                document.getElementById('skip-container').style.display = 'block';
-                document.getElementById('skip-button').textContent = '⏭️ ' + skipTimings[episodeNumber].text;
-            } else {
-                document.getElementById('skip-container').style.display = 'none';
-            }
+            // Убираем подсветку через 1.5 секунды
+            setTimeout(() => {
+                playerContainer.style.boxShadow = 'none';
+            }, 1500);
+        }
+    }
+    
+    // Функция переключения серии
+    function playEpisode(episodeNumber, videoUrl, isFirstLoad = false) {
+        // Меняем видео в плеере
+        document.getElementById('video-iframe').src = videoUrl;
+        
+        // Обновляем текущую серию
+        currentEpisode = episodeNumber;
+        
+        // Обновляем подпись над плеером
+        document.getElementById('current-episode-label').textContent = `(Серия ${episodeNumber})`;
+        
+        // Убираем класс active у всех кнопок
+        const allButtons = document.querySelectorAll('.episode-button');
+        allButtons.forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Добавляем класс active нажатой кнопке (кроме isFirstLoad)
+        if (!isFirstLoad) {
+            event.target.classList.add('active');
             
-            // Сохраняем в историю браузера, чтобы при перезагрузке страницы серия не сбросилась
-            history.pushState({ episode: episodeNumber }, '', `?episode=${episodeNumber}`);
+            // Прокручиваем к плееру при выборе серии
+            setTimeout(scrollToPlayer, 100);
+        } else {
+            // При первой загрузке активна первая кнопка
+            const firstButton = document.querySelector('#episode-1 .episode-button');
+            if (firstButton) firstButton.classList.add('active');
         }
         
-        // При загрузке страницы проверяем, есть ли параметр episode в URL
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const episodeParam = urlParams.get('episode');
-            
-            if (episodeParam) {
-                // Находим кнопку для этой серии и "нажимаем" её
-                const episodeNum = parseInt(episodeParam);
-                const episodeDiv = document.getElementById(`episode-${episodeNum}`);
-                if (episodeDiv) {
-                    const button = episodeDiv.querySelector('.episode-button');
-                    if (button && !button.disabled) {
-                        // Получаем URL видео из атрибута onclick
-                        const onclickAttr = button.getAttribute('onclick');
-                        const match = onclickAttr.match(/'([^']+)'/g);
-                        if (match && match[1]) {
-                            const videoUrl = match[1].replace(/'/g, '');
-                            playEpisode(episodeNum, videoUrl);
-                        }
+        // Проверяем, есть ли Skip для этой серии
+        if (skipTimings[episodeNumber] && skipTimings[episodeNumber].has) {
+            document.getElementById('skip-container').style.display = 'block';
+            document.getElementById('skip-button').textContent = '⏭️ ' + skipTimings[episodeNumber].text;
+        } else {
+            document.getElementById('skip-container').style.display = 'none';
+        }
+        
+        // Сохраняем в историю браузера, чтобы при перезагрузке страницы серия не сбросилась
+        history.pushState({ episode: episodeNumber }, '', `?episode=${episodeNumber}`);
+    }
+    
+    // При загрузке страницы проверяем, есть ли параметр episode в URL
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const episodeParam = urlParams.get('episode');
+        
+        if (episodeParam) {
+            // Находим кнопку для этой серии и "нажимаем" её
+            const episodeNum = parseInt(episodeParam);
+            const episodeDiv = document.getElementById(`episode-${episodeNum}`);
+            if (episodeDiv) {
+                const button = episodeDiv.querySelector('.episode-button');
+                if (button && !button.disabled) {
+                    // Получаем URL видео из атрибута onclick
+                    const onclickAttr = button.getAttribute('onclick');
+                    const match = onclickAttr.match(/'([^']+)'/g);
+                    if (match && match[1]) {
+                        const videoUrl = match[1].replace(/'/g, '');
+                        playEpisode(episodeNum, videoUrl);
+                        
+                        // Прокручиваем к плееру при загрузке по ссылке с параметром
+                        setTimeout(scrollToPlayer, 500);
                     }
                 }
             }
-        };
-        
-        // Функция для кнопки Skip (можно добавить логику перемотки, если ВК поддерживает)
-        document.addEventListener('DOMContentLoaded', function() {
-            const skipBtn = document.getElementById('skip-button');
-            if (skipBtn) {
-                skipBtn.addEventListener('click', function() {
-                    alert('Функция Skip появится позже! Сейчас вы можете перемотать видео вручную.');
-                    // В идеале здесь должен быть код для перемотки видео
-                    // но ВК iframe не даёт доступа к управлению плеером из-за безопасности
-                });
-            }
-        });
-    </script>
+        }
+    };
+    
+    // Функция для кнопки Skip
+    document.addEventListener('DOMContentLoaded', function() {
+        const skipBtn = document.getElementById('skip-button');
+        if (skipBtn) {
+            skipBtn.addEventListener('click', function() {
+                alert('Функция Skip появится позже! Сейчас вы можете перемотать видео вручную.');
+            });
+        }
+    });
+</script>
     <!-- Футер (подвал) -->
 <div class="container" style="margin-top: 20px; padding: 20px; text-align: center;">
     <hr style="margin: 20px 0;">
