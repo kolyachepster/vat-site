@@ -7,16 +7,29 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="navigation-buttons">
-            <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🏠 Главная
-            </a>
-            <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🎭 Состав
-            </a>
-        </div>
+    <!-- Навигация -->
+<div class="container">
+    <div class="navigation-buttons">
+        <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+            🏠 Главная
+        </a>
+        <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+            🎭 Состав
+        </a>
     </div>
+    
+    <!-- ПОИСКОВАЯ СТРОКА -->
+    <div style="margin-top: 15px; display: flex; justify-content: center;">
+        <form action="search.html" method="get" style="display: flex; width: 100%; max-width: 500px; gap: 10px;">
+            <input type="text" name="q" placeholder="🔍 Поиск по тайтлам и дабберам..." 
+                   style="flex: 1; padding: 12px 20px; border: 2px solid #001a8c; border-radius: 50px; font-size: 16px; outline: none;"
+                   required>
+            <button type="submit" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%); color: white; border: none; padding: 0 25px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                Найти
+            </button>
+        </form>
+    </div>
+</div>
 
     <div class="container">
         <div class="header">
@@ -30,8 +43,8 @@
         
         <div class="content-box">
             <div class="titles-grid">
-                <!-- Карточка Молчание ведьм (теперь ведет на страницу аниме, а не на главную) -->
-                <a href="anime-template.html" class="title-card">
+                <!-- Карточка Молчаливая ведьма (теперь ведет на страницу аниме, а не на главную) -->
+                <a href="molchalivaya_vedma.html" class="title-card">
                     <img src="молч_ведьм.jpg" alt="Молчание ведьм" class="title-card-image">
                     <div class="title-card-info">
                         <div class="title-card-name">Молчаливая ведьма</div>
@@ -43,12 +56,12 @@
                 </a>
                 
                 <!-- Заглушки для примера. Добавите свои карточки -->
-                <a href="#" class="title-card">
-                    <img src="https://via.placeholder.com/200x280?text=Постер+2" alt="Название 2" class="title-card-image">
+                <a href="zvezdnoe_ditya.html" class="title-card">
+                    <img src="ЗД.png" alt="Звёздное дитя" class="title-card-image">
                     <div class="title-card-info">
-                        <div class="title-card-name">Аниме 2</div>
+                        <div class="title-card-name">Звёздное дитя</div>
                         <div class="title-card-meta">
-                            <span>⚡ 24 серии</span>
+                            <span>⚡ 36 серий</span>
                             <span>⭐ 4.5</span>
                         </div>
                     </div>

@@ -43,16 +43,28 @@
 </head>
 <body>
     <!-- Навигация -->
-    <div class="container">
-        <div class="navigation-buttons">
-            <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🏠 Главная
-            </a>
-            <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🎦 Тайтлы
-            </a>
-        </div>
+<div class="container">
+    <div class="navigation-buttons">
+        <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+            🏠 Главная
+        </a>
+        <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+            🎦 Тайтлы
+        </a>
     </div>
+    
+    <!-- ПОИСКОВАЯ СТРОКА -->
+    <div style="margin-top: 15px; display: flex; justify-content: center;">
+        <form action="search.html" method="get" style="display: flex; width: 100%; max-width: 500px; gap: 10px;">
+            <input type="text" name="q" placeholder="🔍 Поиск по тайтлам и дабберам..." 
+                   style="flex: 1; padding: 12px 20px; border: 2px solid #001a8c; border-radius: 50px; font-size: 16px; outline: none;"
+                   required>
+            <button type="submit" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%); color: white; border: none; padding: 0 25px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                Найти
+            </button>
+        </form>
+    </div>
+</div>
 
     <!-- Основной контент -->
     <div class="container">
@@ -68,7 +80,7 @@
             <!-- Статистика -->
             <div class="stats-box">
                 <div class="stat-item">
-                    <div class="stat-number">18</div>
+                    <div class="stat-number">17</div>
                     <div class="stat-label">Основной состав</div>
                 </div>
                 <div class="stat-item">
@@ -76,7 +88,7 @@
                     <div class="stat-label">Доп. состав</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">43</div>
+                    <div class="stat-number">42</div>
                     <div class="stat-label">Всего дабберов</div>
                 </div>
             </div>
@@ -112,14 +124,6 @@
                 <div class="team-card">
                     <img src="https://via.placeholder.com/150/001a8c/ffffff?text=Nemo" alt="Nemo" class="team-card-avatar">
                     <div class="team-card-name">Nemo</div>
-                    <div class="team-card-roles">(роль)</div>
-                    <div class="team-card-popular">🎭 Основной состав</div>
-                </div>
-                
-                <!-- Anonym8 -->
-                <div class="team-card">
-                    <img src="https://via.placeholder.com/150/320063/ffffff?text=Anon" alt="Anonym8" class="team-card-avatar">
-                    <div class="team-card-name">Anonym8</div>
                     <div class="team-card-roles">(роль)</div>
                     <div class="team-card-popular">🎭 Основной состав</div>
                 </div>

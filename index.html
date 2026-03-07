@@ -38,16 +38,28 @@
 </head>
 <body>
     <!-- Навигация -->
-    <div class="container">
-        <div class="navigation-buttons">
-            <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🎭 Состав
-            </a>
-            <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🎦 Тайтлы
-            </a>
-        </div>
+<div class="container">
+    <div class="navigation-buttons">
+        <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+            🎭 Состав
+        </a>
+        <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+            🎦 Тайтлы
+        </a>
     </div>
+    
+    <!-- ПОИСКОВАЯ СТРОКА -->
+    <div style="margin-top: 15px; display: flex; justify-content: center;">
+        <form action="search.html" method="get" style="display: flex; width: 100%; max-width: 500px; gap: 10px;">
+            <input type="text" name="q" placeholder="🔍 Поиск по тайтлам и дабберам..." 
+                   style="flex: 1; padding: 12px 20px; border: 2px solid #001a8c; border-radius: 50px; font-size: 16px; outline: none;"
+                   required>
+            <button type="submit" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%); color: white; border: none; padding: 0 25px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                Найти
+            </button>
+        </form>
+    </div>
+</div>
     
     <!-- Основной контент -->
     <div class="container">
@@ -68,19 +80,19 @@
             <h2>🔥 Последние добавленные</h2>
             <div class="featured-grid">
                 <div class="featured-item">
-                    <img src="молч_ведьм.jpg" alt="Молчание ведьм" class="featured-image">
+                    <img src="молч_ведьм.jpg" alt="Молчаливая ведьма" class="featured-image">
                     <p><strong>Молчаливая ведьма</strong></p>
-                    <p>Серия 12 ✓</p>
+                    <p>Серия 7 ✓</p>
                 </div>
                 <div class="featured-item">
-                    <img src="https://via.placeholder.com/280x160/001a8c/ffffff?text=Аниме+2" alt="Аниме 2" class="featured-image">
-                    <p><strong>Название аниме</strong></p>
+                    <img src="молч_ведьм.jpg" alt="Молчаливая ведьма" class="featured-image">
+                    <p><strong>Молчаливая ведьма</strong></p>
                     <p>Серия 6 ✓</p>
                 </div>
                 <div class="featured-item">
-                    <img src="https://via.placeholder.com/280x160/320063/ffffff?text=Аниме+3" alt="Аниме 3" class="featured-image">
-                    <p><strong>Название аниме</strong></p>
-                    <p>Серия 3 ✓</p>
+                    <img src="ЗД.png" alt="Звёздное дитя" class="featured-image">
+                    <p><strong>Звёздное дитя</strong></p>
+                    <p>Сезон 2 Серия 9 ✓</p>
                 </div>
             </div>
             
@@ -89,8 +101,8 @@
             <h2>📢 Новости проекта</h2>
             <div style="background: #f5f5f5; padding: 15px; border-radius: 8px;">
                 <p><strong>06.03.2026</strong> - Запущен новый сайт VAT!</p>
-                <p><strong>05.03.2026</strong> - Вышла 12 серия "Молчаливая ведьма"</p>
-                <p><strong>01.03.2026</strong> - В команду требуются актёры дубляжа</p>
+                <p><strong>03.03.2026</strong> - Вышла 7 серия "Молчаливой ведьмы" в нашем ТГК</p>
+                <p><strong>26.02.2026</strong> - Вышла 6 серия "Молчаливой ведьмы" в нашем ТГК</p>
             </div>
         </div>
     </div>

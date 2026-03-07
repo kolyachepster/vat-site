@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск - VAT</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .search-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .search-query {
+            color: #001a8c;
+            font-weight: bold;
+        }
+        
+        .search-results-count {
+            font-size: 16px;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        .search-section {
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #320063;
+            color: #001a8c;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            color: #666;
+        }
+        
+        .no-results .suggestions {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            transition: background 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .result-item:hover {
+            background: rgba(0, 26, 140, 0.05);
+        }
+        
+        .result-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        
+        .result-info {
+            flex: 1;
+        }
+        
+        .result-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #001a8c;
+            margin-bottom: 5px;
+        }
+        
+        .result-meta {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .result-type {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .type-title {
+            background: #001a8c;
+            color: white;
+        }
+        
+        .type-voice {
+            background: #320063;
+            color: white;
+        }
+        
+        .type-anime {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .search-form-small {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация с поиском -->
+    <div class="container">
+        <div class="navigation-buttons">
+            <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+                🏠 Главная
+            </a>
+            <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+                🎦 Тайтлы
+            </a>
+            <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+                🎭 Состав
+            </a>
+        </div>
+        
+        <!-- Поиск (маленький) -->
+        <div class="search-form-small">
+            <form action="search.html" method="get" style="display: flex; width: 100%; gap: 10px;">
+                <input type="text" name="q" placeholder="🔍 Новый поиск..." 
+                       style="flex: 1; padding: 10px 15px; border: 2px solid #001a8c; border-radius: 50px; font-size: 14px; outline: none;"
+                       required>
+                <button type="submit" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%); color: white; border: none; padding: 0 20px; border-radius: 50px; cursor: pointer;">
+                    Найти
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="container">
+        <div class="header">
+            <a href="index.html">
+                <img src="logo.jpg" alt="Логотип Вата" class="avatar" width="240" height="240">
+            </a>
+            <hr>
+        </div>
+        
+        <div class="content-box">
+            <div class="search-header">
+                <h1 class="title">Результаты поиска</h1>
+                <div id="search-query-display" class="search-query"></div>
+                <div id="results-count" class="search-results-count"></div>
+            </div>
+            
+            <hr>
+            
+            <!-- Результаты будут вставлены сюда -->
+            <div id="search-results"></div>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <div class="container" style="margin-top: 20px; padding: 20px; text-align: center;">
+        <hr style="margin: 20px 0;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-bottom: 15px;">
+            <a href="index.html" style="color: #001a8c; text-decoration: none;">Главная</a>
+            <a href="titles.html" style="color: #001a8c; text-decoration: none;">Тайтлы</a>
+            <a href="sostav.html" style="color: #001a8c; text-decoration: none;">Состав</a>
+            <a href="privacy.html" style="color: #001a8c; text-decoration: none;">Политика конфиденциальности</a>
+        </div>
+        <p style="font-size: 14px; color: #666; margin: 5px 0;">
+            © 2026 VAT - Voice Animation Team. Все права защищены.
+        </p>
+        <p style="font-size: 12px; color: #999; margin: 5px 0;">
+            Любое копирование материалов без согласия правообладателя запрещено.
+        </p>
+        <p style="font-size: 12px; color: #999; margin: 5px 0;">
+            Сайт создан фанатами для фанатов. Все видео и материалы принадлежат их законным владельцам.
+        </p>
+    </div>
+
+    <script>
+        // БАЗА ДАННЫХ ДЛЯ ПОИСКА
+        const searchDatabase = [
+            // Тайтлы (аниме)
+            { type: 'title', typeName: 'Аниме', name: 'Молчаливая ведьма', url: 'molchalivaya_vedma.html', image: 'молч_ведьм.jpg', meta: '13 серий, ⭐ 4.8' },
+            { type: 'title', typeName: 'Аниме', name: 'Звёздное дитя', url: 'zvezdnoe_ditya.html', image: 'ЗД.png', meta: '36 серий, ⭐ 4.5' },
+            { type: 'title', typeName: 'Аниме', name: 'Звездное дитя', url: 'zvezdnoe_ditya.html', image: 'ЗД.png', meta: '36 серий, ⭐ 4.5' },
+            { type: 'title', typeName: 'Аниме', name: 'Аниме 3', url: '#', image: 'https://via.placeholder.com/60', meta: 'Фильм, ⭐ 4.9' },
+            
+            // Дабберы (основной состав)
+            { type: 'voice', typeName: 'Даббер', name: 'Miki-angel', url: 'sostav.html', image: 'https://via.placeholder.com/60/001a8c/ffffff?text=Miki', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Раскольников', url: 'sostav.html', image: 'https://via.placeholder.com/60/320063/ffffff?text=Raskol', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'DNT', url: 'sostav.html', image: 'https://via.placeholder.com/60/4a0072/ffffff?text=DNT', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Nemo', url: 'sostav.html', image: 'https://via.placeholder.com/60/001a8c/ffffff?text=Nemo', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Atari', url: 'sostav.html', image: 'https://via.placeholder.com/60/4a0072/ffffff?text=Atari', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Миндаль', url: 'sostav.html', image: 'https://via.placeholder.com/60/001a8c/ffffff?text=Миндаль', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Наталья Тарасюк', url: 'sostav.html', image: 'https://via.placeholder.com/60/320063/ffffff?text=Наталья', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Руни', url: 'sostav.html', image: 'https://via.placeholder.com/60/4a0072/ffffff?text=Руни', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Amaryllis', url: 'sostav.html', image: 'https://via.placeholder.com/60/001a8c/ffffff?text=Ama', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Алекс Фостер', url: 'sostav.html', image: 'https://via.placeholder.com/60/320063/ffffff?text=Алекс', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Юный Спартанец', url: 'sostav.html', image: 'https://via.placeholder.com/60/4a0072/ffffff?text=Спартанец', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Fury', url: 'sostav.html', image: 'https://via.placeholder.com/60/001a8c/ffffff?text=Fury', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Titch', url: 'sostav.html', image: 'https://via.placeholder.com/60/320063/ffffff?text=Titch', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Sakura Hashimoto', url: 'sostav.html', image: 'https://via.placeholder.com/60/4a0072/ffffff?text=Sakura', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Майс', url: 'sostav.html', image: 'https://via.placeholder.com/60/001a8c/ffffff?text=Майс', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Kolli', url: 'sostav.html', image: 'https://via.placeholder.com/60/320063/ffffff?text=Kolli', meta: 'Основной состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Persik', url: 'sostav.html', image: 'https://via.placeholder.com/60/4a0072/ffffff?text=Persik', meta: 'Основной состав' },
+            
+            // Дабберы (доп. состав)
+            { type: 'voice', typeName: 'Даббер', name: 'Enineke', url: 'sostav.html', image: 'https://via.placeholder.com/60/666666/ffffff?text=Eni', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Traxyn', url: 'sostav.html', image: 'https://via.placeholder.com/60/555555/ffffff?text=Trax', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'tut_Hini', url: 'sostav.html', image: 'https://via.placeholder.com/60/444444/ffffff?text=Hini', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Денис Груздов', url: 'sostav.html', image: 'https://via.placeholder.com/60/333333/ffffff?text=Груздов', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Тушканчик', url: 'sostav.html', image: 'https://via.placeholder.com/60/666666/ffffff?text=Тушкан', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'chep', url: 'sostav.html', image: 'https://via.placeholder.com/60/001a8c/ffffff?text=chep', meta: 'крутой разраб сайта' },
+            { type: 'voice', typeName: 'Даббер', name: 'Juri', url: 'sostav.html', image: 'https://via.placeholder.com/60/555555/ffffff?text=Juri', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Doza_Narkoza', url: 'sostav.html', image: 'https://via.placeholder.com/60/444444/ffffff?text=Doza', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Пенёк', url: 'sostav.html', image: 'https://via.placeholder.com/60/333333/ffffff?text=Пенёк', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Sirius', url: 'sostav.html', image: 'https://via.placeholder.com/60/666666/ffffff?text=Sirius', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Генерал Бибизян', url: 'sostav.html', image: 'https://via.placeholder.com/60/555555/ffffff?text=Бибизян', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Parz', url: 'sostav.html', image: 'https://via.placeholder.com/60/444444/ffffff?text=Parz', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Evangeline', url: 'sostav.html', image: 'https://via.placeholder.com/60/333333/ffffff?text=Eva', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Redmonox', url: 'sostav.html', image: 'https://via.placeholder.com/60/666666/ffffff?text=Red', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Hina', url: 'sostav.html', image: 'https://via.placeholder.com/60/555555/ffffff?text=Hina', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Люмин', url: 'sostav.html', image: 'https://via.placeholder.com/60/444444/ffffff?text=Люмин', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Фемчик', url: 'sostav.html', image: 'https://via.placeholder.com/60/333333/ffffff?text=Фемчик', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Иф', url: 'sostav.html', image: 'https://via.placeholder.com/60/666666/ffffff?text=Иф', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Akva', url: 'sostav.html', image: 'https://via.placeholder.com/60/555555/ffffff?text=Akva', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Dizzel', url: 'sostav.html', image: 'https://via.placeholder.com/60/444444/ffffff?text=Dizzel', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Kr9k', url: 'sostav.html', image: 'https://via.placeholder.com/60/333333/ffffff?text=Kr9k', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Takoto', url: 'sostav.html', image: 'https://via.placeholder.com/60/666666/ffffff?text=Takoto', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Never', url: 'sostav.html', image: 'https://via.placeholder.com/60/555555/ffffff?text=Never', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Sabal', url: 'sostav.html', image: 'https://via.placeholder.com/60/444444/ffffff?text=Sabal', meta: 'Доп. состав' },
+            { type: 'voice', typeName: 'Даббер', name: 'Жека', url: 'sostav.html', image: 'https://via.placeholder.com/60/333333/ffffff?text=Жека', meta: 'Доп. состав' }
+        ];
+
+        // Получаем поисковый запрос из URL
+        function getQueryParam() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('q') || '';
+        }
+
+        // Выполняем поиск
+        function performSearch(query) {
+            if (!query) return [];
+            
+            query = query.toLowerCase().trim();
+            return searchDatabase.filter(item => 
+                item.name.toLowerCase().includes(query)
+            );
+        }
+
+        // Отображаем результаты
+        function displayResults() {
+            const query = getQueryParam();
+            const results = performSearch(query);
+            
+            // Отображаем запрос
+            document.getElementById('search-query-display').innerHTML = `По запросу: <span class="search-query">"${query}"</span>`;
+            
+            // Если запрос пустой
+            if (!query) {
+                document.getElementById('search-results').innerHTML = `
+                    <div class="no-results">
+                        <h3>🔍 Введите поисковый запрос</h3>
+                        <p class="suggestions">Попробуйте найти: Молчаливая ведьма, DNT, chep, Miki-angel...</p>
+                    </div>
+                `;
+                document.getElementById('results-count').innerHTML = '';
+                return;
+            }
+            
+            // Количество результатов
+            document.getElementById('results-count').innerHTML = `Найдено: ${results.length}`;
+            
+            // Если ничего не найдено
+            if (results.length === 0) {
+                document.getElementById('search-results').innerHTML = `
+                    <div class="no-results">
+                        <h3>😕 Ничего не найдено</h3>
+                        <p>По запросу "${query}" ничего не найдено</p>
+                        <p class="suggestions">💡 Попробуйте:<br>
+                        - Проверить написание<br>
+                        - Использовать более короткий запрос<br>
+                        - Поискать по части слова</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Группируем результаты по типу
+            const titles = results.filter(r => r.type === 'title');
+            const voices = results.filter(r => r.type === 'voice');
+            
+            let html = '';
+            
+            // Тайтлы
+            if (titles.length > 0) {
+                html += '<h2 class="search-section">🎬 Тайтлы</h2>';
+                titles.forEach(item => {
+                    html += `
+                        <a href="${item.url}" class="result-item">
+                            <img src="${item.image}" alt="${item.name}" class="result-image">
+                            <div class="result-info">
+                                <div class="result-title">${item.name}</div>
+                                <div class="result-meta">
+                                    <span class="result-type type-title">${item.typeName}</span>
+                                    ${item.meta}
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                });
+            }
+            
+            // Дабберы
+            if (voices.length > 0) {
+                html += '<h2 class="search-section">🎭 Дабберы</h2>';
+                voices.forEach(item => {
+                    html += `
+                        <a href="${item.url}" class="result-item">
+                            <img src="${item.image}" alt="${item.name}" class="result-image">
+                            <div class="result-info">
+                                <div class="result-title">${item.name}</div>
+                                <div class="result-meta">
+                                    <span class="result-type type-voice">${item.typeName}</span>
+                                    ${item.meta}
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                });
+            }
+            
+            document.getElementById('search-results').innerHTML = html;
+        }
+
+        // Запускаем при загрузке
+        window.onload = displayResults;
+    </script>
+</body>
+</html>
