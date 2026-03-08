@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход для администратора - VAT</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="firebase-config.js" type="module"></script>
+    <style>
+                .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .login-title {
+            text-align: center;
+            color: #001a8c;
+            margin-bottom: 20px;
+        }
+        
+        .login-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            padding: 10px;
+            background: #fff3cd;
+            border-radius: 8px;
+            border-left: 4px solid #ffaa00;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus {
+            border-color: #001a8c;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0,26,140,0.2);
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #001a8c, #320063);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,26,140,0.4);
+        }
+        
+        .error-message {
+            color: #d43f6b;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            min-height: 20px;
+        }
+        
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+        }
+        
+        .back-link:hover {
+            color: #001a8c;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #001a8c;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .info-box p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <div class="container">
+        <div class="navigation-buttons">
+            <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+                🏠 Главная
+            </a>
+            <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+                🎦 Тайтлы
+            </a>
+            <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+                🎭 Состав
+            </a>
+        </div>
+    </div>
+
+    <div class="login-container">
+        <h1 class="login-title">🔐 Вход</h1>
+        
+        <div class="login-subtitle">
+            ⚠️ Вход пока только для администраторов
+        </div>
+        
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label>📧 Email</label>
+                <input type="email" id="email" placeholder="login" required>
+            </div>
+            
+            <div class="form-group">
+                <label>🔑 Пароль</label>
+                <input type="password" id="password" placeholder="Введите пароль" required>
+            </div>
+            
+            <button type="submit" class="login-button">Войти</button>
+            
+            <div id="errorMessage" class="error-message"></div>
+        </form>
+        
+        
+        
+        <a href="index.html" class="back-link">← Вернуться на главную</a>
+    </div>
+
+    <script type="module">
+        import { firebase } from './firebase-config.js';
+        
+        window.handleLogin = async function(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            
+            const result = await firebase.loginAdmin(email, password);
+            
+            if (result.success) {
+                localStorage.setItem('adminLoggedIn', 'true');
+                window.location.href = 'admin-panel.html';
+            } else {
+                errorDiv.textContent = '❌ ' + result.error;
+                errorDiv.style.color = '#d43f6b';
+            }
+        };
+    </script>
+</body>
+</html>
