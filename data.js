@@ -23,10 +23,23 @@ const titlesDatabase = [
         image: 'ЗД.png',
         type: 'anime',
         seasons: 3,
-        episodes: 24,
-        year: 2025,
+        episodes: 35,
+        year: 2023,
         rating: 4.5,
-        genres: ['Экшен', 'Приключения', 'Фэнтези'],
+        genres: ['Психологическая драма', 'Детектив', 'Комедия'],
+        description: ''
+    },
+    {
+        id: 'Hellsing',
+        name: 'Хеллсинг: Война с нечистью',
+        nameEng: 'Hellsing',
+        image: 'hellsing.jpg',
+        type: 'anime',
+        seasons: 1,
+        episodes: 13,
+        year: 2001,
+        rating: 4.5,
+        genres: ['Психологическая драма', 'Детектив', 'Комедия'],
         description: ''
     },
     ];
@@ -40,8 +53,10 @@ const voicesDatabase = [
         image: 'ава-miki.jpg',
         status: 'Основной состав',
         joinDate: '2023',
-        bio: '',
-        social: {}
+        bio: 'Девиз: "Из унылого говна, резко в сытого кота"',
+        social: {
+            telegram: '@kadrzakadrommikiangel',
+        }
     },
     { 
         id: 'raskolnikov',
@@ -49,7 +64,7 @@ const voicesDatabase = [
         image: 'ава-raskolnikov.jpg',
         status: 'Основной состав',
         joinDate: '2024',
-        bio: '',
+        bio: 'Девиз : "Тварь ли я дрожащая или право имею"',
         social: {}
     },
     { 
@@ -58,7 +73,7 @@ const voicesDatabase = [
         image: 'ава-dnt.jpg',
         status: 'Основной состав',
         joinDate: '2025',
-        bio: '',
+        bio: 'Девиз: «Смелость открывает двери к успеху»',
         social: {}
     },
     { 
@@ -166,7 +181,7 @@ const voicesDatabase = [
         image: 'ава-mays.jpg',
         status: 'Основной состав',
         joinDate: '2025',
-        bio: '',
+        bio: 'Девиз: "Кто пукнул, тот сам и понюхал."',
         social: {}
     },
     { 
@@ -222,7 +237,7 @@ const voicesDatabase = [
         image: 'ава-tuchkan.jpg',
         status: 'Доп. состав',
         joinDate: '2025',
-        bio: '',
+        bio: 'Девиз: "Кто рано встаёт, того беднягу жаль"',
         social: {}
     },
     { 
@@ -231,7 +246,7 @@ const voicesDatabase = [
         image: 'ава-chep.jpg',
         status: 'Доп. состав',
         joinDate: '2026',
-        bio: '',
+        bio: 'Девиз: "Не сдавайся, позорься дальше"',
         social: {}
     },
     { 
@@ -411,7 +426,7 @@ const voicesDatabase = [
         image: 'ава-putin.jpg',
         status: 'Доп. состав',
         joinDate: '2026',
-        bio: '',
+        bio: 'Девиз: "Похуй, пляшем"',
         social: {}
     },
     { 
