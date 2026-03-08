@@ -3,148 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VAT Главная</title>
-    <link rel="stylesheet" href="style.css">
+    <title>DNT's site</title>
     <style>
-        .featured-grid {
+        body { 
+            background: url(background.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        /* Контейнер для всего контента */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.85); /* Полупрозрачный белый фон */
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Заголовок и аватарка */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .avatar {
+            display: block;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            border: 5px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Основной контент */
+        .content-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #444;
+            text-align: justify;
+            margin: 0;
+        }
+
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #666, transparent);
+            margin: 25px 0;
+        }
+
+        /* Секция для дополнительных картинок */
+        .gallery {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
             justify-content: center;
-            margin: 20px 0;
-        }
-        
-        .featured-item {
-            width: 280px;
-            text-align: center;
-        }
-        
-        .featured-image {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        
-        .welcome-banner {
-            background: linear-gradient(135deg, #001a8c20, #32006320);
+            gap: 20px;
+            margin-top: 30px;
             padding: 20px;
+            background: rgba(240, 240, 240, 0.7);
             border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
         }
-        .flower-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #d43f6b, #ff8da1);
-            color: white;
-            text-decoration: none;
-            padding: 15px 40px;
-            border-radius: 50px;
-            font-size: 20px;
-            font-weight: bold;
-            margin: 20px 0;
-            border: 2px solid white;
-            box-shadow: 0 5px 20px rgba(212, 63, 107, 0.4);
-            transition: all 0.3s;
-            animation: buttonPulse 2s infinite;
+
+        .gallery-item {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            transition: transform 0.3s ease;
+            cursor: pointer;
         }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+            
+            .avatar {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .title {
+                font-size: 24px;
+            }
+            
+            .welcome-text {
+                font-size: 16px;
+            }
+            
+            .gallery-item {
+                width: 150px;
+                height: 120px;
+            }
+        }
+        /* Стили для красивых кнопок */
+.navigation-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 40px;
+    padding: 25px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240,240,255,0.9));
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.nav-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 25px;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    min-width: 180px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+.nav-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* Адаптивность для кнопок */
+@media (max-width: 768px) {
+    .navigation-buttons {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+    
+    .nav-button {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+/* В стилях для кнопок (добавить или заменить) */
+.navigation-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 40px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240,240,255,0.9));
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.nav-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    min-width: 140px;
+    max-width: 100%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    border: 2px solid rgba(255,255,255,0.3);
+    flex: 1;
+    text-align: center;
+    word-break: break-word;
+}
+
+@media (max-width: 768px) {
+    .navigation-buttons {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px;
+        gap: 12px;
+        margin: 20px 0;
+    }
+    
+    .nav-button {
+        width: 100%;
+        min-width: unset;
+        max-width: 100%;
+        padding: 14px 15px;
+        font-size: 15px;
+        margin: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    .nav-button {
+        padding: 12px 10px;
+        font-size: 14px;
+    }
+    
+    .navigation-buttons {
+        padding: 12px;
+        margin: 15px 0;
+    }
+}
     </style>
 </head>
 <body>
-    <!-- Навигация -->
-<div class="container">
-    <div style="text-align: center; margin: 40px 0;">
-            <a href="march8.html" class="flower-button">
-                🌸 С 8 марта! 🌸
-            </a>
-        </div>
+    <div class="container">
     <div class="navigation-buttons">
-        <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-            🎭 Состав
-        </a>
-        <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-            🎦 Тайтлы
-        </a>
-    </div>
-    
-    <!-- ПОИСКОВАЯ СТРОКА -->
-    <div style="margin-top: 15px; display: flex; justify-content: center;">
-        <form action="search.html" method="get" style="display: flex; width: 100%; max-width: 500px; gap: 10px;">
-            <input type="text" name="q" placeholder="🔍 Поиск по тайтлам и дабберам..." 
-                   style="flex: 1; padding: 12px 20px; border: 2px solid #001a8c; border-radius: 50px; font-size: 16px; outline: none;"
-                   required>
-            <button type="submit" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%); color: white; border: none; padding: 0 25px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
-                Найти
-            </button>
-        </form>
+    <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+        🎭 Состав
+    </a>
+    <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+        🎦 Тайтлы
+    </a>
     </div>
 </div>
-    
-    <!-- Основной контент -->
-    <div class="container">
-        <div class="header">
+<div class="container">
+    <div class="header">
             <a href="index.html">
-                <img src="logo.jpg" alt="Логотип Вата" class="avatar" width="240" height="240">
+            <img src="logo.jpg" alt="Логотип Вата" class="avatar" width="240" height="240">
             </a>
-            <h1 class="title">VAT - Voice Acting Team</h1>
+            <h1 class="title">Главная</h1>
             <hr>
-        </div>
-        
-        <div class="content-box">
-            <div class="welcome-banner">
-                <h2>Добро пожаловать!</h2>
-                <p class="text">Мы команда фандаба Voice Acting Team. Приятного просмотра!</p>
-            </div>
-            
-            
-            <h2>🔥 Последние добавленные</h2>
-            <div class="featured-grid">
-                <div class="featured-item">
-                    <img src="молч_ведьм.jpg" alt="Молчаливая ведьма" class="featured-image">
-                    <p><strong>Молчаливая ведьма</strong></p>
-                    <p>Серия 7 ✓</p>
-                </div>
-                <div class="featured-item">
-                    <img src="молч_ведьм.jpg" alt="Молчаливая ведьма" class="featured-image">
-                    <p><strong>Молчаливая ведьма</strong></p>
-                    <p>Серия 6 ✓</p>
-                </div>
-                <div class="featured-item">
-                    <img src="ЗД.png" alt="Звёздное дитя" class="featured-image">
-                    <p><strong>Звёздное дитя</strong></p>
-                    <p>Сезон 2 Серия 9 ✓</p>
-                </div>
-            </div>
-            
-            <hr>
-            
-            <h2>📢 Новости проекта</h2>
-            <div style="background: #f5f5f5; padding: 15px; border-radius: 8px;">
-                <p><strong>06.03.2026</strong> - Запущен новый сайт VAT!</p>
-                <p><strong>03.03.2026</strong> - Вышла 7 серия "Молчаливой ведьмы" в нашем ТГК</p>
-                <p><strong>26.02.2026</strong> - Вышла 6 серия "Молчаливой ведьмы" в нашем ТГК</p>
-            </div>
-        </div>
     </div>
-    <!-- Футер (подвал) -->
-<div class="container" style="margin-top: 20px; padding: 20px; text-align: center;">
-    <hr style="margin: 20px 0;">
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-bottom: 15px;">
-        <a href="index.html" style="color: #001a8c; text-decoration: none;">Главная</a>
-        <a href="titles.html" style="color: #001a8c; text-decoration: none;">Тайтлы</a>
-        <a href="sostav.html" style="color: #001a8c; text-decoration: none;">Состав</a>
-        <a href="privacy.html" style="color: #001a8c; text-decoration: none;">Политика конфиденциальности</a>
+    <div class="content-box">
+
     </div>
-    <p style="font-size: 14px; color: #666; margin: 5px 0;">
-        © 2026 VAT - Voice Acting Team. Все права защищены.
-    </p>
-    <p style="font-size: 12px; color: #999; margin: 5px 0;">
-        Любое копирование материалов без согласия правообладателя запрещено.
-    </p>
-    <p style="font-size: 12px; color: #999; margin: 5px 0;">
-        Сайт создан фанатами для фанатов. Все видео и материалы принадлежат их законным владельцам.
-    </p>
 </div>
 </body>
 </html>
