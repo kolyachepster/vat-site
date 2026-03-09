@@ -489,6 +489,12 @@
     </div>
 
     <script src="firebase-config.js" type="module">
+    import firebase from './firebase-config.js';
+    
+    // Проверка авторизации
+    if (!firebase.isAdminLoggedIn()) {
+        window.location.href = 'admin-login.html';
+    }
         import firebase from './firebase-config.js';
         // Проверка авторизации
         if (!isAdminLoggedIn()) {
