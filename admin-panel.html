@@ -241,7 +241,9 @@
                 name: document.getElementById('titleName').value,
                 nameEng: document.getElementById('titleNameEn').value || '',
                 image: document.getElementById('titleImage').value || 'ава-',
-                status: 'Основной состав'
+                type: 'anime',
+                seasons: 1,
+                episodes: 12
             };
             
             // Добавляем в локальный массив
@@ -250,6 +252,12 @@
             try {
                 // Сохраняем в Firebase
                 await set(ref(database, 'titles'), titlesDatabase);
+                
+                // Обновляем глобальные переменные для других страниц
+                if (window.titlesDatabase) {
+                    window.titlesDatabase = titlesDatabase;
+                }
+                
                 showMessage('✅ Тайтл успешно добавлен!');
                 
                 // Очищаем форму
@@ -274,6 +282,12 @@
             try {
                 // Сохраняем в Firebase
                 await set(ref(database, 'titles'), titlesDatabase);
+                
+                // Обновляем глобальные переменные
+                if (window.titlesDatabase) {
+                    window.titlesDatabase = titlesDatabase;
+                }
+                
                 showMessage('✅ Тайтл удалён');
                 
                 // Обновляем отображение
@@ -314,7 +328,8 @@
                 name: document.getElementById('voiceName').value,
                 image: document.getElementById('voiceImage').value || 'ава-',
                 status: document.getElementById('voiceStatus').value,
-                bio: ''
+                bio: '',
+                joinDate: ''
             };
             
             // Добавляем в локальный массив
@@ -323,6 +338,12 @@
             try {
                 // Сохраняем в Firebase
                 await set(ref(database, 'voices'), voicesDatabase);
+                
+                // Обновляем глобальные переменные
+                if (window.voicesDatabase) {
+                    window.voicesDatabase = voicesDatabase;
+                }
+                
                 showMessage('✅ Даббер успешно добавлен!');
                 
                 // Очищаем форму
@@ -347,6 +368,12 @@
             try {
                 // Сохраняем в Firebase
                 await set(ref(database, 'voices'), voicesDatabase);
+                
+                // Обновляем глобальные переменные
+                if (window.voicesDatabase) {
+                    window.voicesDatabase = voicesDatabase;
+                }
+                
                 showMessage('✅ Даббер удалён');
                 
                 // Обновляем отображение
@@ -407,7 +434,8 @@
                 titleId: document.getElementById('roleTitleId').value,
                 voiceId: document.getElementById('roleVoiceId').value,
                 character: document.getElementById('roleCharacter').value || 'Персонаж',
-                type: 'main'
+                type: 'main',
+                episodes: ''
             };
             
             // Добавляем в локальный массив
@@ -416,6 +444,12 @@
             try {
                 // Сохраняем в Firebase
                 await set(ref(database, 'roles'), rolesDatabase);
+                
+                // Обновляем глобальные переменные
+                if (window.rolesDatabase) {
+                    window.rolesDatabase = rolesDatabase;
+                }
+                
                 showMessage('✅ Роль успешно добавлена!');
                 
                 // Очищаем форму
@@ -439,6 +473,12 @@
             try {
                 // Сохраняем в Firebase
                 await set(ref(database, 'roles'), rolesDatabase);
+                
+                // Обновляем глобальные переменные
+                if (window.rolesDatabase) {
+                    window.rolesDatabase = rolesDatabase;
+                }
+                
                 showMessage('✅ Роль удалена');
                 
                 // Обновляем отображение
@@ -488,6 +528,11 @@
                 if (titlesSnap.exists()) {
                     const data = titlesSnap.val();
                     titlesDatabase = Array.isArray(data) ? data : Object.values(data);
+                    
+                    // Обновляем глобальные переменные
+                    if (window.titlesDatabase) {
+                        window.titlesDatabase = titlesDatabase;
+                    }
                 }
                 
                 // Загружаем дабберов
@@ -495,6 +540,11 @@
                 if (voicesSnap.exists()) {
                     const data = voicesSnap.val();
                     voicesDatabase = Array.isArray(data) ? data : Object.values(data);
+                    
+                    // Обновляем глобальные переменные
+                    if (window.voicesDatabase) {
+                        window.voicesDatabase = voicesDatabase;
+                    }
                 }
                 
                 // Загружаем роли
@@ -502,6 +552,11 @@
                 if (rolesSnap.exists()) {
                     const data = rolesSnap.val();
                     rolesDatabase = Array.isArray(data) ? data : Object.values(data);
+                    
+                    // Обновляем глобальные переменные
+                    if (window.rolesDatabase) {
+                        window.rolesDatabase = rolesDatabase;
+                    }
                 }
                 
                 console.log('Данные загружены из Firebase:');

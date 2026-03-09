@@ -1,6 +1,10 @@
 // data.js - База данных сайта
 
 // Начальные данные (если Firebase пустой)
+// В начало файла data.js добавьте эти строки
+window.titlesDatabase = [];
+window.voicesDatabase = [];
+window.rolesDatabase = [];
 const initialTitles = [
     { id: 'molchalivaya_vedma', name: 'Молчаливая ведьма', nameEng: 'The Silent Witch', image: 'молч_ведьм.jpg', type: 'anime', seasons: 1, episodes: 13 },
     { id: 'zvezdnoe_ditya', name: 'Звёздное дитя', nameEng: 'Oshi No Ko', image: 'ЗД.png', type: 'anime', seasons: 3, episodes: 35 },
