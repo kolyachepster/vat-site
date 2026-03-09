@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Конфигурация Firebase (ваши данные)
+// Конфигурация Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyC-LWCtieKF69kWRRY53Snvor_1KGgCY_A",
   authDomain: "vat-site-43783.firebaseapp.com",
@@ -128,5 +128,7 @@ const firebaseAPI = {
     isAdminLoggedIn
 };
 
-export default firebaseAPI;
+// Делаем доступным глобально
 window.firebase = firebaseAPI;
+
+export default firebaseAPI;

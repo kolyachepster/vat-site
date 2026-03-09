@@ -1,10 +1,6 @@
-// data.js - База данных сайта
+// data.js - База данных сайта VAT
 
-// Начальные данные (если Firebase пустой)
-// В начало файла data.js добавьте эти строки
-window.titlesDatabase = [];
-window.voicesDatabase = [];
-window.rolesDatabase = [];
+// ===== НАЧАЛЬНЫЕ ДАННЫЕ =====
 const initialTitles = [
     { id: 'molchalivaya_vedma', name: 'Молчаливая ведьма', nameEng: 'The Silent Witch', image: 'молч_ведьм.jpg', type: 'anime', seasons: 1, episodes: 13 },
     { id: 'zvezdnoe_ditya', name: 'Звёздное дитя', nameEng: 'Oshi No Ko', image: 'ЗД.png', type: 'anime', seasons: 3, episodes: 35 },
@@ -34,22 +30,31 @@ const initialVoices = [
 const initialRoles = [
     { titleId: 'molchalivaya_vedma', voiceId: 'mindal', character: 'Моника Эверетт', type: 'main' },
     { titleId: 'molchalivaya_vedma', voiceId: 'dnt', character: 'Феликс Арк Ридилл', type: 'main' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'raskolnikov', character: 'Неро', type: 'main' }
+    { titleId: 'molchalivaya_vedma', voiceId: 'raskolnikov', character: 'Неро', type: 'main' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'raskolnikov', character: 'Сирил Эшли', type: 'support' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'fury', character: 'Луис Миллер', type: 'support' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'sakura', character: 'Ринзбельфид', type: 'support' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'nemo', character: 'Эллиотт Говард', type: 'support' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'mays', character: 'Избель Нортон', type: 'support' },
+    { titleId: 'molchalivaya_vedma', voiceId: 'miki-angel', character: 'Лана Колетт', type: 'support' }
 ];
 
-// Глобальные переменные
+// ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====
 window.titlesDatabase = [];
 window.voicesDatabase = [];
 window.rolesDatabase = [];
 
-// Загрузка данных из Firebase
+// ===== ЗАГРУЗКА ДАННЫХ ИЗ FIREBASE =====
 async function loadData() {
     try {
-        if (window.firebase) {
+        // Проверяем, загружен ли Firebase
+        if (window.firebase && typeof window.firebase.loadTitles === 'function') {
+            console.log('🔄 Загрузка данных из Firebase...');
+            
             const [titles, voices, roles] = await Promise.all([
-                window.firebase.loadTitles(),
-                window.firebase.loadVoices(),
-                window.firebase.loadRoles()
+                window.firebase.loadTitles().catch(() => []),
+                window.firebase.loadVoices().catch(() => []),
+                window.firebase.loadRoles().catch(() => [])
             ]);
             
             window.titlesDatabase = titles.length ? titles : initialTitles;
@@ -58,21 +63,30 @@ async function loadData() {
             
             console.log('✅ Данные загружены из Firebase');
         } else {
-            window.titlesDatabase = initialTitles;
-            window.voicesDatabase = initialVoices;
-            window.rolesDatabase = initialRoles;
-            console.log('⚠️ Используются локальные данные');
+            // Используем локальные данные
+            console.log('📁 Используются локальные данные (Firebase не подключён)');
+            window.titlesDatabase = [...initialTitles];
+            window.voicesDatabase = [...initialVoices];
+            window.rolesDatabase = [...initialRoles];
         }
     } catch (error) {
-        console.error('Ошибка загрузки:', error);
-        window.titlesDatabase = initialTitles;
-        window.voicesDatabase = initialVoices;
-        window.rolesDatabase = initialRoles;
+        console.error('❌ Ошибка загрузки данных:', error);
+        // В случае ошибки используем локальные данные
+        window.titlesDatabase = [...initialTitles];
+        window.voicesDatabase = [...initialVoices];
+        window.rolesDatabase = [...initialRoles];
     }
+    
+    // Сохраняем данные в localStorage для быстрого доступа
+    localStorage.setItem('vat_titles', JSON.stringify(window.titlesDatabase));
+    localStorage.setItem('vat_voices', JSON.stringify(window.voicesDatabase));
+    localStorage.setItem('vat_roles', JSON.stringify(window.rolesDatabase));
+    
+    console.log('📊 Статистика:');
+    console.log(`- Тайтлов: ${window.titlesDatabase.length}`);
+    console.log(`- Дабберов: ${window.voicesDatabase.length}`);
+    console.log(`- Ролей: ${window.rolesDatabase.length}`);
 }
-
-// Запускаем загрузку
-loadData();
 
 // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
 window.getVoiceById = function(id) {
@@ -110,4 +124,35 @@ window.searchDatabase = function(query) {
     );
     
     return { titles, voices };
+};
+
+// Функция для получения ролей по тайтлу
+window.getRolesByTitleId = function(titleId) {
+    return window.rolesDatabase.filter(r => r.titleId === titleId);
+};
+
+// Функция для получения дабберов по тайтлу
+window.getVoicesByTitleId = function(titleId) {
+    const roles = window.getRolesByTitleId(titleId);
+    const voiceIds = [...new Set(roles.map(r => r.voiceId))];
+    
+    return voiceIds.map(voiceId => {
+        const voice = window.getVoiceById(voiceId);
+        const voiceRoles = roles.filter(r => r.voiceId === voiceId);
+        return voice ? { ...voice, roles: voiceRoles } : null;
+    }).filter(v => v);
+};
+
+// ===== ЗАПУСК ЗАГРУЗКИ =====
+loadData();
+
+// Экспортируем функции для использования в других файлах
+window.VATData = {
+    getVoiceById: window.getVoiceById,
+    getVoiceByName: window.getVoiceByName,
+    getRolesByVoiceId: window.getRolesByVoiceId,
+    getTitlesByVoiceId: window.getTitlesByVoiceId,
+    getRolesByTitleId: window.getRolesByTitleId,
+    getVoicesByTitleId: window.getVoicesByTitleId,
+    searchDatabase: window.searchDatabase
 };

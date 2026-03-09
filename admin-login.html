@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход - VAT</title>
     <link rel="stylesheet" href="style.css">
+    <script src="data.js"></script>
+<script type="module" src="firebase-config.js"></script>
     <style>
         .login-container {
             max-width: 400px;
@@ -74,17 +76,15 @@
         <form id="loginForm">
             <div class="form-group">
                 <label>📧 Email</label>
-                <input type="email" id="email" value="voiceactingteam8@gmail.com" required>
+                <input type="email" id="email" value="Почта" required>
             </div>
             <div class="form-group">
                 <label>🔑 Пароль</label>
-                <input type="password" id="password" value="A55411455a_" required>
+                <input type="password" id="password" value="Пароль" required>
             </div>
             <button type="submit" class="login-button">Войти</button>
             <div id="errorMessage" class="error-message"></div>
         </form>
-        
-        
     </div>
 
     <script type="module">
