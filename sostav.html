@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Состав команды VAT</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Подключаем data.js ПЕРВЫМ -->
     <script src="data.js"></script>
     <script type="module" src="firebase-config.js"></script>
-    <!-- ... остальные стили ... -->
     <style>
         .team-section-title {
             margin-top: 30px;
@@ -17,7 +15,6 @@
             border-left: 5px solid #320063;
             padding-left: 15px;
         }
-        
         .stats-box {
             display: flex;
             justify-content: space-around;
@@ -28,83 +25,18 @@
             flex-wrap: wrap;
             gap: 15px;
         }
-        
         .stat-item {
             text-align: center;
         }
-        
         .stat-number {
             font-size: 32px;
             font-weight: bold;
             color: #001a8c;
         }
-        
         .stat-label {
             font-size: 14px;
             color: #666;
         }
-
-        /* Стили для подсветки даббера */
-        @keyframes highlightPulse {
-            0% { box-shadow: 0 0 20px #ffaa00; }
-            50% { box-shadow: 0 0 40px #ffaa00, 0 0 60px rgba(255,170,0,0.3); }
-            100% { box-shadow: 0 0 20px #ffaa00; }
-        }
-
-        .team-card.highlight {
-            animation: highlightPulse 1.5s ease-in-out infinite;
-            border: 2px solid #ffaa00 !important;
-            transform: scale(1.02);
-            position: relative;
-            z-index: 5;
-            transition: all 0.3s ease;
-        }
-
-        .search-badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: #ffaa00;
-            color: #001a8c;
-            padding: 5px 12px;
-            border-radius: 25px;
-            font-size: 12px;
-            font-weight: bold;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            z-index: 10;
-            white-space: nowrap;
-        }
-
-        /* Убираем подчёркивание у ссылок */
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        /* Чтобы карточка не ломалась внутри ссылки */
-        .team-card {
-            transition: transform 0.3s ease;
-        }
-
-        .team-card:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Ссылка занимает всю карточку */
-        .team-card-link {
-            display: block;
-            width: fit-content;
-        }
-        
-        .welcome-banner {
-            background: linear-gradient(135deg, #001a8c20, #32006320);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        /* Стили для списка дабберов */
         .team-list {
             display: flex;
             flex-wrap: wrap;
@@ -112,7 +44,6 @@
             justify-content: center;
             margin-top: 20px;
         }
-        
         .team-card {
             background: linear-gradient(145deg, #ffffff, #f0f0f0);
             border-radius: 15px;
@@ -122,8 +53,14 @@
             text-align: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 1px solid rgba(255,255,255,0.5);
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
-        
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+        }
         .team-card-avatar {
             width: 100px;
             height: 100px;
@@ -132,21 +69,18 @@
             border: 3px solid #001a8c;
             margin-bottom: 15px;
         }
-        
         .team-card-name {
             font-size: 20px;
             font-weight: bold;
             color: #001a8c;
             margin: 0 0 10px 0;
         }
-        
         .team-card-roles {
             font-size: 14px;
             color: #555;
             margin: 5px 0;
             font-style: italic;
         }
-        
         .team-card-popular {
             font-size: 13px;
             color: #666;
@@ -155,33 +89,18 @@
             border-radius: 8px;
             margin: 10px 0 0 0;
         }
-        
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            .team-card {
-                width: 160px;
-                padding: 15px 10px;
-            }
-            .team-card-avatar {
-                width: 80px;
-                height: 80px;
-            }
-            .team-card-name {
-                font-size: 18px;
-            }
-            .search-badge {
-                font-size: 10px;
-                padding: 3px 8px;
-                top: -5px;
-                right: -5px;
-            }
-        }
-
         .loading {
             text-align: center;
             padding: 30px;
             width: 100%;
             color: #666;
+        }
+        .welcome-banner {
+            background: linear-gradient(135deg, #001a8c20, #32006320);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -206,7 +125,7 @@
                 <input type="text" name="q" placeholder="🔍 Поиск по тайтлам и дабберам..." 
                        style="flex: 1; padding: 12px 20px; border: 2px solid #001a8c; border-radius: 50px; font-size: 16px; outline: none;"
                        required>
-                <button type="submit" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%); color: white; border: none; padding: 0 25px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                <button type="submit" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%); color: white; border: none; padding: 0 25px; border-radius: 50px; font-weight: bold; cursor: pointer;">
                     Найти
                 </button>
             </form>
@@ -217,7 +136,7 @@
     <div class="container">
         <div class="header">
             <a href="index.html">
-                <img src="logo.jpg" alt="Логотип Вата" class="avatar" width="240" height="240">
+                <img src="logo.jpg" alt="Логотип Вата" class="avatar" width="240" height="240" onerror="this.src='https://via.placeholder.com/240/001a8c/ffffff?text=VAT'">
             </a>
             <h1 class="title">Состав команды</h1>
             <hr>
@@ -229,7 +148,7 @@
         </div>
 
         <div class="content-box">
-            <!-- Статистика будет обновляться через JavaScript -->
+            <!-- Статистика -->
             <div class="stats-box" id="statsBox">
                 <div class="stat-item">
                     <div class="stat-number" id="mainCount">0</div>
@@ -246,15 +165,15 @@
             </div>
 
             <!-- Основной состав -->
-            <h2 class="team-section-title" id="mainTitle">🌟 Основной состав</h2>
+            <h2 class="team-section-title">🌟 Основной состав</h2>
             <div class="team-list" id="mainTeamList">
-                <div class="loading">Загрузка основного состава...</div>
+                <div class="loading">Загрузка...</div>
             </div>
 
             <!-- Дополнительный состав -->
-            <h2 class="team-section-title" id="extraTitle">✨ Дополнительный состав</h2>
+            <h2 class="team-section-title">✨ Дополнительный состав</h2>
             <div class="team-list" id="extraTeamList">
-                <div class="loading">Загрузка дополнительного состава...</div>
+                <div class="loading">Загрузка...</div>
             </div>
         </div>
     </div>
@@ -271,132 +190,79 @@
         <p style="font-size: 14px; color: #666; margin: 5px 0;">
             © 2026 VAT - Voice Acting Team. Все права защищены.
         </p>
-        <p style="font-size: 12px; color: #999; margin: 5px 0;">
-            Сайт создан фанатами для фанатов. Все видео и материалы принадлежат их законным владельцам.
-        </p>
     </div>
 
     <script>
-        // Функция для загрузки и отображения дабберов
-        function loadVoices() {
-            const mainList = document.getElementById('mainTeamList');
-            const extraList = document.getElementById('extraTeamList');
-            
-            // Проверяем, загрузились ли данные
-            const checkData = setInterval(() => {
-                if (window.voicesDatabase && window.voicesDatabase.length > 0) {
-                    clearInterval(checkData);
-                    
-                    // Разделяем на основной и дополнительный состав
-                    const mainVoices = window.voicesDatabase.filter(v => v.status === 'Основной состав');
-                    const extraVoices = window.voicesDatabase.filter(v => v.status === 'Доп. состав');
-                    
-                    console.log('Основной состав:', mainVoices.length);
-                    console.log('Дополнительный состав:', extraVoices.length);
-                    
-                    // Обновляем статистику
-                    document.getElementById('mainCount').textContent = mainVoices.length;
-                    document.getElementById('extraCount').textContent = extraVoices.length;
-                    document.getElementById('totalCount').textContent = window.voicesDatabase.length;
-                    
-                    // Отрисовываем основной состав
-                    if (mainVoices.length > 0) {
-                        mainList.innerHTML = mainVoices.map(voice => `
-                            <a href="voice.html?id=${voice.id}" class="team-card-link">
-                                <div class="team-card">
-                                    <img src="${voice.image}" alt="${voice.name}" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=${voice.name.charAt(0)}'">
-                                    <div class="team-card-name">${voice.name}</div>
-                                    <div class="team-card-roles">${voice.bio || '(роль)'}</div>
-                                    <div class="team-card-popular">🎭 Основной состав</div>
-                                </div>
-                            </a>
-                        `).join('');
-                    } else {
-                        mainList.innerHTML = '<p class="loading">Основной состав пока пуст</p>';
-                    }
-                    
-                    // Отрисовываем дополнительный состав
-                    if (extraVoices.length > 0) {
-                        extraList.innerHTML = extraVoices.map(voice => `
-                            <a href="voice.html?id=${voice.id}" class="team-card-link">
-                                <div class="team-card">
-                                    <img src="${voice.image}" alt="${voice.name}" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/666666/ffffff?text=${voice.name.charAt(0)}'">
-                                    <div class="team-card-name">${voice.name}</div>
-                                    <div class="team-card-roles">${voice.bio || '(роль)'}</div>
-                                    <div class="team-card-popular">🔹 Доп. состав</div>
-                                </div>
-                            </a>
-                        `).join('');
-                    } else {
-                        extraList.innerHTML = '<p class="loading">Дополнительный состав пока пуст</p>';
-                    }
-                    
-                    // Подсветка даббера из поиска
-                    highlightVoiceActor();
-                }
-            }, 100);
-            
-            // Таймаут на случай ошибки
-            setTimeout(() => {
-                clearInterval(checkData);
-                if (!window.voicesDatabase || window.voicesDatabase.length === 0) {
-                    mainList.innerHTML = '<p class="loading">Не удалось загрузить данные</p>';
-                    extraList.innerHTML = '<p class="loading">Не удалось загрузить данные</p>';
-                }
-            }, 5000);
-        }
+    function loadVoices() {
+        const mainList = document.getElementById('mainTeamList');
+        const extraList = document.getElementById('extraTeamList');
         
-        // Функция для подсветки даббера при переходе с поиска
-        function highlightVoiceActor() {
-            const hash = window.location.hash.substring(1);
-            if (!hash) return;
-            
-            const voiceName = decodeURIComponent(hash);
-            console.log('Ищем даббера:', voiceName);
-            
-            const cards = document.querySelectorAll('.team-card');
-            let found = false;
-            
-            cards.forEach(card => {
-                const nameElement = card.querySelector('.team-card-name');
-                if (nameElement && nameElement.textContent.trim() === voiceName) {
-                    // Убираем предыдущую подсветку
-                    document.querySelectorAll('.team-card.highlight').forEach(c => {
-                        c.classList.remove('highlight');
-                        const oldBadge = c.querySelector('.search-badge');
-                        if (oldBadge) oldBadge.remove();
-                    });
-                    
-                    // Добавляем подсветку
-                    card.classList.add('highlight');
-                    
-                    // Добавляем бейдж
-                    const badge = document.createElement('div');
-                    badge.className = 'search-badge';
-                    badge.textContent = '🔍 Результат поиска';
-                    card.style.position = 'relative';
-                    card.appendChild(badge);
-                    
-                    // Прокручиваем
-                    setTimeout(() => {
-                        card.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center'
-                        });
-                    }, 100);
-                    
-                    found = true;
+        setTimeout(() => {
+            if (window.voicesDatabase && window.voicesDatabase.length > 0) {
+                const mainVoices = window.voicesDatabase.filter(v => v.status === 'Основной состав');
+                const extraVoices = window.voicesDatabase.filter(v => v.status === 'Доп. состав');
+                
+                document.getElementById('mainCount').textContent = mainVoices.length;
+                document.getElementById('extraCount').textContent = extraVoices.length;
+                document.getElementById('totalCount').textContent = window.voicesDatabase.length;
+                
+                if (mainVoices.length > 0) {
+                    mainList.innerHTML = mainVoices.map(voice => `
+                        <a href="voice.html?id=${voice.id}" class="team-card">
+                            <img src="${voice.image}" alt="${voice.name}" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=${voice.name.charAt(0)}'">
+                            <div class="team-card-name">${voice.name}</div>
+                            <div class="team-card-roles">${voice.bio || 'Актёр озвучки'}</div>
+                            <div class="team-card-popular">🎭 Основной состав</div>
+                        </a>
+                    `).join('');
+                } else {
+                    mainList.innerHTML = '<p class="loading">Основной состав пока пуст</p>';
                 }
-            });
-            
-            if (!found) {
-                console.log('Даббер не найден, пробуем ещё раз');
-                setTimeout(highlightVoiceActor, 500);
+                
+                if (extraVoices.length > 0) {
+                    extraList.innerHTML = extraVoices.map(voice => `
+                        <a href="voice.html?id=${voice.id}" class="team-card">
+                            <img src="${voice.image}" alt="${voice.name}" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/666666/ffffff?text=${voice.name.charAt(0)}'">
+                            <div class="team-card-name">${voice.name}</div>
+                            <div class="team-card-roles">${voice.bio || 'Актёр озвучки'}</div>
+                            <div class="team-card-popular">🔹 Доп. состав</div>
+                        </a>
+                    `).join('');
+                } else {
+                    extraList.innerHTML = '<p class="loading">Дополнительный состав пока пуст</p>';
+                }
+            } else {
+                // Заглушки
+                document.getElementById('mainCount').textContent = '8';
+                document.getElementById('extraCount').textContent = '0';
+                document.getElementById('totalCount').textContent = '8';
+                
+                mainList.innerHTML = `
+                    <a href="voice.html?id=miki-angel" class="team-card">
+                        <img src="ава-miki.jpg" alt="Miki-angel" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=M'">
+                        <div class="team-card-name">Miki-angel</div>
+                        <div class="team-card-roles">Основатель</div>
+                        <div class="team-card-popular">🎭 Основной состав</div>
+                    </a>
+                    <a href="voice.html?id=raskolnikov" class="team-card">
+                        <img src="ава-raskolnikov.jpg" alt="Раскольников" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=Р'">
+                        <div class="team-card-name">Раскольников</div>
+                        <div class="team-card-roles">Совладелец</div>
+                        <div class="team-card-popular">🎭 Основной состав</div>
+                    </a>
+                    <a href="voice.html?id=dnt" class="team-card">
+                        <img src="ава-dnt.jpg" alt="DNT" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=D'">
+                        <div class="team-card-name">DNT</div>
+                        <div class="team-card-roles">Админ</div>
+                        <div class="team-card-popular">🎭 Основной состав</div>
+                    </a>
+                `;
+                extraList.innerHTML = '<p class="loading">Дополнительный состав пока пуст</p>';
             }
-        }
-        
-        // Запускаем загрузку при загрузке страницы
-        window.onload = loadVoices;
+        }, 500);
+    }
+    
+    document.addEventListener('DOMContentLoaded', loadVoices);
     </script>
 </body>
 </html>

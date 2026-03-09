@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Даббер - VAT</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Подключаем data.js ПЕРВЫМ -->
     <script src="data.js"></script>
     <script type="module" src="firebase-config.js"></script>
-    <!-- ... остальные стили ... -->
     <style>
         .voice-profile {
             display: flex;
@@ -16,6 +14,7 @@
             padding: 30px;
             background: white;
             border-radius: 15px;
+            flex-wrap: wrap;
         }
         .voice-avatar {
             width: 200px;
@@ -24,7 +23,7 @@
             object-fit: cover;
             border: 5px solid #001a8c;
         }
-        .voice-info { flex: 1; }
+        .voice-info { flex: 1; min-width: 300px; }
         .voice-name { font-size: 36px; color: #001a8c; margin: 0; }
         .voice-status {
             display: inline-block;
@@ -39,13 +38,23 @@
             border-radius: 20px;
             font-size: 14px;
             margin: 3px;
+            background: #001a8c;
+            color: white;
         }
-        .role-main { background: #001a8c; color: white; }
         .not-found {
             text-align: center;
             padding: 50px;
             background: #f5f5f5;
             border-radius: 15px;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #001a8c;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
         }
     </style>
 </head>
@@ -60,7 +69,7 @@
 
     <div class="container">
         <div class="header">
-            <img src="logo.jpg" class="avatar" width="240" height="240">
+            <img src="logo.jpg" class="avatar" width="240" height="240" onerror="this.src='https://via.placeholder.com/240/001a8c/ffffff?text=VAT'">
             <hr>
         </div>
         
@@ -70,48 +79,58 @@
     </div>
 
     <script>
-        function getUrlParam(name) {
-            return new URLSearchParams(window.location.search).get(name);
-        }
+    function getUrlParam(name) {
+        return new URLSearchParams(window.location.search).get(name);
+    }
+    
+    function displayVoice() {
+        const id = getUrlParam('id');
+        const content = document.getElementById('voiceContent');
         
-        function displayVoice() {
-            const id = getUrlParam('id');
-            const content = document.getElementById('voiceContent');
+        setTimeout(() => {
+            const voice = window.getVoiceById ? window.getVoiceById(id) : null;
             
-            setTimeout(() => {
-                const voice = window.getVoiceById ? window.getVoiceById(id) : null;
-                
-                if (!voice) {
-                    content.innerHTML = '<div class="not-found"><h2>😕 Даббер не найден</h2><a href="sostav.html">← Назад</a></div>';
-                    return;
-                }
-                
-                const titles = window.getTitlesByVoiceId ? window.getTitlesByVoiceId(id) : [];
-                
-                let rolesHtml = '';
+            if (!voice) {
+                content.innerHTML = `
+                    <div class="not-found">
+                        <h2>😕 Даббер не найден</h2>
+                        <a href="sostav.html" class="back-button">← Назад к составу</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            const titles = window.getTitlesByVoiceId ? window.getTitlesByVoiceId(id) : [];
+            
+            let rolesHtml = '';
+            if (titles.length > 0) {
                 titles.forEach(title => {
                     rolesHtml += `<h3>${title.name}</h3>`;
                     title.roles.forEach(role => {
-                        rolesHtml += `<span class="role-badge role-${role.type}">${role.character || 'Роль'}</span> `;
+                        rolesHtml += `<span class="role-badge">${role.character || 'Роль'}</span> `;
                     });
                 });
-                
-                content.innerHTML = `
-                    <div class="voice-profile">
-                        <img src="${voice.image}" class="voice-avatar">
-                        <div class="voice-info">
-                            <h1 class="voice-name">${voice.name}</h1>
-                            <span class="voice-status">${voice.status}</span>
-                            <p>${voice.bio || ''}</p>
-                            <h3>Роли:</h3>
-                            ${rolesHtml || '<p>Пока нет ролей</p>'}
-                        </div>
+            } else {
+                rolesHtml = '<p>Пока нет ролей</p>';
+            }
+            
+            content.innerHTML = `
+                <div class="voice-profile">
+                    <img src="${voice.image}" class="voice-avatar" onerror="this.src='https://via.placeholder.com/200/001a8c/ffffff?text=${voice.name.charAt(0)}'">
+                    <div class="voice-info">
+                        <h1 class="voice-name">${voice.name}</h1>
+                        <span class="voice-status">${voice.status}</span>
+                        <p>${voice.bio || 'Актёр озвучки'}</p>
+                        <h3>Роли:</h3>
+                        ${rolesHtml}
+                        <a href="sostav.html" class="back-button">← Назад к составу</a>
                     </div>
-                `;
-            }, 500);
-        }
-        
-        window.onload = displayVoice;
+                </div>
+            `;
+        }, 500);
+    }
+    
+    window.onload = displayVoice;
     </script>
 </body>
 </html>

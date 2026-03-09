@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Конфигурация Firebase (ваши данные)
+// Конфигурация Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyC-LWCtieKF69kWRRY53Snvor_1KGgCY_A",
   authDomain: "vat-site-43783.firebaseapp.com",
@@ -11,10 +11,10 @@ const firebaseConfig = {
   storageBucket: "vat-site-43783.firebasestorage.app",
   messagingSenderId: "987773125200",
   appId: "1:987773125200:web:04cfdc68e320c426090755",
-  databaseURL: "https://vat-site-43783-default-rtdb.firebaseio.com/" // Добавьте эту строку!
+  databaseURL: "https://vat-site-43783-default-rtdb.firebaseio.com/"
 };
 
-// Инициализация
+// Инициализация Firebase (только один раз!)
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const auth = getAuth(app);
@@ -69,7 +69,7 @@ async function saveTitles(data) {
         await set(ref(database, 'titles'), data);
         return true;
     } catch (error) {
-        console.error('Ошибка сохранения:', error);
+        console.error('Ошибка сохранения тайтлов:', error);
         return false;
     }
 }
@@ -79,7 +79,7 @@ async function saveVoices(data) {
         await set(ref(database, 'voices'), data);
         return true;
     } catch (error) {
-        console.error('Ошибка сохранения:', error);
+        console.error('Ошибка сохранения дабберов:', error);
         return false;
     }
 }
@@ -89,7 +89,7 @@ async function saveRoles(data) {
         await set(ref(database, 'roles'), data);
         return true;
     } catch (error) {
-        console.error('Ошибка сохранения:', error);
+        console.error('Ошибка сохранения ролей:', error);
         return false;
     }
 }
@@ -129,7 +129,7 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// Экспорт
+// Экспорт API
 const firebaseAPI = {
     loadTitles,
     loadVoices,
@@ -139,7 +139,9 @@ const firebaseAPI = {
     saveRoles,
     loginAdmin,
     logoutAdmin,
-    isAdminLoggedIn
+    isAdminLoggedIn,
+    database,
+    auth
 };
 
 // Делаем доступным глобально

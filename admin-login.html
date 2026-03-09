@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход - VAT</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Подключаем существующие файлы Firebase -->
     <script src="data.js"></script>
     <script type="module" src="firebase-config.js"></script>
     <style>
@@ -60,11 +59,6 @@
             border-radius: 8px;
             margin-top: 20px;
         }
-        .loading {
-            text-align: center;
-            color: #666;
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
@@ -82,7 +76,7 @@
         <form id="loginForm">
             <div class="form-group">
                 <label>📧 Email</label>
-                <input type="email" id="email" placeholder="admin@example.com" required>
+                <input type="email" id="email" placeholder="admin@vat.ru" required>
             </div>
             <div class="form-group">
                 <label>🔑 Пароль</label>
@@ -90,7 +84,6 @@
             </div>
             <button type="submit" class="login-button">Войти</button>
             <div id="errorMessage" class="error-message"></div>
-            <div id="loadingMessage" class="loading" style="display: none;">⏳ Вход...</div>
         </form>
         
         <div class="info-box">
@@ -100,68 +93,34 @@
     </div>
 
     <script type="module">
-        // Импортируем auth из уже инициализированного Firebase
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        
-        // Ждём инициализации Firebase
-        function waitForFirebase() {
-            return new Promise((resolve) => {
-                const checkInterval = setInterval(() => {
-                    if (window.firebase) {
-                        clearInterval(checkInterval);
-                        resolve();
-                    }
-                }, 100);
-                
-                // Таймаут на случай ошибки
-                setTimeout(() => {
-                    clearInterval(checkInterval);
-                    resolve();
-                }, 3000);
-            });
-        }
-        
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('errorMessage');
-            const loadingDiv = document.getElementById('loadingMessage');
             
-            errorDiv.textContent = '';
-            loadingDiv.style.display = 'block';
+            errorDiv.textContent = '⏳ Вход...';
             
             try {
-                // Ждём инициализации Firebase
-                await waitForFirebase();
+                // Используем глобальный объект firebase
+                if (!window.firebase) {
+                    throw new Error('Firebase не инициализирован');
+                }
                 
-                // Получаем auth из уже инициализированного приложения
-                const auth = getAuth();
+                const result = await window.firebase.loginAdmin(email, password);
                 
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                console.log('Успешный вход:', userCredential.user.email);
-                
-                localStorage.setItem('adminLoggedIn', 'true');
-                
-                errorDiv.textContent = '✅ Успех! Перенаправление...';
-                
-                setTimeout(() => {
-                    window.location.href = 'admin-panel.html';
-                }, 1000);
-                
+                if (result.success) {
+                    errorDiv.textContent = '✅ Успех! Перенаправление...';
+                    setTimeout(() => {
+                        window.location.href = 'admin-panel.html';
+                    }, 1000);
+                } else {
+                    errorDiv.textContent = '❌ ' + result.error;
+                }
             } catch (error) {
-                console.error('Ошибка входа:', error);
-                loadingDiv.style.display = 'none';
-                
-                let message = 'Ошибка входа';
-                if (error.code === 'auth/user-not-found') message = 'Пользователь не найден';
-                if (error.code === 'auth/wrong-password') message = 'Неверный пароль';
-                if (error.code === 'auth/invalid-email') message = 'Неверный email';
-                if (error.code === 'auth/too-many-requests') message = 'Слишком много попыток';
-                if (error.code === 'auth/network-request-failed') message = 'Ошибка сети';
-                
-                errorDiv.textContent = '❌ ' + message;
+                console.error('Ошибка:', error);
+                errorDiv.textContent = '❌ Ошибка подключения к Firebase';
             }
         });
     </script>

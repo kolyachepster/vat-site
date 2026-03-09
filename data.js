@@ -1,6 +1,6 @@
 // data.js - База данных сайта VAT
 
-// ===== НАЧАЛЬНЫЕ ДАННЫЕ =====
+// ===== НАЧАЛЬНЫЕ ДАННЫЕ (ЗАГЛУШКИ) =====
 const initialTitles = [
     { id: 'molchalivaya_vedma', name: 'Молчаливая ведьма', nameEng: 'The Silent Witch', image: 'молч_ведьм.jpg', type: 'anime', seasons: 1, episodes: 13 },
     { id: 'zvezdnoe_ditya', name: 'Звёздное дитя', nameEng: 'Oshi No Ko', image: 'ЗД.png', type: 'anime', seasons: 3, episodes: 35 },
@@ -12,19 +12,10 @@ const initialVoices = [
     { id: 'raskolnikov', name: 'Раскольников', image: 'ава-raskolnikov.jpg', status: 'Основной состав', bio: 'Совладелец' },
     { id: 'dnt', name: 'DNT', image: 'ава-dnt.jpg', status: 'Основной состав', bio: 'Админ' },
     { id: 'nemo', name: 'Nemo', image: 'ава-nemo.jpg', status: 'Основной состав', bio: '' },
-    { id: 'atari', name: 'Atari', image: 'ава-atari.jpg', status: 'Основной состав', bio: '' },
     { id: 'mindal', name: 'Миндаль', image: 'ава-mindal.jpg', status: 'Основной состав', bio: '' },
-    { id: 'natalya', name: 'Наталья Тарасюк', image: 'ава-nat.jpg', status: 'Основной состав', bio: '' },
-    { id: 'runi', name: 'Руни', image: 'ава-runi.jpg', status: 'Основной состав', bio: '' },
-    { id: 'amaryllis', name: 'Amaryllis', image: 'ава-amaryllis.jpg', status: 'Основной состав', bio: '' },
-    { id: 'alex', name: 'Алекс Фостер', image: 'ава-alex.jpg', status: 'Основной состав', bio: '' },
-    { id: 'spartans', name: 'Юный Спартанец', image: 'ава-spart.jpg', status: 'Основной состав', bio: '' },
     { id: 'fury', name: 'Fury', image: 'ава-fury.jpg', status: 'Основной состав', bio: '' },
-    { id: 'titch', name: 'Titch', image: 'ава-titch.jpg', status: 'Основной состав', bio: '' },
     { id: 'sakura', name: 'Sakura Hashimoto', image: 'ава-sakura.jpg', status: 'Основной состав', bio: '' },
-    { id: 'mays', name: 'Майс', image: 'ава-mays.jpg', status: 'Основной состав', bio: '' },
-    { id: 'kolli', name: 'Kolli', image: 'ава-kolli.jpg', status: 'Основной состав', bio: '' },
-    { id: 'persik', name: 'Persik', image: 'ава-persik.jpg', status: 'Основной состав', bio: '' }
+    { id: 'mays', name: 'Майс', image: 'ава-mays.jpg', status: 'Основной состав', bio: '' }
 ];
 
 const initialRoles = [
@@ -68,30 +59,11 @@ async function loadData() {
                 })
             ]);
             
-            // Если данные есть, используем их
-            if (titles && titles.length > 0) {
-                window.titlesDatabase = titles;
-                console.log(`✅ Загружено ${titles.length} тайтлов из Firebase`);
-            } else {
-                window.titlesDatabase = [...initialTitles];
-                console.log('📁 Используются локальные тайтлы');
-            }
+            window.titlesDatabase = titles.length ? titles : initialTitles;
+            window.voicesDatabase = voices.length ? voices : initialVoices;
+            window.rolesDatabase = roles.length ? roles : initialRoles;
             
-            if (voices && voices.length > 0) {
-                window.voicesDatabase = voices;
-                console.log(`✅ Загружено ${voices.length} дабберов из Firebase`);
-            } else {
-                window.voicesDatabase = [...initialVoices];
-                console.log('📁 Используются локальные дабберы');
-            }
-            
-            if (roles && roles.length > 0) {
-                window.rolesDatabase = roles;
-                console.log(`✅ Загружено ${roles.length} ролей из Firebase`);
-            } else {
-                window.rolesDatabase = [...initialRoles];
-                console.log('📁 Используются локальные роли');
-            }
+            console.log(`✅ Загружено: ${window.titlesDatabase.length} тайтлов, ${window.voicesDatabase.length} дабберов, ${window.rolesDatabase.length} ролей`);
         } else {
             // Firebase не подключён, используем локальные данные
             console.log('⚠️ Firebase не найден, используются локальные данные');
@@ -101,13 +73,12 @@ async function loadData() {
         }
     } catch (error) {
         console.error('❌ Ошибка загрузки данных:', error);
-        // В случае ошибки используем локальные данные
         window.titlesDatabase = [...initialTitles];
         window.voicesDatabase = [...initialVoices];
         window.rolesDatabase = [...initialRoles];
     }
     
-    // Сохраняем в localStorage для кеширования
+    // Кешируем в localStorage
     try {
         localStorage.setItem('vat_titles', JSON.stringify(window.titlesDatabase));
         localStorage.setItem('vat_voices', JSON.stringify(window.voicesDatabase));
@@ -115,11 +86,6 @@ async function loadData() {
     } catch (e) {
         console.warn('Не удалось сохранить в localStorage:', e);
     }
-    
-    console.log('📊 Итоговая статистика:');
-    console.log(`- Тайтлов: ${window.titlesDatabase.length}`);
-    console.log(`- Дабберов: ${window.voicesDatabase.length}`);
-    console.log(`- Ролей: ${window.rolesDatabase.length}`);
 }
 
 // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
@@ -178,7 +144,7 @@ window.searchDatabase = function(query) {
 // ===== ЗАПУСК ЗАГРУЗКИ =====
 loadData();
 
-// Экспортируем функции
+// Экспорт
 window.VATData = {
     getVoiceById: window.getVoiceById,
     getVoiceByName: window.getVoiceByName,
