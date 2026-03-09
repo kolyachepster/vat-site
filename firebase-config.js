@@ -131,8 +131,10 @@ function isAdminLoggedIn() {
 onAuthStateChanged(auth, (user) => {
     if (user) {
         localStorage.setItem('adminLoggedIn', 'true');
+        console.log('✅ Пользователь авторизован:', user.email);
     } else {
         localStorage.removeItem('adminLoggedIn');
+        console.log('❌ Пользователь не авторизован');
     }
 });
 
