@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Конфигурация Firebase
+// Конфигурация Firebase (ваши данные)
 const firebaseConfig = {
   apiKey: "AIzaSyC-LWCtieKF69kWRRY53Snvor_1KGgCY_A",
   authDomain: "vat-site-43783.firebaseapp.com",
@@ -20,53 +20,40 @@ const auth = getAuth(app);
 
 console.log('✅ Firebase инициализирован');
 
-// Функции для работы с данными
-async function loadTitlesFromFirebase() {
+// ===== ФУНКЦИИ ДЛЯ РАБОТЫ С ДАННЫМИ =====
+async function loadTitles() {
     try {
         const snapshot = await get(child(ref(database), 'titles'));
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            return Array.isArray(data) ? data : Object.values(data);
-        }
-        return [];
+        return snapshot.exists() ? Object.values(snapshot.val()) : [];
     } catch (error) {
         console.error('Ошибка загрузки тайтлов:', error);
         return [];
     }
 }
 
-async function loadVoicesFromFirebase() {
+async function loadVoices() {
     try {
         const snapshot = await get(child(ref(database), 'voices'));
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            return Array.isArray(data) ? data : Object.values(data);
-        }
-        return [];
+        return snapshot.exists() ? Object.values(snapshot.val()) : [];
     } catch (error) {
         console.error('Ошибка загрузки дабберов:', error);
         return [];
     }
 }
 
-async function loadRolesFromFirebase() {
+async function loadRoles() {
     try {
         const snapshot = await get(child(ref(database), 'roles'));
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            return Array.isArray(data) ? data : Object.values(data);
-        }
-        return [];
+        return snapshot.exists() ? Object.values(snapshot.val()) : [];
     } catch (error) {
         console.error('Ошибка загрузки ролей:', error);
         return [];
     }
 }
 
-async function saveTitlesToFirebase(titles) {
+async function saveTitles(data) {
     try {
-        await set(ref(database, 'titles'), titles);
-        console.log('✅ Тайтлы сохранены');
+        await set(ref(database, 'titles'), data);
         return true;
     } catch (error) {
         console.error('Ошибка сохранения:', error);
@@ -74,10 +61,9 @@ async function saveTitlesToFirebase(titles) {
     }
 }
 
-async function saveVoicesToFirebase(voices) {
+async function saveVoices(data) {
     try {
-        await set(ref(database, 'voices'), voices);
-        console.log('✅ Дабберы сохранены');
+        await set(ref(database, 'voices'), data);
         return true;
     } catch (error) {
         console.error('Ошибка сохранения:', error);
@@ -85,10 +71,9 @@ async function saveVoicesToFirebase(voices) {
     }
 }
 
-async function saveRolesToFirebase(roles) {
+async function saveRoles(data) {
     try {
-        await set(ref(database, 'roles'), roles);
-        console.log('✅ Роли сохранены');
+        await set(ref(database, 'roles'), data);
         return true;
     } catch (error) {
         console.error('Ошибка сохранения:', error);
@@ -96,56 +81,48 @@ async function saveRolesToFirebase(roles) {
     }
 }
 
-// Аутентификация
+// ===== АУТЕНТИФИКАЦИЯ =====
 async function loginAdmin(email, password) {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         return { success: true, user: userCredential.user };
     } catch (error) {
-        let errorMessage = 'Ошибка входа';
-        switch(error.code) {
-            case 'auth/invalid-email': errorMessage = 'Неверный формат email'; break;
-            case 'auth/user-not-found': errorMessage = 'Пользователь не найден'; break;
-            case 'auth/wrong-password': errorMessage = 'Неверный пароль'; break;
-            case 'auth/too-many-requests': errorMessage = 'Слишком много попыток'; break;
-            default: errorMessage = error.message;
-        }
-        return { success: false, error: errorMessage };
+        let message = 'Ошибка входа';
+        if (error.code === 'auth/user-not-found') message = 'Пользователь не найден';
+        if (error.code === 'auth/wrong-password') message = 'Неверный пароль';
+        if (error.code === 'auth/invalid-email') message = 'Неверный email';
+        return { success: false, error: message };
     }
 }
 
 async function logoutAdmin() {
-    try {
-        await signOut(auth);
-        localStorage.removeItem('adminLoggedIn');
-        return true;
-    } catch (error) {
-        return false;
-    }
+    await signOut(auth);
+    localStorage.removeItem('adminLoggedIn');
 }
 
 function isAdminLoggedIn() {
     return auth.currentUser !== null;
 }
 
+// Отслеживание состояния авторизации
 onAuthStateChanged(auth, (user) => {
     if (user) {
         localStorage.setItem('adminLoggedIn', 'true');
-        console.log('✅ Пользователь авторизован:', user.email);
+        console.log('✅ Админ авторизован:', user.email);
     } else {
         localStorage.removeItem('adminLoggedIn');
-        console.log('❌ Пользователь не авторизован');
+        console.log('❌ Админ не авторизован');
     }
 });
 
 // Экспорт
 const firebaseAPI = {
-    loadTitlesFromFirebase,
-    loadVoicesFromFirebase,
-    loadRolesFromFirebase,
-    saveTitlesToFirebase,
-    saveVoicesToFirebase,
-    saveRolesToFirebase,
+    loadTitles,
+    loadVoices,
+    loadRoles,
+    saveTitles,
+    saveVoices,
+    saveRoles,
     loginAdmin,
     logoutAdmin,
     isAdminLoggedIn

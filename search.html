@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Поиск - VAT</title>
     <link rel="stylesheet" href="style.css">
+    <script src="data.js"></script>
     <style>
         .search-header {
             text-align: center;
@@ -51,10 +52,15 @@
             transition: background 0.2s;
             text-decoration: none;
             color: inherit;
+            margin-bottom: 10px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         
         .result-item:hover {
             background: rgba(0, 26, 140, 0.05);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
         .result-image {
@@ -99,20 +105,36 @@
             color: white;
         }
         
-        .type-anime {
-            background: #4CAF50;
-            color: white;
-        }
-        
         .search-form-small {
             display: flex;
             gap: 10px;
             margin: 20px 0;
         }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        
+        .loading-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #001a8c;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
-    <!-- Навигация с поиском -->
+    <!-- Навигация -->
     <div class="container">
         <div class="navigation-buttons">
             <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
@@ -158,7 +180,10 @@
             <hr>
             
             <!-- Результаты будут вставлены сюда -->
-            <div id="search-results"></div>
+            <div id="search-results" class="loading">
+                <div class="loading-spinner"></div>
+                <p>Поиск...</p>
+            </div>
         </div>
     </div>
 
@@ -175,69 +200,50 @@
             © 2026 VAT - Voice Acting Team. Все права защищены.
         </p>
         <p style="font-size: 12px; color: #999; margin: 5px 0;">
-            Любое копирование материалов без согласия правообладателя запрещено.
-        </p>
-        <p style="font-size: 12px; color: #999; margin: 5px 0;">
             Сайт создан фанатами для фанатов. Все видео и материалы принадлежат их законным владельцам.
         </p>
     </div>
 
     <script>
-        // БАЗА ДАННЫХ ДЛЯ ПОИСКА
-// БАЗА ДАННЫХ ДЛЯ ПОИСКА
-const searchDatabase = [
-    // Тайтлы (аниме)
-    { type: 'title', typeName: 'Аниме', name: 'Молчаливая ведьма', nameEn: 'The Silent Witch', url: 'molchalivaya_vedma.html', image: 'молч_ведьм.jpg', meta: '13 серий, ⭐ 4.8' },
-    { type: 'title', typeName: 'Аниме', name: 'Звёздное дитя', nameEn: 'Oshi no Ko', url: 'zvezdnoe_ditya.html', image: 'ЗД.png', meta: '36 серий, ⭐ 4.5' },
-    { type: 'title', typeName: 'Аниме', name: 'Аниме 3', nameEn: 'Anime 3', url: '#', image: 'https://via.placeholder.com/60', meta: 'Фильм, ⭐ 4.9' },
-    
-    // Дабберы (основной состав)
-    { type: 'voice', typeName: 'Даббер', name: 'Miki-angel', nameRu: 'Мики-ангел', url: 'voice.html?id=miki-angel', image: 'https://via.placeholder.com/60/001a8c/ffffff?text=Miki', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Раскольников', nameEn: 'Raskolnikov', url: 'voice.html?id=raskolnikov', image: 'https://via.placeholder.com/60/320063/ffffff?text=Raskol', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'DNT', nameRu: 'ДНТ', url: 'voice.html?id=dnt', image: 'https://via.placeholder.com/60/4a0072/ffffff?text=DNT', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Nemo', nameRu: 'Немо', url: 'voice.html?id=nemo', image: 'https://via.placeholder.com/60/001a8c/ffffff?text=Nemo', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Atari', nameRu: 'Атари', url: 'voice.html?id=atari', image: 'https://via.placeholder.com/60/4a0072/ffffff?text=Atari', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Миндаль', nameEn: 'Mindal', url: 'voice.html?id=mindal', image: 'https://via.placeholder.com/60/001a8c/ffffff?text=Миндаль', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Наталья Тарасюк', nameEn: 'Natalya Tarasyuk', url: 'voice.html?id=natalya', image: 'https://via.placeholder.com/60/320063/ffffff?text=Наталья', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Руни', nameEn: 'Runi', url: 'voice.html?id=runi', image: 'https://via.placeholder.com/60/4a0072/ffffff?text=Руни', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Amaryllis', nameRu: 'Амариллис', url: 'voice.html?id=amaryllis', image: 'https://via.placeholder.com/60/001a8c/ffffff?text=Ama', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Алекс Фостер', nameEn: 'Alex Foster', url: 'voice.html?id=alex', image: 'https://via.placeholder.com/60/320063/ffffff?text=Алекс', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Юный Спартанец', nameEn: 'Young Spartan', url: 'voice.html?id=spartans', image: 'https://via.placeholder.com/60/4a0072/ffffff?text=Спартанец', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Fury', nameRu: 'Фьюри', url: 'voice.html?id=fury', image: 'https://via.placeholder.com/60/001a8c/ffffff?text=Fury', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Titch', nameRu: 'Тич', url: 'voice.html?id=titch', image: 'https://via.placeholder.com/60/320063/ffffff?text=Titch', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Sakura Hashimoto', nameRu: 'Сакура Хашимото', url: 'voice.html?id=sakura', image: 'https://via.placeholder.com/60/4a0072/ffffff?text=Sakura', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Майс', nameEn: 'Mays', url: 'voice.html?id=mays', image: 'https://via.placeholder.com/60/001a8c/ffffff?text=Майс', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Kolli', nameRu: 'Колли', url: 'voice.html?id=kolli', image: 'https://via.placeholder.com/60/320063/ffffff?text=Kolli', meta: 'Основной состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Persik', nameRu: 'Персик', url: 'voice.html?id=persik', image: 'https://via.placeholder.com/60/4a0072/ffffff?text=Persik', meta: 'Основной состав' },
-    
-    // Дабберы (доп. состав)
-    { type: 'voice', typeName: 'Даббер', name: 'Enineke', nameRu: 'Энинеке', url: 'voice.html?id=enineke', image: 'https://via.placeholder.com/60/666666/ffffff?text=Eni', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Traxyn', nameRu: 'Траксин', url: 'voice.html?id=traxyn', image: 'https://via.placeholder.com/60/555555/ffffff?text=Trax', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'tut_Hini', nameRu: 'тут_Хини', url: 'voice.html?id=tut_hini', image: 'https://via.placeholder.com/60/444444/ffffff?text=Hini', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Денис Груздов', nameEn: 'Denis Gruzdov', url: 'voice.html?id=denis', image: 'https://via.placeholder.com/60/333333/ffffff?text=Груздов', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Тушканчик', nameEn: 'Tushkanchik', url: 'voice.html?id=tushkan', image: 'https://via.placeholder.com/60/666666/ffffff?text=Тушкан', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'chep', nameRu: 'чеп', url: 'voice.html?id=chep', image: 'https://via.placeholder.com/60/001a8c/ffffff?text=chep', meta: 'крутой разраб сайта' },
-    { type: 'voice', typeName: 'Даббер', name: 'Juri', nameRu: 'Юри', url: 'voice.html?id=juri', image: 'https://via.placeholder.com/60/555555/ffffff?text=Juri', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Doza_Narkoza', nameRu: 'Доза_Наркоза', url: 'voice.html?id=doza_narkoza', image: 'https://via.placeholder.com/60/444444/ffffff?text=Doza', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Пенёк', nameEn: 'Penek', url: 'voice.html?id=penek', image: 'https://via.placeholder.com/60/333333/ffffff?text=Пенёк', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Sirius', nameRu: 'Сириус', url: 'voice.html?id=sirius', image: 'https://via.placeholder.com/60/666666/ffffff?text=Sirius', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Генерал Бибизян', nameEn: 'General Bibizyan', url: 'voice.html?id=general_bibizyan', image: 'https://via.placeholder.com/60/555555/ffffff?text=Бибизян', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Parz', nameRu: 'Парз', url: 'voice.html?id=parz', image: 'https://via.placeholder.com/60/444444/ffffff?text=Parz', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Evangeline', nameRu: 'Евангелина', url: 'voice.html?id=evangeline', image: 'https://via.placeholder.com/60/333333/ffffff?text=Eva', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Redmonox', nameRu: 'Редмонокс', url: 'voice.html?id=redmonox', image: 'https://via.placeholder.com/60/666666/ffffff?text=Red', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Hina', nameRu: 'Хина', url: 'voice.html?id=hina', image: 'https://via.placeholder.com/60/555555/ffffff?text=Hina', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Люмин', nameEn: 'Lumin', url: 'voice.html?id=lumin', image: 'https://via.placeholder.com/60/444444/ffffff?text=Люмин', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Фемчик', nameEn: 'Femchik', url: 'voice.html?id=femchik', image: 'https://via.placeholder.com/60/333333/ffffff?text=Фемчик', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Иф', nameEn: 'If', url: 'voice.html?id=if', image: 'https://via.placeholder.com/60/666666/ffffff?text=Иф', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Akva', nameRu: 'Аква', url: 'voice.html?id=akva', image: 'https://via.placeholder.com/60/555555/ffffff?text=Akva', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Dizzel', nameRu: 'Диззел', url: 'voice.html?id=dizzel', image: 'https://via.placeholder.com/60/444444/ffffff?text=Dizzel', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Kr9k', nameRu: 'Кр9к', url: 'voice.html?id=kr9k', image: 'https://via.placeholder.com/60/333333/ffffff?text=Kr9k', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Takoto', nameRu: 'Такото', url: 'voice.html?id=takoto', image: 'https://via.placeholder.com/60/666666/ffffff?text=Takoto', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Never', nameRu: 'Невер', url: 'voice.html?id=never', image: 'https://via.placeholder.com/60/555555/ffffff?text=Never', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Sabal', nameRu: 'Сабаl', url: 'voice.html?id=sabal', image: 'https://via.placeholder.com/60/444444/ffffff?text=Sabal', meta: 'Доп. состав' },
-    { type: 'voice', typeName: 'Даббер', name: 'Жека', nameEn: 'Zheka', url: 'voice.html?id=zheka', image: 'https://via.placeholder.com/60/333333/ffffff?text=Жека', meta: 'Доп. состав' }
-];
-
+        // База данных для поиска (создаём на основе данных из data.js)
+        let searchDatabase = [];
+        
+        // Функция для построения базы поиска
+        function buildSearchDatabase() {
+            searchDatabase = [];
+            
+            // Добавляем тайтлы
+            if (window.titlesDatabase) {
+                window.titlesDatabase.forEach(title => {
+                    searchDatabase.push({
+                        type: 'title',
+                        typeName: 'Аниме',
+                        name: title.name,
+                        nameEn: title.nameEng || '',
+                        url: `${title.id}.html`,
+                        image: title.image,
+                        meta: `${title.episodes || '?'} серий`
+                    });
+                });
+            }
+            
+            // Добавляем дабберов
+            if (window.voicesDatabase) {
+                window.voicesDatabase.forEach(voice => {
+                    searchDatabase.push({
+                        type: 'voice',
+                        typeName: 'Даббер',
+                        name: voice.name,
+                        url: `voice.html?id=${voice.id}`,
+                        image: voice.image,
+                        meta: voice.status || 'Даббер'
+                    });
+                });
+            }
+            
+            console.log('База поиска построена:', searchDatabase.length, 'элементов');
+        }
+        
         // Получаем поисковый запрос из URL
         function getQueryParam() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -245,29 +251,29 @@ const searchDatabase = [
         }
 
         // Выполняем поиск
-        // Выполняем поиск (с поддержкой двух языков)
-function performSearch(query) {
-    if (!query) return [];
-    
-    query = query.toLowerCase().trim();
-    
-    return searchDatabase.filter(item => {
-        // Поиск по основному имени
-        if (item.name.toLowerCase().includes(query)) return true;
-        
-        // Поиск по английскому имени
-        if (item.nameEn && item.nameEn.toLowerCase().includes(query)) return true;
-        
-        // Поиск по русскому имени
-        if (item.nameRu && item.nameRu.toLowerCase().includes(query)) return true;
-        
-        return false;
-    });
-}
+        function performSearch(query) {
+            if (!query) return [];
+            
+            query = query.toLowerCase().trim();
+            
+            return searchDatabase.filter(item => {
+                // Поиск по имени
+                if (item.name && item.name.toLowerCase().includes(query)) return true;
+                // Поиск по английскому имени
+                if (item.nameEn && item.nameEn.toLowerCase().includes(query)) return true;
+                return false;
+            });
+        }
 
         // Отображаем результаты
         function displayResults() {
             const query = getQueryParam();
+            
+            // Если база поиска пустая, пробуем построить
+            if (searchDatabase.length === 0) {
+                buildSearchDatabase();
+            }
+            
             const results = performSearch(query);
             
             // Отображаем запрос
@@ -278,7 +284,7 @@ function performSearch(query) {
                 document.getElementById('search-results').innerHTML = `
                     <div class="no-results">
                         <h3>🔍 Введите поисковый запрос</h3>
-                        <p class="suggestions">Попробуйте найти: Молчаливая ведьма, DNT, chep, Miki-angel...</p>
+                        <p class="suggestions">Попробуйте найти: Молчаливая ведьма, DNT, Miki-angel...</p>
                     </div>
                 `;
                 document.getElementById('results-count').innerHTML = '';
@@ -296,8 +302,7 @@ function performSearch(query) {
                         <p>По запросу "${query}" ничего не найдено</p>
                         <p class="suggestions">💡 Попробуйте:<br>
                         - Проверить написание<br>
-                        - Использовать более короткий запрос<br>
-                        - Поискать по части слова</p>
+                        - Использовать более короткий запрос</p>
                     </div>
                 `;
                 return;
@@ -315,7 +320,7 @@ function performSearch(query) {
                 titles.forEach(item => {
                     html += `
                         <a href="${item.url}" class="result-item">
-                            <img src="${item.image}" alt="${item.name}" class="result-image">
+                            <img src="${item.image}" alt="${item.name}" class="result-image" onerror="this.src='https://via.placeholder.com/60/001a8c/ffffff?text=?'">
                             <div class="result-info">
                                 <div class="result-title">${item.name}</div>
                                 <div class="result-meta">
@@ -329,30 +334,56 @@ function performSearch(query) {
             }
             
             // Дабберы
-            // Дабберы
-if (voices.length > 0) {
-    html += '<h2 class="search-section">🎭 Дабберы</h2>';
-    voices.forEach(item => {
-        html += `
-            <a href="sostav.html#${encodeURIComponent(item.name)}" class="result-item">
-                <img src="${item.image}" alt="${item.name}" class="result-image">
-                <div class="result-info">
-                    <div class="result-title">${item.name}</div>
-                    <div class="result-meta">
-                        <span class="result-type type-voice">${item.typeName}</span>
-                        ${item.meta}
-                    </div>
-                </div>
-            </a>
-        `;
-    });
-}
+            if (voices.length > 0) {
+                html += '<h2 class="search-section">🎭 Дабберы</h2>';
+                voices.forEach(item => {
+                    html += `
+                        <a href="${item.url}" class="result-item">
+                            <img src="${item.image}" alt="${item.name}" class="result-image" onerror="this.src='https://via.placeholder.com/60/320063/ffffff?text=?'">
+                            <div class="result-info">
+                                <div class="result-title">${item.name}</div>
+                                <div class="result-meta">
+                                    <span class="result-type type-voice">${item.typeName}</span>
+                                    ${item.meta}
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                });
+            }
             
             document.getElementById('search-results').innerHTML = html;
         }
 
+        // Ждём загрузки данных
+        function waitForData() {
+            const checkInterval = setInterval(() => {
+                if (window.voicesDatabase && window.titlesDatabase) {
+                    clearInterval(checkInterval);
+                    buildSearchDatabase();
+                    displayResults();
+                }
+            }, 100);
+            
+            // Таймаут на случай, если данные не загрузятся
+            setTimeout(() => {
+                clearInterval(checkInterval);
+                if (searchDatabase.length === 0) {
+                    // Используем заглушки
+                    searchDatabase = [
+                        { type: 'title', typeName: 'Аниме', name: 'Молчаливая ведьма', url: 'molchalivaya_vedma.html', image: 'молч_ведьм.jpg', meta: '13 серий' },
+                        { type: 'title', typeName: 'Аниме', name: 'Звёздное дитя', url: 'zvezdnoe_ditya.html', image: 'ЗД.png', meta: '36 серий' },
+                        { type: 'voice', typeName: 'Даббер', name: 'Miki-angel', url: 'voice.html?id=miki-angel', image: 'ава-miki.jpg', meta: 'Основной состав' },
+                        { type: 'voice', typeName: 'Даббер', name: 'Раскольников', url: 'voice.html?id=raskolnikov', image: 'ава-raskolnikov.jpg', meta: 'Основной состав' },
+                        { type: 'voice', typeName: 'Даббер', name: 'DNT', url: 'voice.html?id=dnt', image: 'ава-dnt.jpg', meta: 'Основной состав' }
+                    ];
+                    displayResults();
+                }
+            }, 3000);
+        }
+
         // Запускаем при загрузке
-        window.onload = displayResults;
+        window.onload = waitForData;
     </script>
 </body>
 </html>

@@ -21,7 +21,6 @@
             display: flex;
             gap: 10px;
             margin-bottom: 30px;
-            flex-wrap: wrap;
         }
         .admin-tab {
             padding: 12px 25px;
@@ -70,8 +69,6 @@
             cursor: pointer;
             font-weight: bold;
         }
-        .admin-button.secondary { background: #666; }
-        .admin-button.danger { background: #d43f6b; }
         .item-card {
             background: #f9f9f9;
             border-radius: 10px;
@@ -85,7 +82,7 @@
             font-weight: bold;
             color: #001a8c;
         }
-        .item-button.delete {
+        .delete-btn {
             background: #d43f6b;
             color: white;
             border: none;
@@ -101,82 +98,69 @@
             display: none;
             margin-bottom: 20px;
         }
-        .loading {
-            text-align: center;
-            padding: 50px;
-            font-size: 18px;
-            color: #666;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="admin-header">
-            <h1>👨‍💼 Админ-панель VAT</h1>
-            <button onclick="handleLogout()" class="admin-button secondary">Выйти</button>
+            <h1>👨‍💼 Админ-панель</h1>
+            <button onclick="logout()" class="admin-button">Выйти</button>
         </div>
         
         <div id="successMessage" class="success-message"></div>
         
-        <div id="loadingScreen" class="loading">
-            <div class="loading-spinner"></div>
-            <p>Проверка авторизации...</p>
+        <div class="admin-tabs">
+            <button class="admin-tab active" onclick="switchTab('titles')">📺 Тайтлы</button>
+            <button class="admin-tab" onclick="switchTab('voices')">🎭 Дабберы</button>
+            <button class="admin-tab" onclick="switchTab('roles')">🔗 Роли</button>
         </div>
         
-        <div id="adminContent" style="display: none;">
-            <div class="admin-tabs">
-                <button class="admin-tab active" onclick="switchTab('titles')">📺 Тайтлы</button>
-                <button class="admin-tab" onclick="switchTab('voices')">🎭 Дабберы</button>
-                <button class="admin-tab" onclick="switchTab('roles')">🔗 Роли</button>
-            </div>
-            
-            <!-- Тайтлы -->
-            <div id="titlesSection" class="admin-section">
-                <h2>➕ Добавить тайтл</h2>
-                <form id="titleForm">
-                    <div class="form-grid">
-                        <div class="form-group"><label>ID</label><input id="titleId" required></div>
-                        <div class="form-group"><label>Название</label><input id="titleName" required></div>
-                        <div class="form-group"><label>Англ.</label><input id="titleNameEn"></div>
-                        <div class="form-group"><label>Изображение</label><input id="titleImage" value="ава-"></div>
-                        <div class="form-group"><label>Тип</label><select id="titleType"><option value="anime">Аниме</option></select></div>
-                        <div class="form-group"><label>Сезонов</label><input id="titleSeasons" type="number" value="1"></div>
-                        <div class="form-group"><label>Серий</label><input id="titleEpisodes" type="number" value="12"></div>
+        <!-- Тайтлы -->
+        <div id="titlesSection" class="admin-section">
+            <h2>➕ Добавить тайтл</h2>
+            <form id="titleForm">
+                <div class="form-grid">
+                    <div class="form-group"><label>ID</label><input id="titleId" required></div>
+                    <div class="form-group"><label>Название</label><input id="titleName" required></div>
+                    <div class="form-group"><label>Изображение</label><input id="titleImage" value="ава-"></div>
+                </div>
+                <button type="submit" class="admin-button">➕ Добавить</button>
+            </form>
+            <div id="titlesList"></div>
+        </div>
+        
+        <!-- Дабберы -->
+        <div id="voicesSection" class="admin-section" style="display:none">
+            <h2>➕ Добавить даббера</h2>
+            <form id="voiceForm">
+                <div class="form-grid">
+                    <div class="form-group"><label>ID</label><input id="voiceId" required></div>
+                    <div class="form-group"><label>Имя</label><input id="voiceName" required></div>
+                    <div class="form-group"><label>Изображение</label><input id="voiceImage" value="ава-"></div>
+                    <div class="form-group"><label>Статус</label>
+                        <select id="voiceStatus">
+                            <option value="Основной состав">Основной</option>
+                            <option value="Доп. состав">Доп.</option>
+                        </select>
                     </div>
-                    <button type="submit" class="admin-button">➕ Добавить</button>
-                </form>
-                <div id="titlesList" class="items-list"></div>
-            </div>
-            
-            <!-- Дабберы -->
-            <div id="voicesSection" class="admin-section" style="display:none">
-                <h2>➕ Добавить даббера</h2>
-                <form id="voiceForm">
-                    <div class="form-grid">
-                        <div class="form-group"><label>ID</label><input id="voiceId" required></div>
-                        <div class="form-group"><label>Имя</label><input id="voiceName" required></div>
-                        <div class="form-group"><label>Изображение</label><input id="voiceImage" value="ава-"></div>
-                        <div class="form-group"><label>Статус</label><select id="voiceStatus"><option value="Основной состав">Основной</option><option value="Доп. состав">Доп.</option></select></div>
-                    </div>
-                    <button type="submit" class="admin-button">➕ Добавить</button>
-                </form>
-                <div id="voicesList" class="items-list"></div>
-            </div>
-            
-            <!-- Роли -->
-            <div id="rolesSection" class="admin-section" style="display:none">
-                <h2>➕ Добавить роль</h2>
-                <form id="roleForm">
-                    <div class="form-grid">
-                        <div class="form-group"><label>Тайтл</label><select id="roleTitleId"></select></div>
-                        <div class="form-group"><label>Даббер</label><select id="roleVoiceId"></select></div>
-                        <div class="form-group"><label>Персонаж</label><input id="roleCharacter"></div>
-                        <div class="form-group"><label>Тип</label><select id="roleType"><option value="main">Главная</option><option value="supporting">Втор.</option></select></div>
-                    </div>
-                    <button type="submit" class="admin-button">➕ Добавить</button>
-                </form>
-                <div id="rolesList" class="items-list"></div>
-            </div>
+                </div>
+                <button type="submit" class="admin-button">➕ Добавить</button>
+            </form>
+            <div id="voicesList"></div>
+        </div>
+        
+        <!-- Роли -->
+        <div id="rolesSection" class="admin-section" style="display:none">
+            <h2>➕ Добавить роль</h2>
+            <form id="roleForm">
+                <div class="form-grid">
+                    <div class="form-group"><label>Тайтл</label><select id="roleTitleId"></select></div>
+                    <div class="form-group"><label>Даббер</label><select id="roleVoiceId"></select></div>
+                    <div class="form-group"><label>Персонаж</label><input id="roleCharacter"></div>
+                </div>
+                <button type="submit" class="admin-button">➕ Добавить</button>
+            </form>
+            <div id="rolesList"></div>
         </div>
     </div>
 
@@ -184,54 +168,27 @@
         import firebase from './firebase-config.js';
         window.firebase = firebase;
         
-        // Функция для показа сообщений
+        // Проверка авторизации
+        setTimeout(() => {
+            if (!firebase.isAdminLoggedIn()) {
+                window.location.href = 'admin-login.html';
+            }
+        }, 500);
+        
         function showMessage(text) {
             const msg = document.getElementById('successMessage');
             msg.textContent = text;
             msg.style.display = 'block';
-            setTimeout(() => msg.style.display = 'none', 3000);
+            setTimeout(() => msg.style.display = 'none', 2000);
         }
         
-        // Проверка авторизации с задержкой
-        async function checkAuth() {
-            const loadingScreen = document.getElementById('loadingScreen');
-            const adminContent = document.getElementById('adminContent');
-            
-            // Ждем немного, чтобы Firebase успел обновиться
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            if (!firebase.isAdminLoggedIn()) {
-                // Если не авторизован, перенаправляем на страницу входа
-                window.location.href = 'admin-login.html';
-                return;
-            }
-            
-            // Если авторизован, показываем контент
-            loadingScreen.style.display = 'none';
-            adminContent.style.display = 'block';
-            
-            // Инициализация данных
-            setTimeout(() => {
-                renderTitles();
-                renderVoices();
-                updateSelects();
-                renderRoles();
-            }, 500);
-        }
-        
-        // Запускаем проверку
-        checkAuth();
-        
-        // Переключение вкладок
         window.switchTab = function(tab) {
             document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
-            ['titles','voices','roles'].forEach(s => 
-                document.getElementById(s + 'Section').style.display = s === tab ? 'block' : 'none'
-            );
-            if (tab === 'titles') renderTitles();
-            if (tab === 'voices') renderVoices();
-            if (tab === 'roles') { updateSelects(); renderRoles(); }
+            document.getElementById('titlesSection').style.display = tab === 'titles' ? 'block' : 'none';
+            document.getElementById('voicesSection').style.display = tab === 'voices' ? 'block' : 'none';
+            document.getElementById('rolesSection').style.display = tab === 'roles' ? 'block' : 'none';
+            if (tab === 'roles') updateSelects();
         };
         
         // Тайтлы
@@ -240,15 +197,11 @@
             const newTitle = {
                 id: document.getElementById('titleId').value,
                 name: document.getElementById('titleName').value,
-                nameEng: document.getElementById('titleNameEn').value,
                 image: document.getElementById('titleImage').value,
-                type: document.getElementById('titleType').value,
-                seasons: +document.getElementById('titleSeasons').value,
-                episodes: +document.getElementById('titleEpisodes').value,
-                year: 2026, rating: 4.5, genres: [], description: ''
+                type: 'anime', seasons: 1, episodes: 12
             };
             window.titlesDatabase.push(newTitle);
-            await firebase.saveTitlesToFirebase(window.titlesDatabase);
+            await firebase.saveTitles(window.titlesDatabase);
             renderTitles();
             showMessage('✅ Тайтл добавлен');
         });
@@ -256,7 +209,7 @@
         window.deleteTitle = async (id) => {
             if (!confirm('Удалить?')) return;
             window.titlesDatabase = window.titlesDatabase.filter(t => t.id !== id);
-            await firebase.saveTitlesToFirebase(window.titlesDatabase);
+            await firebase.saveTitles(window.titlesDatabase);
             renderTitles();
             showMessage('✅ Тайтл удалён');
         };
@@ -266,7 +219,7 @@
             list.innerHTML = window.titlesDatabase.map(t => `
                 <div class="item-card">
                     <span class="item-name">${t.name}</span>
-                    <button class="item-button delete" onclick="deleteTitle('${t.id}')">Удалить</button>
+                    <button class="delete-btn" onclick="deleteTitle('${t.id}')">Удалить</button>
                 </div>
             `).join('');
         }
@@ -278,11 +231,10 @@
                 id: document.getElementById('voiceId').value,
                 name: document.getElementById('voiceName').value,
                 image: document.getElementById('voiceImage').value,
-                status: document.getElementById('voiceStatus').value,
-                joinDate: '', bio: '', social: {}
+                status: document.getElementById('voiceStatus').value
             };
             window.voicesDatabase.push(newVoice);
-            await firebase.saveVoicesToFirebase(window.voicesDatabase);
+            await firebase.saveVoices(window.voicesDatabase);
             renderVoices();
             showMessage('✅ Даббер добавлен');
         });
@@ -290,7 +242,7 @@
         window.deleteVoice = async (id) => {
             if (!confirm('Удалить?')) return;
             window.voicesDatabase = window.voicesDatabase.filter(v => v.id !== id);
-            await firebase.saveVoicesToFirebase(window.voicesDatabase);
+            await firebase.saveVoices(window.voicesDatabase);
             renderVoices();
             showMessage('✅ Даббер удалён');
         };
@@ -300,7 +252,7 @@
             list.innerHTML = window.voicesDatabase.map(v => `
                 <div class="item-card">
                     <span class="item-name">${v.name}</span>
-                    <button class="item-button delete" onclick="deleteVoice('${v.id}')">Удалить</button>
+                    <button class="delete-btn" onclick="deleteVoice('${v.id}')">Удалить</button>
                 </div>
             `).join('');
         }
@@ -309,8 +261,8 @@
         function updateSelects() {
             const titleSelect = document.getElementById('roleTitleId');
             const voiceSelect = document.getElementById('roleVoiceId');
-            titleSelect.innerHTML = '<option value="">Выберите тайтл</option>' + window.titlesDatabase.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
-            voiceSelect.innerHTML = '<option value="">Выберите даббера</option>' + window.voicesDatabase.map(v => `<option value="${v.id}">${v.name}</option>`).join('');
+            titleSelect.innerHTML = window.titlesDatabase.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+            voiceSelect.innerHTML = window.voicesDatabase.map(v => `<option value="${v.id}">${v.name}</option>`).join('');
         }
         
         document.getElementById('roleForm').addEventListener('submit', async (e) => {
@@ -319,11 +271,10 @@
                 titleId: document.getElementById('roleTitleId').value,
                 voiceId: document.getElementById('roleVoiceId').value,
                 character: document.getElementById('roleCharacter').value,
-                type: document.getElementById('roleType').value,
-                episodes: ''
+                type: 'main'
             };
             window.rolesDatabase.push(newRole);
-            await firebase.saveRolesToFirebase(window.rolesDatabase);
+            await firebase.saveRoles(window.rolesDatabase);
             renderRoles();
             showMessage('✅ Роль добавлена');
         });
@@ -331,7 +282,7 @@
         window.deleteRole = async (index) => {
             if (!confirm('Удалить?')) return;
             window.rolesDatabase.splice(index, 1);
-            await firebase.saveRolesToFirebase(window.rolesDatabase);
+            await firebase.saveRoles(window.rolesDatabase);
             renderRoles();
             showMessage('✅ Роль удалена');
         };
@@ -343,18 +294,24 @@
                 const voice = window.voicesDatabase.find(v => v.id === r.voiceId);
                 return `
                     <div class="item-card">
-                        <span class="item-name">${title?.name || '?'} → ${voice?.name || '?'} (${r.character || '?'})</span>
-                        <button class="item-button delete" onclick="deleteRole(${i})">Удалить</button>
+                        <span class="item-name">${title?.name} → ${voice?.name} (${r.character})</span>
+                        <button class="delete-btn" onclick="deleteRole(${i})">Удалить</button>
                     </div>
                 `;
             }).join('');
         }
         
-        // Выход
-        window.handleLogout = async () => {
+        window.logout = async () => {
             await firebase.logoutAdmin();
             window.location.href = 'admin-login.html';
         };
+        
+        // Инициализация
+        setTimeout(() => {
+            renderTitles();
+            renderVoices();
+            renderRoles();
+        }, 1000);
     </script>
 </body>
 </html>
