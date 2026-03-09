@@ -101,69 +101,82 @@
             display: none;
             margin-bottom: 20px;
         }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="admin-header">
-            <h1>👨‍💼 Админ-панель</h1>
+            <h1>👨‍💼 Админ-панель VAT</h1>
             <button onclick="handleLogout()" class="admin-button secondary">Выйти</button>
         </div>
         
         <div id="successMessage" class="success-message"></div>
         
-        <div class="admin-tabs">
-            <button class="admin-tab active" onclick="switchTab('titles')">📺 Тайтлы</button>
-            <button class="admin-tab" onclick="switchTab('voices')">🎭 Дабберы</button>
-            <button class="admin-tab" onclick="switchTab('roles')">🔗 Роли</button>
+        <div id="loadingScreen" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Проверка авторизации...</p>
         </div>
         
-        <!-- Тайтлы -->
-        <div id="titlesSection" class="admin-section">
-            <h2>➕ Добавить тайтл</h2>
-            <form id="titleForm">
-                <div class="form-grid">
-                    <div class="form-group"><label>ID</label><input id="titleId" required></div>
-                    <div class="form-group"><label>Название</label><input id="titleName" required></div>
-                    <div class="form-group"><label>Англ.</label><input id="titleNameEn"></div>
-                    <div class="form-group"><label>Изображение</label><input id="titleImage" value="ава-"></div>
-                    <div class="form-group"><label>Тип</label><select id="titleType"><option value="anime">Аниме</option></select></div>
-                    <div class="form-group"><label>Сезонов</label><input id="titleSeasons" type="number" value="1"></div>
-                    <div class="form-group"><label>Серий</label><input id="titleEpisodes" type="number" value="12"></div>
-                </div>
-                <button type="submit" class="admin-button">➕ Добавить</button>
-            </form>
-            <div id="titlesList" class="items-list"></div>
-        </div>
-        
-        <!-- Дабберы -->
-        <div id="voicesSection" class="admin-section" style="display:none">
-            <h2>➕ Добавить даббера</h2>
-            <form id="voiceForm">
-                <div class="form-grid">
-                    <div class="form-group"><label>ID</label><input id="voiceId" required></div>
-                    <div class="form-group"><label>Имя</label><input id="voiceName" required></div>
-                    <div class="form-group"><label>Изображение</label><input id="voiceImage" value="ава-"></div>
-                    <div class="form-group"><label>Статус</label><select id="voiceStatus"><option value="Основной состав">Основной</option><option value="Доп. состав">Доп.</option></select></div>
-                </div>
-                <button type="submit" class="admin-button">➕ Добавить</button>
-            </form>
-            <div id="voicesList" class="items-list"></div>
-        </div>
-        
-        <!-- Роли -->
-        <div id="rolesSection" class="admin-section" style="display:none">
-            <h2>➕ Добавить роль</h2>
-            <form id="roleForm">
-                <div class="form-grid">
-                    <div class="form-group"><label>Тайтл</label><select id="roleTitleId"></select></div>
-                    <div class="form-group"><label>Даббер</label><select id="roleVoiceId"></select></div>
-                    <div class="form-group"><label>Персонаж</label><input id="roleCharacter"></div>
-                    <div class="form-group"><label>Тип</label><select id="roleType"><option value="main">Главная</option><option value="supporting">Втор.</option></select></div>
-                </div>
-                <button type="submit" class="admin-button">➕ Добавить</button>
-            </form>
-            <div id="rolesList" class="items-list"></div>
+        <div id="adminContent" style="display: none;">
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="switchTab('titles')">📺 Тайтлы</button>
+                <button class="admin-tab" onclick="switchTab('voices')">🎭 Дабберы</button>
+                <button class="admin-tab" onclick="switchTab('roles')">🔗 Роли</button>
+            </div>
+            
+            <!-- Тайтлы -->
+            <div id="titlesSection" class="admin-section">
+                <h2>➕ Добавить тайтл</h2>
+                <form id="titleForm">
+                    <div class="form-grid">
+                        <div class="form-group"><label>ID</label><input id="titleId" required></div>
+                        <div class="form-group"><label>Название</label><input id="titleName" required></div>
+                        <div class="form-group"><label>Англ.</label><input id="titleNameEn"></div>
+                        <div class="form-group"><label>Изображение</label><input id="titleImage" value="ава-"></div>
+                        <div class="form-group"><label>Тип</label><select id="titleType"><option value="anime">Аниме</option></select></div>
+                        <div class="form-group"><label>Сезонов</label><input id="titleSeasons" type="number" value="1"></div>
+                        <div class="form-group"><label>Серий</label><input id="titleEpisodes" type="number" value="12"></div>
+                    </div>
+                    <button type="submit" class="admin-button">➕ Добавить</button>
+                </form>
+                <div id="titlesList" class="items-list"></div>
+            </div>
+            
+            <!-- Дабберы -->
+            <div id="voicesSection" class="admin-section" style="display:none">
+                <h2>➕ Добавить даббера</h2>
+                <form id="voiceForm">
+                    <div class="form-grid">
+                        <div class="form-group"><label>ID</label><input id="voiceId" required></div>
+                        <div class="form-group"><label>Имя</label><input id="voiceName" required></div>
+                        <div class="form-group"><label>Изображение</label><input id="voiceImage" value="ава-"></div>
+                        <div class="form-group"><label>Статус</label><select id="voiceStatus"><option value="Основной состав">Основной</option><option value="Доп. состав">Доп.</option></select></div>
+                    </div>
+                    <button type="submit" class="admin-button">➕ Добавить</button>
+                </form>
+                <div id="voicesList" class="items-list"></div>
+            </div>
+            
+            <!-- Роли -->
+            <div id="rolesSection" class="admin-section" style="display:none">
+                <h2>➕ Добавить роль</h2>
+                <form id="roleForm">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Тайтл</label><select id="roleTitleId"></select></div>
+                        <div class="form-group"><label>Даббер</label><select id="roleVoiceId"></select></div>
+                        <div class="form-group"><label>Персонаж</label><input id="roleCharacter"></div>
+                        <div class="form-group"><label>Тип</label><select id="roleType"><option value="main">Главная</option><option value="supporting">Втор.</option></select></div>
+                    </div>
+                    <button type="submit" class="admin-button">➕ Добавить</button>
+                </form>
+                <div id="rolesList" class="items-list"></div>
+            </div>
         </div>
     </div>
 
@@ -171,10 +184,7 @@
         import firebase from './firebase-config.js';
         window.firebase = firebase;
         
-        if (!firebase.isAdminLoggedIn()) {
-            window.location.href = 'admin-login.html';
-        }
-        
+        // Функция для показа сообщений
         function showMessage(text) {
             const msg = document.getElementById('successMessage');
             msg.textContent = text;
@@ -182,6 +192,37 @@
             setTimeout(() => msg.style.display = 'none', 3000);
         }
         
+        // Проверка авторизации с задержкой
+        async function checkAuth() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const adminContent = document.getElementById('adminContent');
+            
+            // Ждем немного, чтобы Firebase успел обновиться
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            if (!firebase.isAdminLoggedIn()) {
+                // Если не авторизован, перенаправляем на страницу входа
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            // Если авторизован, показываем контент
+            loadingScreen.style.display = 'none';
+            adminContent.style.display = 'block';
+            
+            // Инициализация данных
+            setTimeout(() => {
+                renderTitles();
+                renderVoices();
+                updateSelects();
+                renderRoles();
+            }, 500);
+        }
+        
+        // Запускаем проверку
+        checkAuth();
+        
+        // Переключение вкладок
         window.switchTab = function(tab) {
             document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
@@ -268,8 +309,8 @@
         function updateSelects() {
             const titleSelect = document.getElementById('roleTitleId');
             const voiceSelect = document.getElementById('roleVoiceId');
-            titleSelect.innerHTML = '<option>Выберите</option>' + window.titlesDatabase.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
-            voiceSelect.innerHTML = '<option>Выберите</option>' + window.voicesDatabase.map(v => `<option value="${v.id}">${v.name}</option>`).join('');
+            titleSelect.innerHTML = '<option value="">Выберите тайтл</option>' + window.titlesDatabase.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+            voiceSelect.innerHTML = '<option value="">Выберите даббера</option>' + window.voicesDatabase.map(v => `<option value="${v.id}">${v.name}</option>`).join('');
         }
         
         document.getElementById('roleForm').addEventListener('submit', async (e) => {
@@ -302,25 +343,18 @@
                 const voice = window.voicesDatabase.find(v => v.id === r.voiceId);
                 return `
                     <div class="item-card">
-                        <span class="item-name">${title?.name} → ${voice?.name} (${r.character})</span>
+                        <span class="item-name">${title?.name || '?'} → ${voice?.name || '?'} (${r.character || '?'})</span>
                         <button class="item-button delete" onclick="deleteRole(${i})">Удалить</button>
                     </div>
                 `;
             }).join('');
         }
         
-        window.handleLogout = () => {
-            firebase.logoutAdmin();
+        // Выход
+        window.handleLogout = async () => {
+            await firebase.logoutAdmin();
             window.location.href = 'admin-login.html';
         };
-        
-        // Инициализация
-        setTimeout(() => {
-            renderTitles();
-            renderVoices();
-            updateSelects();
-            renderRoles();
-        }, 500);
     </script>
 </body>
 </html>
