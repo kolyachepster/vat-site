@@ -7,169 +7,71 @@
     <link rel="stylesheet" href="style.css">
     <script src="data.js"></script>
     <style>
-        .admin-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
         .admin-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
             padding: 20px;
             background: linear-gradient(135deg, #001a8c, #320063);
             color: white;
             border-radius: 15px;
+            margin-bottom: 30px;
         }
-        
-        .admin-title {
-            font-size: 28px;
-            margin: 0;
-        }
-        
-        .admin-logout {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 2px solid white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .admin-logout:hover {
-            background: white;
-            color: #001a8c;
-        }
-        
         .admin-tabs {
             display: flex;
             gap: 10px;
             margin-bottom: 30px;
             flex-wrap: wrap;
         }
-        
         .admin-tab {
             padding: 12px 25px;
             background: #f0f0f0;
             border: none;
             border-radius: 50px;
-            font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 16px;
+            font-weight: bold;
         }
-        
         .admin-tab.active {
             background: #001a8c;
             color: white;
         }
-        
-        .admin-tab:hover {
-            background: #320063;
-            color: white;
-        }
-        
         .admin-section {
             background: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             margin-bottom: 30px;
         }
-        
-        .section-title {
-            color: #001a8c;
-            margin-top: 0;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #320063;
-            padding-bottom: 10px;
-        }
-        
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
         }
-        
         .form-group {
             margin-bottom: 15px;
         }
-        
         .form-group label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
-            color: #333;
         }
-        
-        .form-group input, 
-        .form-group select, 
-        .form-group textarea {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 10px;
             border: 2px solid #ddd;
             border-radius: 8px;
-            font-size: 14px;
             box-sizing: border-box;
-            transition: all 0.3s;
         }
-        
-        .form-group input:focus, 
-        .form-group select:focus, 
-        .form-group textarea:focus {
-            border-color: #001a8c;
-            outline: none;
-        }
-        
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        
         .admin-button {
             background: #001a8c;
             color: white;
             border: none;
             padding: 12px 25px;
             border-radius: 50px;
-            font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 16px;
+            font-weight: bold;
         }
-        
-        .admin-button:hover {
-            background: #320063;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,26,140,0.3);
-        }
-        
-        .admin-button.secondary {
-            background: #666;
-        }
-        
-        .admin-button.secondary:hover {
-            background: #444;
-        }
-        
-        .admin-button.danger {
-            background: #d43f6b;
-        }
-        
-        .admin-button.danger:hover {
-            background: #b53a5c;
-        }
-        
-        .items-list {
-            margin-top: 30px;
-            border-top: 2px solid #eee;
-            padding-top: 20px;
-        }
-        
+        .admin-button.secondary { background: #666; }
+        .admin-button.danger { background: #d43f6b; }
         .item-card {
             background: #f9f9f9;
             border-radius: 10px;
@@ -178,684 +80,247 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
         }
-        
-        .item-info {
-            flex: 1;
-        }
-        
         .item-name {
             font-weight: bold;
             color: #001a8c;
-            font-size: 18px;
         }
-        
-        .item-meta {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .item-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .item-button {
-            padding: 5px 15px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .item-button.edit {
-            background: #ffaa00;
-            color: #001a8c;
-        }
-        
         .item-button.delete {
             background: #d43f6b;
             color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
         }
-        
-        .item-button:hover {
-            transform: scale(1.05);
-        }
-        
         .success-message {
             background: #4CAF50;
             color: white;
             padding: 15px;
             border-radius: 8px;
-            margin-bottom: 20px;
             display: none;
-        }
-        
-        .warning-message {
-            background: #fff3cd;
-            color: #856404;
-            padding: 15px;
-            border-radius: 8px;
             margin-bottom: 20px;
-            border-left: 4px solid #ffaa00;
-        }
-        
-        .role-badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-right: 5px;
-        }
-        
-        .role-main { background: #001a8c; color: white; }
-        .role-recurring { background: #320063; color: white; }
-        .role-supporting { background: #666; color: white; }
-        .role-guest { background: #ffaa00; color: #001a8c; }
-        
-        .search-box {
-            margin-bottom: 20px;
-        }
-        
-        .search-box input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 50px;
-            font-size: 16px;
         }
     </style>
 </head>
 <body>
-    <!-- Навигация -->
     <div class="container">
-        <div class="navigation-buttons">
-            <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🏠 Главная
-            </a>
-            <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🎦 Тайтлы
-            </a>
-            <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🎭 Состав
-            </a>
-        </div>
-    </div>
-
-    <div class="container admin-container">
-        <!-- Шапка админки -->
         <div class="admin-header">
-            <h1 class="admin-title">👨‍💼 Админ-панель VAT</h1>
-            <button onclick="handleLogout()" class="admin-logout">Выйти</button>
+            <h1>👨‍💼 Админ-панель</h1>
+            <button onclick="handleLogout()" class="admin-button secondary">Выйти</button>
         </div>
         
         <div id="successMessage" class="success-message"></div>
         
-        <!-- Вкладки -->
         <div class="admin-tabs">
-            <button class="admin-tab active" onclick="window.switchTab('titles')">📺 Тайтлы</button>
-            <button class="admin-tab" onclick="window.switchTab('voices')">🎭 Дабберы</button>
-            <button class="admin-tab" onclick="window.switchTab('roles')">🔗 Роли</button>
-            <button class="admin-tab" onclick="window.switchTab('stats')">📊 Статистика</button>
+            <button class="admin-tab active" onclick="switchTab('titles')">📺 Тайтлы</button>
+            <button class="admin-tab" onclick="switchTab('voices')">🎭 Дабберы</button>
+            <button class="admin-tab" onclick="switchTab('roles')">🔗 Роли</button>
         </div>
         
-        <!-- Секция Тайтлы -->
+        <!-- Тайтлы -->
         <div id="titlesSection" class="admin-section">
-            <h2 class="section-title">➕ Добавить новый тайтл</h2>
-            
-            <form id="titleForm" onsubmit="window.addTitle(event)">
+            <h2>➕ Добавить тайтл</h2>
+            <form id="titleForm">
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label>ID (уникальный)</label>
-                        <input type="text" id="titleId" placeholder="naprimer: molchalivaya_vedma" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Название (рус)</label>
-                        <input type="text" id="titleName" placeholder="Молчаливая ведьма" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Название (англ)</label>
-                        <input type="text" id="titleNameEn" placeholder="The Silent Witch">
-                    </div>
-                    <div class="form-group">
-                        <label>Изображение</label>
-                        <input type="text" id="titleImage" placeholder="молч_ведьм.jpg" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Тип</label>
-                        <select id="titleType">
-                            <option value="anime">Аниме</option>
-                            <option value="manhwa">Манхва</option>
-                            <option value="gacha">Гача</option>
-                            <option value="movie">Фильм</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Сезонов</label>
-                        <input type="number" id="titleSeasons" value="1">
-                    </div>
-                    <div class="form-group">
-                        <label>Серий</label>
-                        <input type="number" id="titleEpisodes" value="12">
-                    </div>
-                    <div class="form-group">
-                        <label>Год</label>
-                        <input type="number" id="titleYear" value="2026">
-                    </div>
-                    <div class="form-group">
-                        <label>Рейтинг</label>
-                        <input type="number" id="titleRating" step="0.1" value="4.5">
-                    </div>
-                    <div class="form-group">
-                        <label>Жанры (через запятую)</label>
-                        <input type="text" id="titleGenres" placeholder="Фэнтези, Драма">
-                    </div>
+                    <div class="form-group"><label>ID</label><input id="titleId" required></div>
+                    <div class="form-group"><label>Название</label><input id="titleName" required></div>
+                    <div class="form-group"><label>Англ.</label><input id="titleNameEn"></div>
+                    <div class="form-group"><label>Изображение</label><input id="titleImage" value="ава-"></div>
+                    <div class="form-group"><label>Тип</label><select id="titleType"><option value="anime">Аниме</option></select></div>
+                    <div class="form-group"><label>Сезонов</label><input id="titleSeasons" type="number" value="1"></div>
+                    <div class="form-group"><label>Серий</label><input id="titleEpisodes" type="number" value="12"></div>
                 </div>
-                <div class="form-group">
-                    <label>Описание</label>
-                    <textarea id="titleDescription"></textarea>
-                </div>
-                <button type="submit" class="admin-button">➕ Добавить тайтл</button>
+                <button type="submit" class="admin-button">➕ Добавить</button>
             </form>
-            
-            <div class="items-list">
-                <h3>📋 Список тайтлов</h3>
-                <div class="search-box">
-                    <input type="text" id="titleSearch" placeholder="🔍 Поиск по названию..." onkeyup="window.filterTitles()">
-                </div>
-                <div id="titlesList"></div>
-            </div>
+            <div id="titlesList" class="items-list"></div>
         </div>
         
-        <!-- Секция Дабберы -->
-        <div id="voicesSection" class="admin-section" style="display: none;">
-            <h2 class="section-title">➕ Добавить нового даббера</h2>
-            
-            <form id="voiceForm" onsubmit="window.addVoice(event)">
+        <!-- Дабберы -->
+        <div id="voicesSection" class="admin-section" style="display:none">
+            <h2>➕ Добавить даббера</h2>
+            <form id="voiceForm">
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label>ID (уникальный)</label>
-                        <input type="text" id="voiceId" placeholder="naprimer: miki-angel" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Имя</label>
-                        <input type="text" id="voiceName" placeholder="Miki-angel" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Изображение</label>
-                        <input type="text" id="voiceImage" placeholder="ава-miki.jpg">
-                    </div>
-                    <div class="form-group">
-                        <label>Статус</label>
-                        <select id="voiceStatus">
-                            <option value="Основной состав">Основной состав</option>
-                            <option value="Доп. состав">Доп. состав</option>
-                        </select>
-                    </div>
+                    <div class="form-group"><label>ID</label><input id="voiceId" required></div>
+                    <div class="form-group"><label>Имя</label><input id="voiceName" required></div>
+                    <div class="form-group"><label>Изображение</label><input id="voiceImage" value="ава-"></div>
+                    <div class="form-group"><label>Статус</label><select id="voiceStatus"><option value="Основной состав">Основной</option><option value="Доп. состав">Доп.</option></select></div>
                 </div>
-                <button type="submit" class="admin-button">➕ Добавить даббера</button>
+                <button type="submit" class="admin-button">➕ Добавить</button>
             </form>
-            
-            <div class="items-list">
-                <h3>📋 Список дабберов</h3>
-                <div class="search-box">
-                    <input type="text" id="voiceSearch" placeholder="🔍 Поиск по имени..." onkeyup="window.filterVoices()">
-                </div>
-                <div id="voicesList"></div>
-            </div>
+            <div id="voicesList" class="items-list"></div>
         </div>
         
-        <!-- Секция Роли -->
-        <div id="rolesSection" class="admin-section" style="display: none;">
-            <h2 class="section-title">🔗 Добавить новую роль</h2>
-            
-            <form id="roleForm" onsubmit="window.addRole(event)">
+        <!-- Роли -->
+        <div id="rolesSection" class="admin-section" style="display:none">
+            <h2>➕ Добавить роль</h2>
+            <form id="roleForm">
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label>Тайтл</label>
-                        <select id="roleTitleId" required>
-                            <option value="">Выберите тайтл</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Даббер</label>
-                        <select id="roleVoiceId" required>
-                            <option value="">Выберите даббера</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Персонаж</label>
-                        <input type="text" id="roleCharacter" placeholder="Эльза">
-                    </div>
-                    <div class="form-group">
-                        <label>Тип роли</label>
-                        <select id="roleType">
-                            <option value="main">Главная</option>
-                            <option value="recurring">Повторяющаяся</option>
-                            <option value="supporting">Второстепенная</option>
-                            <option value="guest">Эпизодическая</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Серии</label>
-                        <input type="text" id="roleEpisodes" placeholder="1-12 или 7">
-                    </div>
+                    <div class="form-group"><label>Тайтл</label><select id="roleTitleId"></select></div>
+                    <div class="form-group"><label>Даббер</label><select id="roleVoiceId"></select></div>
+                    <div class="form-group"><label>Персонаж</label><input id="roleCharacter"></div>
+                    <div class="form-group"><label>Тип</label><select id="roleType"><option value="main">Главная</option><option value="supporting">Втор.</option></select></div>
                 </div>
-                <button type="submit" class="admin-button">🔗 Добавить роль</button>
+                <button type="submit" class="admin-button">➕ Добавить</button>
             </form>
-            
-            <div class="items-list">
-                <h3>📋 Список ролей</h3>
-                <div class="search-box">
-                    <input type="text" id="roleSearch" placeholder="🔍 Поиск..." onkeyup="window.filterRoles()">
-                </div>
-                <div id="rolesList"></div>
-            </div>
-        </div>
-        
-        <!-- Секция Статистика -->
-        <div id="statsSection" class="admin-section" style="display: none;">
-            <h2 class="section-title">📊 Статистика сайта</h2>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
-                <div style="background: linear-gradient(135deg, #001a8c, #320063); color: white; padding: 25px; border-radius: 15px; text-align: center;">
-                    <div style="font-size: 48px; font-weight: bold;" id="statTitles">0</div>
-                    <div>Тайтлов</div>
-                </div>
-                <div style="background: linear-gradient(135deg, #320063, #4a0072); color: white; padding: 25px; border-radius: 15px; text-align: center;">
-                    <div style="font-size: 48px; font-weight: bold;" id="statVoices">0</div>
-                    <div>Дабберов</div>
-                </div>
-                <div style="background: linear-gradient(135deg, #4a0072, #666); color: white; padding: 25px; border-radius: 15px; text-align: center;">
-                    <div style="font-size: 48px; font-weight: bold;" id="statRoles">0</div>
-                    <div>Ролей</div>
-                </div>
-            </div>
-            
-            <div class="warning-message">
-                <strong>ℹ️ Информация:</strong> Все данные хранятся в Firebase. При добавлении новых данных они сразу видны всем пользователям!
-            </div>
-            
-            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                <button onclick="window.exportData()" class="admin-button">📥 Экспортировать данные</button>
-                <button onclick="window.importData()" class="admin-button secondary">📤 Импортировать данные</button>
-            </div>
+            <div id="rolesList" class="items-list"></div>
         </div>
     </div>
 
     <script type="module">
         import firebase from './firebase-config.js';
-        
-        // Делаем firebase доступным глобально
         window.firebase = firebase;
         
-        // Проверка авторизации
         if (!firebase.isAdminLoggedIn()) {
             window.location.href = 'admin-login.html';
         }
         
-        // Текущая вкладка
-        let currentTab = 'titles';
-        
-        // Функция для показа сообщения
-        function showMessage(text, isSuccess = true) {
+        function showMessage(text) {
             const msg = document.getElementById('successMessage');
             msg.textContent = text;
             msg.style.display = 'block';
-            msg.style.background = isSuccess ? '#4CAF50' : '#d43f6b';
-            setTimeout(() => {
-                msg.style.display = 'none';
-            }, 3000);
+            setTimeout(() => msg.style.display = 'none', 3000);
         }
-        window.showMessage = showMessage;
         
-        // Переключение вкладок
         window.switchTab = function(tab) {
-            currentTab = tab;
-            
-            // Обновляем классы кнопок
-            document.querySelectorAll('.admin-tab').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
-            
-            // Прячем все секции
-            document.getElementById('titlesSection').style.display = 'none';
-            document.getElementById('voicesSection').style.display = 'none';
-            document.getElementById('rolesSection').style.display = 'none';
-            document.getElementById('statsSection').style.display = 'none';
-            
-            // Показываем нужную
-            document.getElementById(tab + 'Section').style.display = 'block';
-            
-            // Обновляем данные
-            if (tab === 'titles') {
-                renderTitlesList();
-                updateTitleSelects();
-            } else if (tab === 'voices') {
-                renderVoicesList();
-                updateVoiceSelects();
-            } else if (tab === 'roles') {
-                updateRoleSelects();
-                renderRolesList();
-            } else if (tab === 'stats') {
-                updateStats();
-            }
+            ['titles','voices','roles'].forEach(s => 
+                document.getElementById(s + 'Section').style.display = s === tab ? 'block' : 'none'
+            );
+            if (tab === 'titles') renderTitles();
+            if (tab === 'voices') renderVoices();
+            if (tab === 'roles') { updateSelects(); renderRoles(); }
         };
         
-        // ===== ТАЙТЛЫ =====
-        window.addTitle = async function(event) {
-            event.preventDefault();
-            
+        // Тайтлы
+        document.getElementById('titleForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
             const newTitle = {
                 id: document.getElementById('titleId').value,
                 name: document.getElementById('titleName').value,
                 nameEng: document.getElementById('titleNameEn').value,
                 image: document.getElementById('titleImage').value,
                 type: document.getElementById('titleType').value,
-                seasons: parseInt(document.getElementById('titleSeasons').value),
-                episodes: parseInt(document.getElementById('titleEpisodes').value),
-                year: parseInt(document.getElementById('titleYear').value),
-                rating: parseFloat(document.getElementById('titleRating').value),
-                genres: document.getElementById('titleGenres').value.split(',').map(g => g.trim()),
-                description: document.getElementById('titleDescription').value
+                seasons: +document.getElementById('titleSeasons').value,
+                episodes: +document.getElementById('titleEpisodes').value,
+                year: 2026, rating: 4.5, genres: [], description: ''
             };
-            
-            // Добавляем в массив
             window.titlesDatabase.push(newTitle);
-            
-            // Сохраняем в Firebase
             await firebase.saveTitlesToFirebase(window.titlesDatabase);
-            
-            // Очищаем форму
-            document.getElementById('titleForm').reset();
-            
-            // Обновляем список
-            renderTitlesList();
-            updateTitleSelects();
-            
-            showMessage('✅ Тайтл успешно добавлен!');
+            renderTitles();
+            showMessage('✅ Тайтл добавлен');
+        });
+        
+        window.deleteTitle = async (id) => {
+            if (!confirm('Удалить?')) return;
+            window.titlesDatabase = window.titlesDatabase.filter(t => t.id !== id);
+            await firebase.saveTitlesToFirebase(window.titlesDatabase);
+            renderTitles();
+            showMessage('✅ Тайтл удалён');
         };
         
-        window.deleteTitle = async function(id) {
-            if (confirm('Вы уверены, что хотите удалить этот тайтл?')) {
-                window.titlesDatabase = window.titlesDatabase.filter(t => t.id !== id);
-                await firebase.saveTitlesToFirebase(window.titlesDatabase);
-                renderTitlesList();
-                updateTitleSelects();
-                showMessage('✅ Тайтл удалён');
-            }
-        };
-        
-        function renderTitlesList() {
+        function renderTitles() {
             const list = document.getElementById('titlesList');
-            const search = document.getElementById('titleSearch')?.value.toLowerCase() || '';
-            
-            const filtered = window.titlesDatabase.filter(t => 
-                t.name.toLowerCase().includes(search) || 
-                (t.nameEng && t.nameEng.toLowerCase().includes(search))
-            );
-            
-            list.innerHTML = filtered.map(title => `
+            list.innerHTML = window.titlesDatabase.map(t => `
                 <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-name">${title.name} ${title.nameEng ? `(${title.nameEng})` : ''}</div>
-                        <div class="item-meta">
-                            ID: ${title.id} | ${title.type} | ${title.episodes} серий | ⭐ ${title.rating}
-                        </div>
-                    </div>
-                    <div class="item-actions">
-                        <button class="item-button delete" onclick="window.deleteTitle('${title.id}')">Удалить</button>
-                    </div>
+                    <span class="item-name">${t.name}</span>
+                    <button class="item-button delete" onclick="deleteTitle('${t.id}')">Удалить</button>
                 </div>
             `).join('');
         }
         
-        window.filterTitles = function() {
-            renderTitlesList();
-        };
-        
-        // ===== ДАББЕРЫ =====
-        window.addVoice = async function(event) {
-            event.preventDefault();
-            
+        // Дабберы
+        document.getElementById('voiceForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
             const newVoice = {
                 id: document.getElementById('voiceId').value,
                 name: document.getElementById('voiceName').value,
                 image: document.getElementById('voiceImage').value,
                 status: document.getElementById('voiceStatus').value,
-                joinDate: '',
-                bio: '',
-                social: {}
+                joinDate: '', bio: '', social: {}
             };
-            
             window.voicesDatabase.push(newVoice);
             await firebase.saveVoicesToFirebase(window.voicesDatabase);
-            
-            document.getElementById('voiceForm').reset();
-            renderVoicesList();
-            updateVoiceSelects();
-            
-            showMessage('✅ Даббер успешно добавлен!');
+            renderVoices();
+            showMessage('✅ Даббер добавлен');
+        });
+        
+        window.deleteVoice = async (id) => {
+            if (!confirm('Удалить?')) return;
+            window.voicesDatabase = window.voicesDatabase.filter(v => v.id !== id);
+            await firebase.saveVoicesToFirebase(window.voicesDatabase);
+            renderVoices();
+            showMessage('✅ Даббер удалён');
         };
         
-        window.deleteVoice = async function(id) {
-            if (confirm('Вы уверены, что хотите удалить этого даббера?')) {
-                window.voicesDatabase = window.voicesDatabase.filter(v => v.id !== id);
-                await firebase.saveVoicesToFirebase(window.voicesDatabase);
-                renderVoicesList();
-                updateVoiceSelects();
-                showMessage('✅ Даббер удалён');
-            }
-        };
-        
-        function renderVoicesList() {
+        function renderVoices() {
             const list = document.getElementById('voicesList');
-            const search = document.getElementById('voiceSearch')?.value.toLowerCase() || '';
-            
-            const filtered = window.voicesDatabase.filter(v => 
-                v.name.toLowerCase().includes(search)
-            );
-            
-            list.innerHTML = filtered.map(voice => `
+            list.innerHTML = window.voicesDatabase.map(v => `
                 <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-name">${voice.name}</div>
-                        <div class="item-meta">
-                            ID: ${voice.id} | ${voice.status}
-                        </div>
-                    </div>
-                    <div class="item-actions">
-                        <button class="item-button delete" onclick="window.deleteVoice('${voice.id}')">Удалить</button>
-                    </div>
+                    <span class="item-name">${v.name}</span>
+                    <button class="item-button delete" onclick="deleteVoice('${v.id}')">Удалить</button>
                 </div>
             `).join('');
         }
         
-        window.filterVoices = function() {
-            renderVoicesList();
-        };
-        
-        // ===== РОЛИ =====
-        function updateTitleSelects() {
-            const selects = document.querySelectorAll('#roleTitleId');
-            selects.forEach(select => {
-                if (select) {
-                    select.innerHTML = '<option value="">Выберите тайтл</option>' +
-                        window.titlesDatabase.map(t => 
-                            `<option value="${t.id}">${t.name}</option>`
-                        ).join('');
-                }
-            });
+        // Роли
+        function updateSelects() {
+            const titleSelect = document.getElementById('roleTitleId');
+            const voiceSelect = document.getElementById('roleVoiceId');
+            titleSelect.innerHTML = '<option>Выберите</option>' + window.titlesDatabase.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+            voiceSelect.innerHTML = '<option>Выберите</option>' + window.voicesDatabase.map(v => `<option value="${v.id}">${v.name}</option>`).join('');
         }
         
-        function updateVoiceSelects() {
-            const selects = document.querySelectorAll('#roleVoiceId');
-            selects.forEach(select => {
-                if (select) {
-                    select.innerHTML = '<option value="">Выберите даббера</option>' +
-                        window.voicesDatabase.map(v => 
-                            `<option value="${v.id}">${v.name}</option>`
-                        ).join('');
-                }
-            });
-        }
-        
-        window.addRole = async function(event) {
-            event.preventDefault();
-            
+        document.getElementById('roleForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
             const newRole = {
                 titleId: document.getElementById('roleTitleId').value,
                 voiceId: document.getElementById('roleVoiceId').value,
                 character: document.getElementById('roleCharacter').value,
                 type: document.getElementById('roleType').value,
-                episodes: document.getElementById('roleEpisodes').value
+                episodes: ''
             };
-            
             window.rolesDatabase.push(newRole);
             await firebase.saveRolesToFirebase(window.rolesDatabase);
-            
-            document.getElementById('roleForm').reset();
-            renderRolesList();
-            
-            showMessage('✅ Роль успешно добавлена!');
+            renderRoles();
+            showMessage('✅ Роль добавлена');
+        });
+        
+        window.deleteRole = async (index) => {
+            if (!confirm('Удалить?')) return;
+            window.rolesDatabase.splice(index, 1);
+            await firebase.saveRolesToFirebase(window.rolesDatabase);
+            renderRoles();
+            showMessage('✅ Роль удалена');
         };
         
-        window.deleteRole = async function(index) {
-            if (confirm('Вы уверены, что хотите удалить эту роль?')) {
-                window.rolesDatabase.splice(index, 1);
-                await firebase.saveRolesToFirebase(window.rolesDatabase);
-                renderRolesList();
-                showMessage('✅ Роль удалена');
-            }
-        };
-        
-        function renderRolesList() {
+        function renderRoles() {
             const list = document.getElementById('rolesList');
-            const search = document.getElementById('roleSearch')?.value.toLowerCase() || '';
-            
-            const filtered = window.rolesDatabase.filter(role => {
-                const title = window.titlesDatabase.find(t => t.id === role.titleId);
-                const voice = window.voicesDatabase.find(v => v.id === role.voiceId);
-                const searchStr = `${title?.name} ${voice?.name} ${role.character}`.toLowerCase();
-                return searchStr.includes(search);
-            });
-            
-            list.innerHTML = filtered.map((role, index) => {
-                const title = window.titlesDatabase.find(t => t.id === role.titleId);
-                const voice = window.voicesDatabase.find(v => v.id === role.voiceId);
-                const roleClass = `role-${role.type}`;
-                
+            list.innerHTML = window.rolesDatabase.map((r, i) => {
+                const title = window.titlesDatabase.find(t => t.id === r.titleId);
+                const voice = window.voicesDatabase.find(v => v.id === r.voiceId);
                 return `
                     <div class="item-card">
-                        <div class="item-info">
-                            <div class="item-name">${title?.name || '?'} → ${voice?.name || '?'}</div>
-                            <div class="item-meta">
-                                ${role.character ? `Персонаж: ${role.character} | ` : ''}
-                                <span class="role-badge ${roleClass}">${role.type}</span>
-                                ${role.episodes ? ` | Серии: ${role.episodes}` : ''}
-                            </div>
-                        </div>
-                        <div class="item-actions">
-                            <button class="item-button delete" onclick="window.deleteRole(${index})">Удалить</button>
-                        </div>
+                        <span class="item-name">${title?.name} → ${voice?.name} (${r.character})</span>
+                        <button class="item-button delete" onclick="deleteRole(${i})">Удалить</button>
                     </div>
                 `;
             }).join('');
         }
         
-        window.filterRoles = function() {
-            renderRolesList();
-        };
-        
-        function updateRoleSelects() {
-            updateTitleSelects();
-            updateVoiceSelects();
-        }
-        
-        // ===== СТАТИСТИКА =====
-        function updateStats() {
-            document.getElementById('statTitles').textContent = window.titlesDatabase.length;
-            document.getElementById('statVoices').textContent = window.voicesDatabase.length;
-            document.getElementById('statRoles').textContent = window.rolesDatabase.length;
-        }
-        
-        // ===== ЭКСПОРТ/ИМПОРТ =====
-        window.exportData = function() {
-            const data = {
-                titles: window.titlesDatabase,
-                voices: window.voicesDatabase,
-                roles: window.rolesDatabase
-            };
-            
-            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'vat-backup.json';
-            a.click();
-            
-            showMessage('✅ Данные экспортированы');
-        };
-        
-        window.importData = function() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            
-            input.onchange = async function(e) {
-                const file = e.target.files[0];
-                const reader = new FileReader();
-                
-                reader.onload = async function(e) {
-                    try {
-                        const data = JSON.parse(e.target.result);
-                        
-                        if (data.titles) {
-                            window.titlesDatabase = data.titles;
-                            await firebase.saveTitlesToFirebase(data.titles);
-                        }
-                        if (data.voices) {
-                            window.voicesDatabase = data.voices;
-                            await firebase.saveVoicesToFirebase(data.voices);
-                        }
-                        if (data.roles) {
-                            window.rolesDatabase = data.roles;
-                            await firebase.saveRolesToFirebase(data.roles);
-                        }
-                        
-                        showMessage('✅ Данные импортированы');
-                        location.reload();
-                    } catch (err) {
-                        showMessage('❌ Ошибка импорта', false);
-                    }
-                };
-                
-                reader.readAsText(file);
-            };
-            
-            input.click();
-        };
-        
-        // Выход
-        window.handleLogout = function() {
+        window.handleLogout = () => {
             firebase.logoutAdmin();
             window.location.href = 'admin-login.html';
         };
         
         // Инициализация
-        window.onload = function() {
-            renderTitlesList();
-            renderVoicesList();
-            renderRolesList();
-            updateTitleSelects();
-            updateVoiceSelects();
-            updateStats();
-        };
+        setTimeout(() => {
+            renderTitles();
+            renderVoices();
+            updateSelects();
+            renderRoles();
+        }, 500);
     </script>
 </body>
 </html>

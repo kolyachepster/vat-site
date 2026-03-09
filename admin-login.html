@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход для администратора - VAT</title>
+    <title>Вход - VAT</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .login-container {
@@ -14,51 +14,27 @@
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-        
         .login-title {
             text-align: center;
             color: #001a8c;
             margin-bottom: 20px;
         }
-        
-        .login-subtitle {
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 30px;
-            padding: 10px;
-            background: #fff3cd;
-            border-radius: 8px;
-            border-left: 4px solid #ffaa00;
-        }
-        
         .form-group {
             margin-bottom: 20px;
         }
-        
         .form-group label {
             display: block;
             margin-bottom: 5px;
-            color: #333;
             font-weight: bold;
         }
-        
         .form-group input {
             width: 100%;
             padding: 12px;
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 16px;
-            transition: all 0.3s;
             box-sizing: border-box;
         }
-        
-        .form-group input:focus {
-            border-color: #001a8c;
-            outline: none;
-            box-shadow: 0 0 10px rgba(0,26,140,0.2);
-        }
-        
         .login-button {
             width: 100%;
             padding: 14px;
@@ -69,47 +45,18 @@
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
         }
-        
-        .login-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0,26,140,0.4);
-        }
-        
         .error-message {
             color: #d43f6b;
             text-align: center;
             margin-top: 15px;
-            font-size: 14px;
-            min-height: 20px;
         }
-        
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #666;
-            text-decoration: none;
-        }
-        
-        .back-link:hover {
-            color: #001a8c;
-        }
-        
         .info-box {
             background: #e7f3ff;
-            border-left: 4px solid #001a8c;
             padding: 15px;
             border-radius: 8px;
             margin-top: 20px;
         }
-        
-        .info-box p {
-            margin: 5px 0;
-            font-size: 14px;
-        }
-        
         .fill-button {
             margin-top: 10px;
             padding: 8px 15px;
@@ -118,174 +65,70 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
-        }
-        
-        .fill-button:hover {
-            background: #320063;
-        }
-        
-        .debug-box {
-            background: #f0f0f0;
-            padding: 10px;
-            border-radius: 5px;
-            font-family: monospace;
-            font-size: 12px;
-            margin-top: 20px;
-            display: none;
-            white-space: pre-wrap;
-            word-break: break-all;
         }
     </style>
 </head>
 <body>
-    <!-- Навигация -->
     <div class="container">
         <div class="navigation-buttons">
-            <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🏠 Главная
-            </a>
-            <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🎦 Тайтлы
-            </a>
-            <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🎭 Состав
-            </a>
+            <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">🏠 Главная</a>
+            <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">🎦 Тайтлы</a>
+            <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">🎭 Состав</a>
         </div>
     </div>
 
     <div class="login-container">
         <h1 class="login-title">🔐 Вход в админ-панель</h1>
         
-        <div class="login-subtitle">
-            ⚠️ Вход только для администраторов
-        </div>
-        
         <form id="loginForm">
             <div class="form-group">
                 <label>📧 Email</label>
-                <input type="email" id="email" placeholder="voiceactingteam8@gmail.com" required>
+                <input type="email" id="email" required>
             </div>
-            
             <div class="form-group">
                 <label>🔑 Пароль</label>
-                <input type="password" id="password" placeholder="Введите пароль" required>
+                <input type="password" id="password" required>
             </div>
-            
             <button type="submit" class="login-button">Войти</button>
-            
             <div id="errorMessage" class="error-message"></div>
         </form>
         
         <div class="info-box">
-            <p><strong>📝 Данные для входа:</strong></p>
+            <p><strong>Данные для входа:</strong></p>
             <p>Email: <code>voiceactingteam8@gmail.com</code></p>
             <p>Пароль: <code>A55411455a_</code></p>
-            <button type="button" id="fillButton" class="fill-button">🔑 Заполнить данные</button>
+            <button type="button" id="fillButton" class="fill-button">🔑 Заполнить</button>
         </div>
-        
-        <div id="debugBox" class="debug-box">
-            <strong>Отладочная информация:</strong><br>
-            <span id="debugText"></span>
-        </div>
-        
-        <a href="index.html" class="back-link">← Вернуться на главную</a>
     </div>
 
     <script type="module">
-        // Импортируем Firebase
         import firebase from './firebase-config.js';
         
-        console.log('Firebase импортирован:', firebase);
+        document.getElementById('fillButton').addEventListener('click', () => {
+            document.getElementById('email').value = 'voiceactingteam8@gmail.com';
+            document.getElementById('password').value = 'A55411455a_';
+        });
         
-        // Получаем элементы
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
-        const fillButton = document.getElementById('fillButton');
-        const loginForm = document.getElementById('loginForm');
-        const errorDiv = document.getElementById('errorMessage');
-        const debugBox = document.getElementById('debugBox');
-        const debugText = document.getElementById('debugText');
-        
-        // Функция для отладки
-        function debug(message) {
-            console.log(message);
-            debugBox.style.display = 'block';
-            debugText.innerHTML += message + '<br>';
-        }
-        
-        // Проверяем наличие элементов
-        console.log('Элементы:', { emailInput, passwordInput, fillButton, loginForm });
-        
-        // Кнопка заполнения данных
-        if (fillButton) {
-            fillButton.addEventListener('click', () => {
-                emailInput.value = 'voiceactingteam8@gmail.com';
-                passwordInput.value = 'A55411455a_';
-                debug('✅ Поля заполнены');
-            });
-        } else {
-            console.error('Кнопка fillButton не найдена');
-        }
-        
-        // Обработка формы входа
-        if (loginForm) {
-            loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const email = emailInput.value;
-                const password = passwordInput.value;
-                
-                errorDiv.textContent = '⏳ Вход...';
-                errorDiv.style.color = '#666';
-                
-                debug('🔐 Попытка входа...');
-                debug(`Email: ${email}`);
-                debug(`Пароль: ${password.replace(/./g, '*')}`);
-                
-                try {
-                    if (!firebase) {
-                        throw new Error('Firebase не загружен');
-                    }
-                    
-                    if (typeof firebase.loginAdmin !== 'function') {
-                        throw new Error('Функция loginAdmin не найдена');
-                    }
-                    
-                    debug('Вызываем loginAdmin...');
-                    const result = await firebase.loginAdmin(email, password);
-                    debug(`Результат: ${JSON.stringify(result)}`);
-                    
-                    if (result && result.success) {
-                        errorDiv.textContent = '✅ Успешный вход! Перенаправление...';
-                        errorDiv.style.color = '#4CAF50';
-                        debug('✅ Успех! Перенаправляем');
-                        
-                        setTimeout(() => {
-                            window.location.href = 'admin-panel.html';
-                        }, 1500);
-                    } else {
-                        errorDiv.textContent = '❌ ' + (result?.error || 'Ошибка входа');
-                        errorDiv.style.color = '#d43f6b';
-                        debug('❌ Ошибка: ' + (result?.error || 'Неизвестная ошибка'));
-                    }
-                } catch (error) {
-                    console.error('Ошибка:', error);
-                    errorDiv.textContent = '❌ ' + error.message;
-                    errorDiv.style.color = '#d43f6b';
-                    debug('❌ Исключение: ' + error.message);
-                }
-            });
-        } else {
-            console.error('Форма loginForm не найдена');
-        }
-        
-        // Проверка загрузки
-        debug('✅ Страница загружена');
-        debug(`Firebase доступен: ${firebase ? 'да' : 'нет'}`);
-        if (firebase) {
-            debug(`Методы: ${Object.keys(firebase).join(', ')}`);
-        }
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            
+            errorDiv.textContent = '⏳ Вход...';
+            
+            const result = await firebase.loginAdmin(email, password);
+            
+            if (result.success) {
+                errorDiv.textContent = '✅ Успех! Перенаправление...';
+                setTimeout(() => {
+                    window.location.href = 'admin-panel.html';
+                }, 1000);
+            } else {
+                errorDiv.textContent = '❌ ' + result.error;
+            }
+        });
     </script>
 </body>
 </html>

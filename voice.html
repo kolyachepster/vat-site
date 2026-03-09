@@ -305,144 +305,33 @@
 
         // Функция для отображения страницы даббера
         function displayVoicePage() {
-            const voiceId = getUrlParameter('id');
-            
-            if (!voiceId) {
-                document.getElementById('voice-content').innerHTML = `
-                    <div class="not-found">
-                        <h2>😕 Даббер не указан</h2>
-                        <p>В URL отсутствует ID даббера</p>
-                        <a href="sostav.html" class="nav-button" style="display: inline-block; margin-top: 20px; background: linear-gradient(135deg, #001a8c 0%, #320063 100%); color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none;">
-                            ← Вернуться к составу
-                        </a>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Ищем даббера по ID
-            const voice = getVoiceById(voiceId);
-            
-            if (!voice) {
-                document.getElementById('voice-content').innerHTML = `
-                    <div class="not-found">
-                        <h2>😕 Даббер не найден</h2>
-                        <p>Даббер с ID "${voiceId}" не найден в базе данных</p>
-                        <a href="sostav.html" class="nav-button" style="display: inline-block; margin-top: 20px; background: linear-gradient(135deg, #001a8c 0%, #320063 100%); color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none;">
-                            ← Вернуться к составу
-                        </a>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Обновляем заголовок страницы
-            document.title = `${voice.name} - VAT`;
-            
-            // Получаем все тайтлы даббера
-            const titles = getTitlesByVoiceId(voice.id);
-            
-            // Статистика
-            const totalTitles = titles.length;
-            const totalRoles = getRolesByVoiceId(voice.id).length;
-            const mainRoles = titles.reduce((acc, t) => acc + t.roles.filter(r => r.type === 'main').length, 0);
-            
-            // Формируем HTML для тайтлов
-            let titlesHtml = '';
-            if (titles.length > 0) {
-                titlesHtml = '<h2>🎬 Участие в проектах</h2>';
-                
-                titles.forEach(title => {
-                    const roles = title.roles;
-                    
-                    let rolesHtml = '';
-                    roles.forEach(role => {
-                        const roleClass = role.type === 'main' ? 'main' : 
-                                         role.type === 'recurring' ? 'recurring' : 
-                                         role.type === 'supporting' ? 'supporting' : 'guest';
-                        
-                        rolesHtml += `
-                            <div class="role-badge ${roleClass}">
-                                <span class="role-character">${role.character}</span>
-                                ${role.episodes ? `<span class="role-episodes">(${role.episodes})</span>` : ''}
-                            </div>
-                        `;
-                    });
-                    
-                    titlesHtml += `
-                        <a href="${title.id}.html" class="title-card-voice">
-                            <img src="${title.image}" alt="${title.name}" class="title-card-voice-image">
-                            <div class="title-card-voice-info">
-                                <div class="title-card-voice-name">${title.name}</div>
-                                <div style="font-size: 14px; color: #666; margin-bottom: 8px;">
-                                    ${title.type === 'movie' ? '🎬 Фильм' : `📺 ${title.seasons} сезона, ${title.episodes} серий`}
-                                </div>
-                                <div class="roles-list">
-                                    ${rolesHtml}
-                                </div>
-                            </div>
-                        </a>
-                    `;
-                });
-            } else {
-                titlesHtml = '<p>Пока нет информации об участии в проектах</p>';
-            }
-            
-            // Социальные сети
-            let socialHtml = '';
-            if (voice.social) {
-                if (voice.social.telegram) {
-                    const tg = voice.social.telegram.replace('@', '');
-                    socialHtml += `<a href="https://t.me/${tg}" target="_blank" class="social-link">📱 Telegram: ${voice.social.telegram}</a>`;
-                }
-                if (voice.social.vk) {
-                    socialHtml += `<a href="https://vk.com/${voice.social.vk}" target="_blank" class="social-link">📘 VK: ${voice.social.vk}</a>`;
-                }
-                if (voice.social.github) {
-                    socialHtml += `<a href="https://github.com/${voice.social.github}" target="_blank" class="social-link">🐙 GitHub: ${voice.social.github}</a>`;
-                }
-            }
-            
-            // Полный HTML страницы
-            document.getElementById('voice-content').innerHTML = `
-                <div class="voice-profile">
-                    <img src="${voice.image}" alt="${voice.name}" class="voice-avatar-large">
-                    <div class="voice-info">
-                        <h1 class="voice-name">${voice.name}</h1>
-                        <span class="voice-status">${voice.status}</span>
-                        
-                        <div class="voice-meta">
-                            <span class="voice-meta-item">📅 В команде с ${voice.joinDate}</span>
-                            <span class="voice-meta-item">🎭 ${totalRoles} ролей</span>
-                            <span class="voice-meta-item">🎬 ${totalTitles} проектов</span>
-                        </div>
-                        
-                        ${voice.bio ? `<div class="voice-bio">${voice.bio}</div>` : ''}
-                        
-                        ${socialHtml ? `<div class="voice-social">${socialHtml}</div>` : ''}
-                    </div>
-                </div>
-                
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-number">${totalTitles}</div>
-                        <div class="stat-label">Проектов</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">${totalRoles}</div>
-                        <div class="stat-label">Всего ролей</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">${mainRoles}</div>
-                        <div class="stat-label">Главных ролей</div>
-                    </div>
-                </div>
-                
-                <div class="titles-section">
-                    ${titlesHtml}
-                </div>
-            `;
+    const voiceId = getUrlParameter('id');
+    
+    if (!voiceId) {
+        document.getElementById('voice-content').innerHTML = '<div class="not-found">Даббер не указан</div>';
+        return;
+    }
+    
+    // Ждём загрузки данных
+    setTimeout(() => {
+        const voice = window.getVoiceById ? window.getVoiceById(voiceId) : null;
+        
+        if (!voice) {
+            document.getElementById('voice-content').innerHTML = '<div class="not-found">Даббер не найден</div>';
+            return;
         }
+        
+        document.title = `${voice.name} - VAT`;
+        document.getElementById('voice-content').innerHTML = `
+            <div class="voice-profile">
+                <img src="${voice.image}" class="voice-avatar-large">
+                <h1>${voice.name}</h1>
+                <p>${voice.status}</p>
+                ${voice.bio ? `<p>${voice.bio}</p>` : ''}
+            </div>
+        `;
+    }, 1000);
+}
 
         // Запускаем после загрузки
         if (document.readyState === 'loading') {
