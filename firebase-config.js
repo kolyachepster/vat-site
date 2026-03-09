@@ -3,14 +3,15 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Конфигурация Firebase
+// Конфигурация Firebase (ваши данные)
 const firebaseConfig = {
   apiKey: "AIzaSyC-LWCtieKF69kWRRY53Snvor_1KGgCY_A",
   authDomain: "vat-site-43783.firebaseapp.com",
   projectId: "vat-site-43783",
   storageBucket: "vat-site-43783.firebasestorage.app",
   messagingSenderId: "987773125200",
-  appId: "1:987773125200:web:04cfdc68e320c426090755"
+  appId: "1:987773125200:web:04cfdc68e320c426090755",
+  databaseURL: "https://vat-site-43783-default-rtdb.firebaseio.com/" // Добавьте эту строку!
 };
 
 // Инициализация
@@ -24,7 +25,11 @@ console.log('✅ Firebase инициализирован');
 async function loadTitles() {
     try {
         const snapshot = await get(child(ref(database), 'titles'));
-        return snapshot.exists() ? Object.values(snapshot.val()) : [];
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            return Array.isArray(data) ? data : Object.values(data);
+        }
+        return [];
     } catch (error) {
         console.error('Ошибка загрузки тайтлов:', error);
         return [];
@@ -34,7 +39,11 @@ async function loadTitles() {
 async function loadVoices() {
     try {
         const snapshot = await get(child(ref(database), 'voices'));
-        return snapshot.exists() ? Object.values(snapshot.val()) : [];
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            return Array.isArray(data) ? data : Object.values(data);
+        }
+        return [];
     } catch (error) {
         console.error('Ошибка загрузки дабберов:', error);
         return [];
@@ -44,7 +53,11 @@ async function loadVoices() {
 async function loadRoles() {
     try {
         const snapshot = await get(child(ref(database), 'roles'));
-        return snapshot.exists() ? Object.values(snapshot.val()) : [];
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            return Array.isArray(data) ? data : Object.values(data);
+        }
+        return [];
     } catch (error) {
         console.error('Ошибка загрузки ролей:', error);
         return [];
@@ -91,6 +104,7 @@ async function loginAdmin(email, password) {
         if (error.code === 'auth/user-not-found') message = 'Пользователь не найден';
         if (error.code === 'auth/wrong-password') message = 'Неверный пароль';
         if (error.code === 'auth/invalid-email') message = 'Неверный email';
+        if (error.code === 'auth/too-many-requests') message = 'Слишком много попыток';
         return { success: false, error: message };
     }
 }

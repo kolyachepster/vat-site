@@ -44,27 +44,57 @@ window.titlesDatabase = [];
 window.voicesDatabase = [];
 window.rolesDatabase = [];
 
-// ===== ЗАГРУЗКА ДАННЫХ ИЗ FIREBASE =====
+// ===== ЗАГРУЗКА ДАННЫХ =====
 async function loadData() {
+    console.log('🔄 Загрузка данных...');
+    
     try {
-        // Проверяем, загружен ли Firebase
-        if (window.firebase && typeof window.firebase.loadTitles === 'function') {
-            console.log('🔄 Загрузка данных из Firebase...');
+        // Пробуем загрузить из Firebase
+        if (window.firebase) {
+            console.log('📡 Подключение к Firebase...');
             
             const [titles, voices, roles] = await Promise.all([
-                window.firebase.loadTitles().catch(() => []),
-                window.firebase.loadVoices().catch(() => []),
-                window.firebase.loadRoles().catch(() => [])
+                window.firebase.loadTitles().catch(e => {
+                    console.warn('Не удалось загрузить тайтлы:', e);
+                    return [];
+                }),
+                window.firebase.loadVoices().catch(e => {
+                    console.warn('Не удалось загрузить дабберов:', e);
+                    return [];
+                }),
+                window.firebase.loadRoles().catch(e => {
+                    console.warn('Не удалось загрузить роли:', e);
+                    return [];
+                })
             ]);
             
-            window.titlesDatabase = titles.length ? titles : initialTitles;
-            window.voicesDatabase = voices.length ? voices : initialVoices;
-            window.rolesDatabase = roles.length ? roles : initialRoles;
+            // Если данные есть, используем их
+            if (titles && titles.length > 0) {
+                window.titlesDatabase = titles;
+                console.log(`✅ Загружено ${titles.length} тайтлов из Firebase`);
+            } else {
+                window.titlesDatabase = [...initialTitles];
+                console.log('📁 Используются локальные тайтлы');
+            }
             
-            console.log('✅ Данные загружены из Firebase');
+            if (voices && voices.length > 0) {
+                window.voicesDatabase = voices;
+                console.log(`✅ Загружено ${voices.length} дабберов из Firebase`);
+            } else {
+                window.voicesDatabase = [...initialVoices];
+                console.log('📁 Используются локальные дабберы');
+            }
+            
+            if (roles && roles.length > 0) {
+                window.rolesDatabase = roles;
+                console.log(`✅ Загружено ${roles.length} ролей из Firebase`);
+            } else {
+                window.rolesDatabase = [...initialRoles];
+                console.log('📁 Используются локальные роли');
+            }
         } else {
-            // Используем локальные данные
-            console.log('📁 Используются локальные данные (Firebase не подключён)');
+            // Firebase не подключён, используем локальные данные
+            console.log('⚠️ Firebase не найден, используются локальные данные');
             window.titlesDatabase = [...initialTitles];
             window.voicesDatabase = [...initialVoices];
             window.rolesDatabase = [...initialRoles];
@@ -77,12 +107,16 @@ async function loadData() {
         window.rolesDatabase = [...initialRoles];
     }
     
-    // Сохраняем данные в localStorage для быстрого доступа
-    localStorage.setItem('vat_titles', JSON.stringify(window.titlesDatabase));
-    localStorage.setItem('vat_voices', JSON.stringify(window.voicesDatabase));
-    localStorage.setItem('vat_roles', JSON.stringify(window.rolesDatabase));
+    // Сохраняем в localStorage для кеширования
+    try {
+        localStorage.setItem('vat_titles', JSON.stringify(window.titlesDatabase));
+        localStorage.setItem('vat_voices', JSON.stringify(window.voicesDatabase));
+        localStorage.setItem('vat_roles', JSON.stringify(window.rolesDatabase));
+    } catch (e) {
+        console.warn('Не удалось сохранить в localStorage:', e);
+    }
     
-    console.log('📊 Статистика:');
+    console.log('📊 Итоговая статистика:');
     console.log(`- Тайтлов: ${window.titlesDatabase.length}`);
     console.log(`- Дабберов: ${window.voicesDatabase.length}`);
     console.log(`- Ролей: ${window.rolesDatabase.length}`);
@@ -112,6 +146,21 @@ window.getTitlesByVoiceId = function(voiceId) {
     }).filter(t => t);
 };
 
+window.getRolesByTitleId = function(titleId) {
+    return window.rolesDatabase.filter(r => r.titleId === titleId);
+};
+
+window.getVoicesByTitleId = function(titleId) {
+    const roles = window.getRolesByTitleId(titleId);
+    const voiceIds = [...new Set(roles.map(r => r.voiceId))];
+    
+    return voiceIds.map(voiceId => {
+        const voice = window.getVoiceById(voiceId);
+        const voiceRoles = roles.filter(r => r.voiceId === voiceId);
+        return voice ? { ...voice, roles: voiceRoles } : null;
+    }).filter(v => v);
+};
+
 window.searchDatabase = function(query) {
     if (!query) return { titles: [], voices: [] };
     
@@ -126,27 +175,10 @@ window.searchDatabase = function(query) {
     return { titles, voices };
 };
 
-// Функция для получения ролей по тайтлу
-window.getRolesByTitleId = function(titleId) {
-    return window.rolesDatabase.filter(r => r.titleId === titleId);
-};
-
-// Функция для получения дабберов по тайтлу
-window.getVoicesByTitleId = function(titleId) {
-    const roles = window.getRolesByTitleId(titleId);
-    const voiceIds = [...new Set(roles.map(r => r.voiceId))];
-    
-    return voiceIds.map(voiceId => {
-        const voice = window.getVoiceById(voiceId);
-        const voiceRoles = roles.filter(r => r.voiceId === voiceId);
-        return voice ? { ...voice, roles: voiceRoles } : null;
-    }).filter(v => v);
-};
-
 // ===== ЗАПУСК ЗАГРУЗКИ =====
 loadData();
 
-// Экспортируем функции для использования в других файлах
+// Экспортируем функции
 window.VATData = {
     getVoiceById: window.getVoiceById,
     getVoiceByName: window.getVoiceByName,

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Инициализация Firebase</title>
+    <script src="data.js"></script>
+    <script type="module" src="firebase-config.js"></script>
+</head>
+<body>
+    <h1>Инициализация Firebase</h1>
+    <button onclick="initData()">Загрузить начальные данные</button>
+    <div id="status"></div>
+
+    <script type="module">
+        window.initData = async function() {
+            const status = document.getElementById('status');
+            status.innerHTML = '⏳ Загрузка...';
+            
+            try {
+                // Загружаем начальные данные из data.js
+                const titles = window.titlesDatabase;
+                const voices = window.voicesDatabase;
+                const roles = window.rolesDatabase;
+                
+                // Сохраняем в Firebase
+                await window.firebase.saveTitles(titles);
+                await window.firebase.saveVoices(voices);
+                await window.firebase.saveRoles(roles);
+                
+                status.innerHTML = '✅ Данные успешно загружены в Firebase!';
+            } catch (error) {
+                status.innerHTML = '❌ Ошибка: ' + error.message;
+            }
+        };
+    </script>
+</body>
+</html>
