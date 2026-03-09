@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход для администратора - VAT</title>
     <link rel="stylesheet" href="style.css">
-    <script src="firebase-config.js" type="module"></script>
     <style>
-                .login-container {
+        .login-container {
             max-width: 400px;
             margin: 50px auto;
             padding: 30px;
@@ -110,6 +109,23 @@
             margin: 5px 0;
             font-size: 14px;
         }
+        
+        .debug-box {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            margin-top: 20px;
+            display: none;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -129,16 +145,16 @@
     </div>
 
     <div class="login-container">
-        <h1 class="login-title">🔐 Вход</h1>
+        <h1 class="login-title">🔐 Вход в админ-панель</h1>
         
         <div class="login-subtitle">
-            ⚠️ Вход пока только для администраторов
+            ⚠️ Вход только для администраторов
         </div>
         
-        <form id="loginForm" onsubmit="handleLogin(event)">
+        <form id="loginForm">
             <div class="form-group">
                 <label>📧 Email</label>
-                <input type="email" id="email" placeholder="login" required>
+                <input type="email" id="email" placeholder="voiceactingteam8@gmail.com" required>
             </div>
             
             <div class="form-group">
@@ -151,31 +167,101 @@
             <div id="errorMessage" class="error-message"></div>
         </form>
         
-        
+        <div id="debugBox" class="debug-box">
+            <strong>Отладочная информация:</strong><br>
+            <span id="debugText"></span>
+        </div>
         
         <a href="index.html" class="back-link">← Вернуться на главную</a>
     </div>
 
     <script type="module">
-        import { firebase } from './firebase-config.js';
+        // ИМПОРТИРУЕМ ПРАВИЛЬНО - используем default import
+        import firebase from './firebase-config.js';
         
-        window.handleLogin = async function(event) {
-            event.preventDefault();
+        console.log('Firebase импортирован:', firebase);
+        
+        // Проверяем, что firebase загрузился
+        if (!firebase) {
+            document.getElementById('errorMessage').textContent = '❌ Ошибка загрузки Firebase';
+            document.getElementById('debugBox').style.display = 'block';
+            document.getElementById('debugText').textContent = 'firebase = undefined';
+        }
+        
+        // Кнопка для заполнения тестовых данных
+        document.getElementById('fillTestData').addEventListener('click', () => {
+            document.getElementById('email').value = 'voiceactingteam8@gmail.com';
+            document.getElementById('password').value = 'A55411455a_';
+            document.getElementById('debugText').textContent = 'Поля заполнены';
+        });
+        
+        // Обработка формы входа
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('errorMessage');
+            const debugBox = document.getElementById('debugBox');
+            const debugText = document.getElementById('debugText');
             
-            const result = await firebase.loginAdmin(email, password);
+            errorDiv.textContent = '⏳ Вход...';
+            errorDiv.style.color = '#666';
             
-            if (result.success) {
-                localStorage.setItem('adminLoggedIn', 'true');
-                window.location.href = 'admin-panel.html';
-            } else {
-                errorDiv.textContent = '❌ ' + result.error;
+            // Показываем отладочную информацию
+            debugBox.style.display = 'block';
+            debugText.innerHTML = `Пытаемся войти с:<br>Email: ${email}<br>Пароль: ${password.replace(/./g, '*')}<br><br>`;
+            
+            try {
+                console.log('Запускаем loginAdmin...');
+                
+                // Проверяем, есть ли функция loginAdmin
+                if (!firebase || typeof firebase.loginAdmin !== 'function') {
+                    throw new Error('Функция loginAdmin не найдена в firebase');
+                }
+                
+                debugText.innerHTML += `Вызываем firebase.loginAdmin(${email})...<br>`;
+                
+                const result = await firebase.loginAdmin(email, password);
+                console.log('Результат:', result);
+                
+                debugText.innerHTML += `Результат: ${JSON.stringify(result, null, 2)}<br>`;
+                
+                if (result && result.success) {
+                    errorDiv.innerHTML = '✅ <span class="success">Успешный вход! Перенаправление...</span>';
+                    errorDiv.style.color = '#4CAF50';
+                    
+                    debugText.innerHTML += `✅ Успех! Перенаправляем...<br>`;
+                    
+                    setTimeout(() => {
+                        window.location.href = 'admin-panel.html';
+                    }, 1500);
+                } else {
+                    errorDiv.textContent = '❌ ' + (result?.error || 'Неизвестная ошибка');
+                    errorDiv.style.color = '#d43f6b';
+                    debugText.innerHTML += `❌ Ошибка: ${result?.error}<br>`;
+                }
+            } catch (error) {
+                console.error('Критическая ошибка:', error);
+                errorDiv.textContent = '❌ Ошибка: ' + error.message;
                 errorDiv.style.color = '#d43f6b';
+                debugText.innerHTML += `❌ Исключение: ${error.message}<br>`;
+                debugText.innerHTML += `Стек: ${error.stack || 'нет'}<br>`;
             }
-        };
+        });
+        
+        // Проверяем, загрузился ли firebase
+        console.log('Firebase доступен:', firebase);
+        
+        // Выводим все методы firebase для отладки
+        if (firebase) {
+            console.log('Методы Firebase:', Object.keys(firebase));
+        }
+    </script>
+    
+    <!-- Запасной вариант без модулей (если модули не работают) -->
+    <script nomodule>
+        alert('Ваш браузер не поддерживает модули ES6. Пожалуйста, обновите браузер.');
     </script>
 </body>
 </html>

@@ -489,6 +489,7 @@
     </div>
 
     <script src="firebase-config.js" type="module">
+        import firebase from './firebase-config.js';
         // Проверка авторизации
         if (!isAdminLoggedIn()) {
             window.location.href = 'admin-login.html';
