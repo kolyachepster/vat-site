@@ -30,7 +30,7 @@ const titlesDatabase = [
         description: ''
     },
     {
-        id: 'Hellsing',
+        id: 'hellsing',
         name: 'Хеллсинг: Война с нечистью',
         nameEng: 'Hellsing',
         image: 'hellsing.jpg',
@@ -41,12 +41,12 @@ const titlesDatabase = [
         rating: 4.5,
         genres: ['Психологическая драма', 'Детектив', 'Комедия'],
         description: ''
-    },
-    ];
+    }
+];
 
 // ========== ДАББЕРЫ (АКТЁРЫ ОЗВУЧКИ) ==========
 const voicesDatabase = [
-    // ===== ОСНОВНОЙ СОСТАВ (18 человек) =====
+    // ===== ОСНОВНОЙ СОСТАВ =====
     { 
         id: 'miki-angel',
         name: 'Miki-angel', 
@@ -55,7 +55,7 @@ const voicesDatabase = [
         joinDate: '2023',
         bio: 'Девиз: "Из унылого говна, резко в сытого кота"',
         social: {
-            telegram: '@kadrzakadrommikiangel',
+            telegram: '@kadrzakadrommikiangel'
         }
     },
     { 
@@ -203,7 +203,7 @@ const voicesDatabase = [
         social: {}
     },
     
-    // ===== ДОПОЛНИТЕЛЬНЫЙ СОСТАВ (25 человек) =====
+    // ===== ДОПОЛНИТЕЛЬНЫЙ СОСТАВ =====
     { 
         id: 'enineke',
         name: 'Enineke', 
@@ -225,7 +225,7 @@ const voicesDatabase = [
     { 
         id: 'denis',
         name: 'Денис Груздов', 
-        image: 'ава-denis',
+        image: 'ава-denis.jpg',
         status: 'Доп. состав',
         joinDate: '2024',
         bio: '',
@@ -261,7 +261,7 @@ const voicesDatabase = [
     { 
         id: 'doza_narkoza',
         name: 'Doza_Narkoza', 
-        image: 'ава-Doza.jpg',
+        image: 'ава-doza.jpg',
         status: 'Доп. состав',
         joinDate: '2025',
         bio: '',
@@ -297,7 +297,7 @@ const voicesDatabase = [
     { 
         id: 'parz',
         name: 'Parz', 
-        image: 'ава-Parz.jpg',
+        image: 'ава-parz.jpg',
         status: 'Доп. состав',
         joinDate: '2026',
         bio: '',
@@ -362,7 +362,7 @@ const voicesDatabase = [
     { 
         id: 'akva',
         name: 'Akva', 
-        image: 'ава-Akva.jpg',
+        image: 'ава-akva.jpg',
         status: 'Доп. состав',
         joinDate: '2024',
         bio: '',
@@ -371,7 +371,7 @@ const voicesDatabase = [
     { 
         id: 'dizzel',
         name: 'Dizzel', 
-        image: 'ава-dizzel',
+        image: 'ава-dizzel.jpg',
         status: 'Доп. состав',
         joinDate: '2026',
         bio: '',
@@ -380,7 +380,7 @@ const voicesDatabase = [
     { 
         id: 'kr9k',
         name: 'Kr9k', 
-        image: 'ава-Kr9k',
+        image: 'ава-kr9k.jpg',
         status: 'Доп. состав',
         joinDate: '2026',
         bio: '',
@@ -398,7 +398,7 @@ const voicesDatabase = [
     { 
         id: 'never',
         name: 'Never', 
-        image: 'ава-Never.jpg',
+        image: 'ава-never.jpg',
         status: 'Доп. состав',
         joinDate: '2026',
         bio: '',
@@ -407,7 +407,7 @@ const voicesDatabase = [
     { 
         id: 'sabal',
         name: 'Sabal', 
-        image: 'ава-Sabal.jpg',
+        image: 'ава-sabal.jpg',
         status: 'Доп. состав',
         joinDate: '2025',
         bio: '',
@@ -416,7 +416,7 @@ const voicesDatabase = [
     { 
         id: 'zheka',
         name: 'Жека', 
-        image: 'ава-zheka',
+        image: 'ава-zheka.jpg',
         status: 'Доп. состав',
         joinDate: '2025',
         bio: '',
@@ -452,13 +452,14 @@ const voicesDatabase = [
     { 
         id: 'rayko',
         name: 'Rayko', 
-        image: 'ава-Rayko.jpg',
+        image: 'ава-rayko.jpg',
         status: 'Доп. состав',
-        joinDate: '67/69/52/42/1488',
+        joinDate: '2025',
         bio: '',
         social: {}
-    },
+    }
 ];
+
 // ========== РОЛИ (СВЯЗЬ ДАББЕРОВ С ТАЙТЛАМИ) ==========
 const rolesDatabase = [
     // ===== МОЛЧАЛИВАЯ ВЕДЬМА =====
@@ -487,8 +488,7 @@ const rolesDatabase = [
     { titleId: 'molchalivaya_vedma', voiceId: 'runi', character: 'Кэролайн', episodes: '', type: 'supporting' },
     { titleId: 'molchalivaya_vedma', voiceId: 'spartans', character: 'Профессор Уильям', episodes: '', type: 'supporting' },
     { titleId: 'molchalivaya_vedma', voiceId: 'spartans', character: 'Учитель Войд', episodes: '', type: 'supporting' },
-    { titleId: 'molchalivaya_vedma', voiceId: 'runi', character: 'Кейси', episodes: '', type: 'supporting' },
-    
+    { titleId: 'molchalivaya_vedma', voiceId: 'runi', character: 'Кейси', episodes: '', type: 'supporting' }
 ];
 
 // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
@@ -497,18 +497,17 @@ function getVoiceById(id) {
     return voicesDatabase.find(v => v.id === id) || null;
 }
 
-//
 function getVoiceByName(name) {
     return voicesDatabase.find(v => v.name === name) || null;
+}
 
 function getRolesByVoiceId(voiceId) {
     return rolesDatabase.filter(r => r.voiceId === voiceId);
 }
 
-
 function getTitlesByVoiceId(voiceId) {
     const roles = getRolesByVoiceId(voiceId);
-    const titleIds = [...new Set(roles.map(r => r.titleId))]; // уникальные ID
+    const titleIds = [...new Set(roles.map(r => r.titleId))];
     
     return titleIds.map(titleId => {
         const title = titlesDatabase.find(t => t.id === titleId);
@@ -517,7 +516,7 @@ function getTitlesByVoiceId(voiceId) {
             ...title,
             roles: voiceRoles
         };
-    }).filter(t => t); // убираем null
+    }).filter(t => t);
 }
 
 function getVoicesByTitleId(titleId) {
@@ -543,7 +542,6 @@ function groupRolesByType(roles) {
     };
 }
 
-
 function getVoiceStats(voiceId) {
     const roles = getRolesByVoiceId(voiceId);
     const titles = getTitlesByVoiceId(voiceId);
@@ -559,19 +557,16 @@ function getVoiceStats(voiceId) {
     };
 }
 
-//
 function searchDatabase(query) {
     if (!query) return { titles: [], voices: [] };
     
     const lowerQuery = query.toLowerCase().trim();
     
-    // Поиск по тайтлам
     const titles = titlesDatabase.filter(title => 
         title.name.toLowerCase().includes(lowerQuery) ||
         (title.nameEng && title.nameEng.toLowerCase().includes(lowerQuery))
     );
     
-    // Поиск по дабберам
     const voices = voicesDatabase.filter(voice => 
         voice.name.toLowerCase().includes(lowerQuery)
     );
@@ -579,8 +574,7 @@ function searchDatabase(query) {
     return { titles, voices };
 }
 
-
-// Экспортируем всё в глобальную область (для доступа из HTML)
+// Экспортируем всё в глобальную область
 window.titlesDatabase = titlesDatabase;
 window.voicesDatabase = voicesDatabase;
 window.rolesDatabase = rolesDatabase;
@@ -592,123 +586,9 @@ window.getVoicesByTitleId = getVoicesByTitleId;
 window.groupRolesByType = groupRolesByType;
 window.getVoiceStats = getVoiceStats;
 window.searchDatabase = searchDatabase;
-// data.js - База данных с Firebase
 
-// Загружаем начальные данные
-async function initializeData() {
-    try {
-        const [titles, voices, roles] = await Promise.all([
-            window.firebase.loadTitlesFromFirebase(),
-            window.firebase.loadVoicesFromFirebase(),
-            window.firebase.loadRolesFromFirebase()
-        ]);
-        
-        window.titlesDatabase = titles.length ? titles : [];
-        window.voicesDatabase = voices.length ? voices : [];
-        window.rolesDatabase = roles.length ? roles : [];
-        
-        console.log('Данные загружены из Firebase');
-    } catch (error) {
-        console.error('Ошибка загрузки из Firebase:', error);
-        // Если ошибка, используем локальные данные как запасной вариант
-        window.titlesDatabase = window.titlesDatabase || [];
-        window.voicesDatabase = window.voicesDatabase || [];
-        window.rolesDatabase = window.rolesDatabase || [];
-    }
-}
-
-// Запускаем загрузку
-initializeData();
-
-// ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
-
-function getVoiceById(id) {
-    return window.voicesDatabase.find(v => v.id === id) || null;
-}
-
-function getVoiceByName(name) {
-    return window.voicesDatabase.find(v => v.name === name) || null;
-}
-
-function getRolesByVoiceId(voiceId) {
-    return window.rolesDatabase.filter(r => r.voiceId === voiceId);
-}
-
-function getTitlesByVoiceId(voiceId) {
-    const roles = getRolesByVoiceId(voiceId);
-    const titleIds = [...new Set(roles.map(r => r.titleId))];
-    
-    return titleIds.map(titleId => {
-        const title = window.titlesDatabase.find(t => t.id === titleId);
-        const voiceRoles = roles.filter(r => r.titleId === titleId);
-        return {
-            ...title,
-            roles: voiceRoles
-        };
-    }).filter(t => t);
-}
-
-function getVoicesByTitleId(titleId) {
-    const roles = window.rolesDatabase.filter(r => r.titleId === titleId);
-    const voiceIds = [...new Set(roles.map(r => r.voiceId))];
-    
-    return voiceIds.map(voiceId => {
-        const voice = getVoiceById(voiceId);
-        const titleRoles = roles.filter(r => r.voiceId === voiceId);
-        return {
-            ...voice,
-            roles: titleRoles
-        };
-    }).filter(v => v);
-}
-
-function groupRolesByType(roles) {
-    return {
-        main: roles.filter(r => r.type === 'main'),
-        recurring: roles.filter(r => r.type === 'recurring'),
-        supporting: roles.filter(r => r.type === 'supporting'),
-        guest: roles.filter(r => r.type === 'guest')
-    };
-}
-
-function getVoiceStats(voiceId) {
-    const roles = getRolesByVoiceId(voiceId);
-    const titles = getTitlesByVoiceId(voiceId);
-    const grouped = groupRolesByType(roles);
-    
-    return {
-        totalTitles: titles.length,
-        totalRoles: roles.length,
-        mainRoles: grouped.main.length,
-        recurringRoles: grouped.recurring.length,
-        supportingRoles: grouped.supporting.length,
-        guestRoles: grouped.guest.length
-    };
-}
-
-function searchDatabase(query) {
-    if (!query) return { titles: [], voices: [] };
-    
-    const lowerQuery = query.toLowerCase().trim();
-    
-    const titles = window.titlesDatabase.filter(title => 
-        title.name.toLowerCase().includes(lowerQuery) ||
-        (title.nameEng && title.nameEng.toLowerCase().includes(lowerQuery))
-    );
-    
-    const voices = window.voicesDatabase.filter(voice => 
-        voice.name.toLowerCase().includes(lowerQuery)
-    );
-    
-    return { titles, voices };
-}
-
-// Экспортируем
-window.getVoiceById = getVoiceById;
-window.getVoiceByName = getVoiceByName;
-window.getRolesByVoiceId = getRolesByVoiceId;
-window.getTitlesByVoiceId = getTitlesByVoiceId;
-window.getVoicesByTitleId = getVoicesByTitleId;
-window.groupRolesByType = groupRolesByType;
-window.getVoiceStats = getVoiceStats;
-window.searchDatabase = searchDatabase;
+console.log('data.js загружен, функций:', {
+    getVoiceById: typeof getVoiceById,
+    getVoiceByName: typeof getVoiceByName,
+    getRolesByVoiceId: typeof getRolesByVoiceId
+});

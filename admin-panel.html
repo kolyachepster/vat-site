@@ -297,17 +297,17 @@
         
         <!-- Вкладки -->
         <div class="admin-tabs">
-            <button class="admin-tab active" onclick="switchTab('titles')">📺 Тайтлы</button>
-            <button class="admin-tab" onclick="switchTab('voices')">🎭 Дабберы</button>
-            <button class="admin-tab" onclick="switchTab('roles')">🔗 Роли</button>
-            <button class="admin-tab" onclick="switchTab('stats')">📊 Статистика</button>
+            <button class="admin-tab active" onclick="window.switchTab('titles')">📺 Тайтлы</button>
+            <button class="admin-tab" onclick="window.switchTab('voices')">🎭 Дабберы</button>
+            <button class="admin-tab" onclick="window.switchTab('roles')">🔗 Роли</button>
+            <button class="admin-tab" onclick="window.switchTab('stats')">📊 Статистика</button>
         </div>
         
         <!-- Секция Тайтлы -->
         <div id="titlesSection" class="admin-section">
             <h2 class="section-title">➕ Добавить новый тайтл</h2>
             
-            <form id="titleForm" onsubmit="addTitle(event)">
+            <form id="titleForm" onsubmit="window.addTitle(event)">
                 <div class="form-grid">
                     <div class="form-group">
                         <label>ID (уникальный)</label>
@@ -365,7 +365,7 @@
             <div class="items-list">
                 <h3>📋 Список тайтлов</h3>
                 <div class="search-box">
-                    <input type="text" id="titleSearch" placeholder="🔍 Поиск по названию..." onkeyup="filterTitles()">
+                    <input type="text" id="titleSearch" placeholder="🔍 Поиск по названию..." onkeyup="window.filterTitles()">
                 </div>
                 <div id="titlesList"></div>
             </div>
@@ -375,7 +375,7 @@
         <div id="voicesSection" class="admin-section" style="display: none;">
             <h2 class="section-title">➕ Добавить нового даббера</h2>
             
-            <form id="voiceForm" onsubmit="addVoice(event)">
+            <form id="voiceForm" onsubmit="window.addVoice(event)">
                 <div class="form-grid">
                     <div class="form-group">
                         <label>ID (уникальный)</label>
@@ -387,7 +387,7 @@
                     </div>
                     <div class="form-group">
                         <label>Изображение</label>
-                        <input type="text" id="voiceImage" placeholder="https://via.placeholder.com/200/001a8c/ffffff?text=Miki">
+                        <input type="text" id="voiceImage" placeholder="ава-miki.jpg">
                     </div>
                     <div class="form-group">
                         <label>Статус</label>
@@ -403,7 +403,7 @@
             <div class="items-list">
                 <h3>📋 Список дабберов</h3>
                 <div class="search-box">
-                    <input type="text" id="voiceSearch" placeholder="🔍 Поиск по имени..." onkeyup="filterVoices()">
+                    <input type="text" id="voiceSearch" placeholder="🔍 Поиск по имени..." onkeyup="window.filterVoices()">
                 </div>
                 <div id="voicesList"></div>
             </div>
@@ -413,7 +413,7 @@
         <div id="rolesSection" class="admin-section" style="display: none;">
             <h2 class="section-title">🔗 Добавить новую роль</h2>
             
-            <form id="roleForm" onsubmit="addRole(event)">
+            <form id="roleForm" onsubmit="window.addRole(event)">
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Тайтл</label>
@@ -451,7 +451,7 @@
             <div class="items-list">
                 <h3>📋 Список ролей</h3>
                 <div class="search-box">
-                    <input type="text" id="roleSearch" placeholder="🔍 Поиск..." onkeyup="filterRoles()">
+                    <input type="text" id="roleSearch" placeholder="🔍 Поиск..." onkeyup="window.filterRoles()">
                 </div>
                 <div id="rolesList"></div>
             </div>
@@ -477,27 +477,24 @@
             </div>
             
             <div class="warning-message">
-                <strong>ℹ️ Информация:</strong> Все данные хранятся в вашем браузере (localStorage). При очистке кэша данные могут потеряться!
+                <strong>ℹ️ Информация:</strong> Все данные хранятся в Firebase. При добавлении новых данных они сразу видны всем пользователям!
             </div>
             
             <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                <button onclick="exportData()" class="admin-button">📥 Экспортировать данные</button>
-                <button onclick="importData()" class="admin-button secondary">📤 Импортировать данные</button>
-                <button onclick="resetToDefault()" class="admin-button danger">⚠️ Сбросить к исходным</button>
+                <button onclick="window.exportData()" class="admin-button">📥 Экспортировать данные</button>
+                <button onclick="window.importData()" class="admin-button secondary">📤 Импортировать данные</button>
             </div>
         </div>
     </div>
 
-    <script src="firebase-config.js" type="module">
-    import firebase from './firebase-config.js';
-    
-    // Проверка авторизации
-    if (!firebase.isAdminLoggedIn()) {
-        window.location.href = 'admin-login.html';
-    }
+    <script type="module">
         import firebase from './firebase-config.js';
+        
+        // Делаем firebase доступным глобально
+        window.firebase = firebase;
+        
         // Проверка авторизации
-        if (!isAdminLoggedIn()) {
+        if (!firebase.isAdminLoggedIn()) {
             window.location.href = 'admin-login.html';
         }
         
@@ -514,9 +511,10 @@
                 msg.style.display = 'none';
             }, 3000);
         }
+        window.showMessage = showMessage;
         
         // Переключение вкладок
-        function switchTab(tab) {
+        window.switchTab = function(tab) {
             currentTab = tab;
             
             // Обновляем классы кнопок
@@ -547,10 +545,10 @@
             } else if (tab === 'stats') {
                 updateStats();
             }
-        }
+        };
         
         // ===== ТАЙТЛЫ =====
-        function addTitle(event) {
+        window.addTitle = async function(event) {
             event.preventDefault();
             
             const newTitle = {
@@ -570,8 +568,8 @@
             // Добавляем в массив
             window.titlesDatabase.push(newTitle);
             
-            // Сохраняем в localStorage
-            saveTitlesToStorage(window.titlesDatabase);
+            // Сохраняем в Firebase
+            await firebase.saveTitlesToFirebase(window.titlesDatabase);
             
             // Очищаем форму
             document.getElementById('titleForm').reset();
@@ -581,17 +579,17 @@
             updateTitleSelects();
             
             showMessage('✅ Тайтл успешно добавлен!');
-        }
+        };
         
-        function deleteTitle(id) {
+        window.deleteTitle = async function(id) {
             if (confirm('Вы уверены, что хотите удалить этот тайтл?')) {
                 window.titlesDatabase = window.titlesDatabase.filter(t => t.id !== id);
-                saveTitlesToStorage(window.titlesDatabase);
+                await firebase.saveTitlesToFirebase(window.titlesDatabase);
                 renderTitlesList();
                 updateTitleSelects();
                 showMessage('✅ Тайтл удалён');
             }
-        }
+        };
         
         function renderTitlesList() {
             const list = document.getElementById('titlesList');
@@ -611,18 +609,18 @@
                         </div>
                     </div>
                     <div class="item-actions">
-                        <button class="item-button delete" onclick="deleteTitle('${title.id}')">Удалить</button>
+                        <button class="item-button delete" onclick="window.deleteTitle('${title.id}')">Удалить</button>
                     </div>
                 </div>
             `).join('');
         }
         
-        function filterTitles() {
+        window.filterTitles = function() {
             renderTitlesList();
-        }
+        };
         
         // ===== ДАББЕРЫ =====
-        function addVoice(event) {
+        window.addVoice = async function(event) {
             event.preventDefault();
             
             const newVoice = {
@@ -636,24 +634,24 @@
             };
             
             window.voicesDatabase.push(newVoice);
-            saveVoicesToStorage(window.voicesDatabase);
+            await firebase.saveVoicesToFirebase(window.voicesDatabase);
             
             document.getElementById('voiceForm').reset();
             renderVoicesList();
             updateVoiceSelects();
             
             showMessage('✅ Даббер успешно добавлен!');
-        }
+        };
         
-        function deleteVoice(id) {
+        window.deleteVoice = async function(id) {
             if (confirm('Вы уверены, что хотите удалить этого даббера?')) {
                 window.voicesDatabase = window.voicesDatabase.filter(v => v.id !== id);
-                saveVoicesToStorage(window.voicesDatabase);
+                await firebase.saveVoicesToFirebase(window.voicesDatabase);
                 renderVoicesList();
                 updateVoiceSelects();
                 showMessage('✅ Даббер удалён');
             }
-        }
+        };
         
         function renderVoicesList() {
             const list = document.getElementById('voicesList');
@@ -672,19 +670,19 @@
                         </div>
                     </div>
                     <div class="item-actions">
-                        <button class="item-button delete" onclick="deleteVoice('${voice.id}')">Удалить</button>
+                        <button class="item-button delete" onclick="window.deleteVoice('${voice.id}')">Удалить</button>
                     </div>
                 </div>
             `).join('');
         }
         
-        function filterVoices() {
+        window.filterVoices = function() {
             renderVoicesList();
-        }
+        };
         
         // ===== РОЛИ =====
         function updateTitleSelects() {
-            const selects = document.querySelectorAll('#roleTitleId, #filterTitleId');
+            const selects = document.querySelectorAll('#roleTitleId');
             selects.forEach(select => {
                 if (select) {
                     select.innerHTML = '<option value="">Выберите тайтл</option>' +
@@ -696,7 +694,7 @@
         }
         
         function updateVoiceSelects() {
-            const selects = document.querySelectorAll('#roleVoiceId, #filterVoiceId');
+            const selects = document.querySelectorAll('#roleVoiceId');
             selects.forEach(select => {
                 if (select) {
                     select.innerHTML = '<option value="">Выберите даббера</option>' +
@@ -707,7 +705,7 @@
             });
         }
         
-        function addRole(event) {
+        window.addRole = async function(event) {
             event.preventDefault();
             
             const newRole = {
@@ -719,22 +717,22 @@
             };
             
             window.rolesDatabase.push(newRole);
-            saveRolesToStorage(window.rolesDatabase);
+            await firebase.saveRolesToFirebase(window.rolesDatabase);
             
             document.getElementById('roleForm').reset();
             renderRolesList();
             
             showMessage('✅ Роль успешно добавлена!');
-        }
+        };
         
-        function deleteRole(index) {
+        window.deleteRole = async function(index) {
             if (confirm('Вы уверены, что хотите удалить эту роль?')) {
                 window.rolesDatabase.splice(index, 1);
-                saveRolesToStorage(window.rolesDatabase);
+                await firebase.saveRolesToFirebase(window.rolesDatabase);
                 renderRolesList();
                 showMessage('✅ Роль удалена');
             }
-        }
+        };
         
         function renderRolesList() {
             const list = document.getElementById('rolesList');
@@ -763,15 +761,20 @@
                             </div>
                         </div>
                         <div class="item-actions">
-                            <button class="item-button delete" onclick="deleteRole(${index})">Удалить</button>
+                            <button class="item-button delete" onclick="window.deleteRole(${index})">Удалить</button>
                         </div>
                     </div>
                 `;
             }).join('');
         }
         
-        function filterRoles() {
+        window.filterRoles = function() {
             renderRolesList();
+        };
+        
+        function updateRoleSelects() {
+            updateTitleSelects();
+            updateVoiceSelects();
         }
         
         // ===== СТАТИСТИКА =====
@@ -782,7 +785,7 @@
         }
         
         // ===== ЭКСПОРТ/ИМПОРТ =====
-        function exportData() {
+        window.exportData = function() {
             const data = {
                 titles: window.titlesDatabase,
                 voices: window.voicesDatabase,
@@ -797,32 +800,32 @@
             a.click();
             
             showMessage('✅ Данные экспортированы');
-        }
+        };
         
-        function importData() {
+        window.importData = function() {
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.json';
             
-            input.onchange = function(e) {
+            input.onchange = async function(e) {
                 const file = e.target.files[0];
                 const reader = new FileReader();
                 
-                reader.onload = function(e) {
+                reader.onload = async function(e) {
                     try {
                         const data = JSON.parse(e.target.result);
                         
                         if (data.titles) {
                             window.titlesDatabase = data.titles;
-                            saveTitlesToStorage(data.titles);
+                            await firebase.saveTitlesToFirebase(data.titles);
                         }
                         if (data.voices) {
                             window.voicesDatabase = data.voices;
-                            saveVoicesToStorage(data.voices);
+                            await firebase.saveVoicesToFirebase(data.voices);
                         }
                         if (data.roles) {
                             window.rolesDatabase = data.roles;
-                            saveRolesToStorage(data.roles);
+                            await firebase.saveRolesToFirebase(data.roles);
                         }
                         
                         showMessage('✅ Данные импортированы');
@@ -836,22 +839,13 @@
             };
             
             input.click();
-        }
-        
-        function resetToDefault() {
-            if (confirm('Вы уверены? Все текущие данные будут потеряны!')) {
-                localStorage.removeItem('titlesDatabase');
-                localStorage.removeItem('voicesDatabase');
-                localStorage.removeItem('rolesDatabase');
-                location.reload();
-            }
-        }
+        };
         
         // Выход
-        function handleLogout() {
-            adminLogout();
+        window.handleLogout = function() {
+            firebase.logoutAdmin();
             window.location.href = 'admin-login.html';
-        }
+        };
         
         // Инициализация
         window.onload = function() {
@@ -862,16 +856,6 @@
             updateVoiceSelects();
             updateStats();
         };
-        // В админ-панели, после добавления/удаления вызывайте:
-
-// После изменения тайтлов
-await firebase.saveTitlesToFirebase(window.titlesDatabase);
-
-// После изменения дабберов
-await firebase.saveVoicesToFirebase(window.voicesDatabase);
-
-// После изменения ролей
-await firebase.saveRolesToFirebase(window.rolesDatabase);
     </script>
 </body>
 </html>
