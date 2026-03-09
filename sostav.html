@@ -173,6 +173,13 @@
                 right: -5px;
             }
         }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            width: 100%;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -238,15 +245,13 @@
             <!-- Основной состав -->
             <h2 class="team-section-title" id="mainTitle">🌟 Основной состав</h2>
             <div class="team-list" id="mainTeamList">
-                <!-- Данные будут загружены через JavaScript -->
-                <div class="loading">Загрузка...</div>
+                <div class="loading">Загрузка основного состава...</div>
             </div>
 
             <!-- Дополнительный состав -->
             <h2 class="team-section-title" id="extraTitle">✨ Дополнительный состав</h2>
             <div class="team-list" id="extraTeamList">
-                <!-- Данные будут загружены через JavaScript -->
-                <div class="loading">Загрузка...</div>
+                <div class="loading">Загрузка дополнительного состава...</div>
             </div>
         </div>
     </div>
@@ -275,50 +280,67 @@
             const extraList = document.getElementById('extraTeamList');
             
             // Проверяем, загрузились ли данные
-            setTimeout(() => {
-                if (!window.voicesDatabase || window.voicesDatabase.length === 0) {
-                    mainList.innerHTML = '<p>Загрузка данных...</p>';
-                    extraList.innerHTML = '<p>Загрузка данных...</p>';
-                    setTimeout(loadVoices, 500);
-                    return;
+            const checkData = setInterval(() => {
+                if (window.voicesDatabase && window.voicesDatabase.length > 0) {
+                    clearInterval(checkData);
+                    
+                    // Разделяем на основной и дополнительный состав
+                    const mainVoices = window.voicesDatabase.filter(v => v.status === 'Основной состав');
+                    const extraVoices = window.voicesDatabase.filter(v => v.status === 'Доп. состав');
+                    
+                    console.log('Основной состав:', mainVoices.length);
+                    console.log('Дополнительный состав:', extraVoices.length);
+                    
+                    // Обновляем статистику
+                    document.getElementById('mainCount').textContent = mainVoices.length;
+                    document.getElementById('extraCount').textContent = extraVoices.length;
+                    document.getElementById('totalCount').textContent = window.voicesDatabase.length;
+                    
+                    // Отрисовываем основной состав
+                    if (mainVoices.length > 0) {
+                        mainList.innerHTML = mainVoices.map(voice => `
+                            <a href="voice.html?id=${voice.id}" class="team-card-link">
+                                <div class="team-card">
+                                    <img src="${voice.image}" alt="${voice.name}" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=${voice.name.charAt(0)}'">
+                                    <div class="team-card-name">${voice.name}</div>
+                                    <div class="team-card-roles">${voice.bio || '(роль)'}</div>
+                                    <div class="team-card-popular">🎭 Основной состав</div>
+                                </div>
+                            </a>
+                        `).join('');
+                    } else {
+                        mainList.innerHTML = '<p class="loading">Основной состав пока пуст</p>';
+                    }
+                    
+                    // Отрисовываем дополнительный состав
+                    if (extraVoices.length > 0) {
+                        extraList.innerHTML = extraVoices.map(voice => `
+                            <a href="voice.html?id=${voice.id}" class="team-card-link">
+                                <div class="team-card">
+                                    <img src="${voice.image}" alt="${voice.name}" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/666666/ffffff?text=${voice.name.charAt(0)}'">
+                                    <div class="team-card-name">${voice.name}</div>
+                                    <div class="team-card-roles">${voice.bio || '(роль)'}</div>
+                                    <div class="team-card-popular">🔹 Доп. состав</div>
+                                </div>
+                            </a>
+                        `).join('');
+                    } else {
+                        extraList.innerHTML = '<p class="loading">Дополнительный состав пока пуст</p>';
+                    }
+                    
+                    // Подсветка даббера из поиска
+                    highlightVoiceActor();
                 }
-                
-                // Разделяем на основной и дополнительный состав
-                const mainVoices = window.voicesDatabase.filter(v => v.status === 'Основной состав');
-                const extraVoices = window.voicesDatabase.filter(v => v.status === 'Доп. состав');
-                
-                // Обновляем статистику
-                document.getElementById('mainCount').textContent = mainVoices.length;
-                document.getElementById('extraCount').textContent = extraVoices.length;
-                document.getElementById('totalCount').textContent = window.voicesDatabase.length;
-                
-                // Отрисовываем основной состав
-                mainList.innerHTML = mainVoices.map(voice => `
-                    <a href="voice.html?id=${voice.id}" class="team-card-link">
-                        <div class="team-card">
-                            <img src="${voice.image}" alt="${voice.name}" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=${voice.name.charAt(0)}'">
-                            <div class="team-card-name">${voice.name}</div>
-                            <div class="team-card-roles">${voice.bio || '(роль)'}</div>
-                            <div class="team-card-popular">🎭 Основной состав</div>
-                        </div>
-                    </a>
-                `).join('');
-                
-                // Отрисовываем дополнительный состав
-                extraList.innerHTML = extraVoices.map(voice => `
-                    <a href="voice.html?id=${voice.id}" class="team-card-link">
-                        <div class="team-card">
-                            <img src="${voice.image}" alt="${voice.name}" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/666666/ffffff?text=${voice.name.charAt(0)}'">
-                            <div class="team-card-name">${voice.name}</div>
-                            <div class="team-card-roles">${voice.bio || '(роль)'}</div>
-                            <div class="team-card-popular">🔹 Доп. состав</div>
-                        </div>
-                    </a>
-                `).join('');
-                
-                // Подсветка даббера из поиска
-                highlightVoiceActor();
-            }, 1000);
+            }, 100);
+            
+            // Таймаут на случай ошибки
+            setTimeout(() => {
+                clearInterval(checkData);
+                if (!window.voicesDatabase || window.voicesDatabase.length === 0) {
+                    mainList.innerHTML = '<p class="loading">Не удалось загрузить данные</p>';
+                    extraList.innerHTML = '<p class="loading">Не удалось загрузить данные</p>';
+                }
+            }, 5000);
         }
         
         // Функция для подсветки даббера при переходе с поиска
