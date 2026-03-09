@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Админ-панель - VAT</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Подключаем data.js ДО Firebase, чтобы были глобальные переменные -->
+    <!-- Подключаем существующие файлы -->
     <script src="data.js"></script>
-    <!-- ... остальные стили ... -->
+    <script type="module" src="firebase-config.js"></script>
     <style>
         .admin-header {
             display: flex;
@@ -134,6 +134,7 @@
                     <div class="form-group"><label>Название (рус)</label><input id="titleName" placeholder="Молчаливая ведьма" required></div>
                     <div class="form-group"><label>Название (англ)</label><input id="titleNameEn" placeholder="The Silent Witch"></div>
                     <div class="form-group"><label>Изображение</label><input id="titleImage" placeholder="молч_ведьм.jpg" value="ава-"></div>
+                    <div class="form-group"><label>Кол-во серий</label><input id="titleEpisodes" placeholder="13" value="13"></div>
                 </div>
                 <button type="submit" class="admin-button">➕ Добавить тайтл</button>
             </form>
@@ -156,6 +157,7 @@
                             <option value="Доп. состав">Доп. состав</option>
                         </select>
                     </div>
+                    <div class="form-group"><label>Био</label><input id="voiceBio" placeholder="Краткая информация"></div>
                 </div>
                 <button type="submit" class="admin-button">➕ Добавить даббера</button>
             </form>
@@ -171,7 +173,7 @@
                 <div class="form-grid">
                     <div class="form-group"><label>Тайтл</label><select id="roleTitleId" required></select></div>
                     <div class="form-group"><label>Даббер</label><select id="roleVoiceId" required></select></div>
-                    <div class="form-group"><label>Персонаж</label><input id="roleCharacter" placeholder="Эльза"></div>
+                    <div class="form-group"><label>Персонаж</label><input id="roleCharacter" placeholder="Имя персонажа" required></div>
                 </div>
                 <button type="submit" class="admin-button">➕ Добавить роль</button>
             </form>
@@ -182,35 +184,23 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         
-        // Конфигурация Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyC-LWCtieKF69kWRRY53Snvor_1KGgCY_A",
-            authDomain: "vat-site-43783.firebaseapp.com",
-            projectId: "vat-site-43783",
-            storageBucket: "vat-site-43783.firebasestorage.app",
-            messagingSenderId: "987773125200",
-            appId: "1:987773125200:web:04cfdc68e320c426090755"
-        };
-        
-        // Инициализация Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        const auth = getAuth(app);
-        
-        // Глобальные переменные для данных
-        let titlesDatabase = [];
-        let voicesDatabase = [];
-        let rolesDatabase = [];
+        // Получаем уже инициализированные сервисы
+        const auth = getAuth();
+        const database = getDatabase();
         
         // Проверка авторизации
         const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
         if (!isLoggedIn) {
             window.location.href = 'admin-login.html';
         }
+        
+        // Глобальные переменные для данных
+        let titlesDatabase = [];
+        let voicesDatabase = [];
+        let rolesDatabase = [];
         
         // Функция для показа сообщения
         function showMessage(text, isSuccess = true) {
@@ -246,27 +236,20 @@
                 image: document.getElementById('titleImage').value || 'ава-',
                 type: 'anime',
                 seasons: 1,
-                episodes: 12
+                episodes: parseInt(document.getElementById('titleEpisodes').value) || 13
             };
             
-            // Добавляем в локальный массив
             titlesDatabase.push(newTitle);
             
             try {
-                // Сохраняем в Firebase
                 await set(ref(database, 'titles'), titlesDatabase);
                 
-                // Обновляем глобальные переменные для других страниц
                 if (window.titlesDatabase) {
                     window.titlesDatabase = titlesDatabase;
                 }
                 
                 showMessage('✅ Тайтл успешно добавлен!');
-                
-                // Очищаем форму
                 document.getElementById('titleForm').reset();
-                
-                // Обновляем отображение
                 renderTitles();
                 updateRoleSelects();
                 
@@ -279,21 +262,16 @@
         window.deleteTitle = async (id) => {
             if (!confirm('Вы уверены, что хотите удалить этот тайтл?')) return;
             
-            // Удаляем из локального массива
             titlesDatabase = titlesDatabase.filter(t => t.id !== id);
             
             try {
-                // Сохраняем в Firebase
                 await set(ref(database, 'titles'), titlesDatabase);
                 
-                // Обновляем глобальные переменные
                 if (window.titlesDatabase) {
                     window.titlesDatabase = titlesDatabase;
                 }
                 
                 showMessage('✅ Тайтл удалён');
-                
-                // Обновляем отображение
                 renderTitles();
                 updateRoleSelects();
                 
@@ -315,7 +293,7 @@
                 <div class="item-card">
                     <div>
                         <div class="item-name">${t.name}</div>
-                        <div style="font-size:12px; color:#666;">ID: ${t.id}</div>
+                        <div style="font-size:12px; color:#666;">ID: ${t.id} | Серий: ${t.episodes || '?'}</div>
                     </div>
                     <button class="delete-btn" onclick="deleteTitle('${t.id}')">Удалить</button>
                 </div>
@@ -331,28 +309,21 @@
                 name: document.getElementById('voiceName').value,
                 image: document.getElementById('voiceImage').value || 'ава-',
                 status: document.getElementById('voiceStatus').value,
-                bio: '',
-                joinDate: ''
+                bio: document.getElementById('voiceBio').value || '',
+                joinDate: new Date().toISOString().split('T')[0]
             };
             
-            // Добавляем в локальный массив
             voicesDatabase.push(newVoice);
             
             try {
-                // Сохраняем в Firebase
                 await set(ref(database, 'voices'), voicesDatabase);
                 
-                // Обновляем глобальные переменные
                 if (window.voicesDatabase) {
                     window.voicesDatabase = voicesDatabase;
                 }
                 
                 showMessage('✅ Даббер успешно добавлен!');
-                
-                // Очищаем форму
                 document.getElementById('voiceForm').reset();
-                
-                // Обновляем отображение
                 renderVoices();
                 updateRoleSelects();
                 
@@ -365,21 +336,16 @@
         window.deleteVoice = async (id) => {
             if (!confirm('Вы уверены, что хотите удалить этого даббера?')) return;
             
-            // Удаляем из локального массива
             voicesDatabase = voicesDatabase.filter(v => v.id !== id);
             
             try {
-                // Сохраняем в Firebase
                 await set(ref(database, 'voices'), voicesDatabase);
                 
-                // Обновляем глобальные переменные
                 if (window.voicesDatabase) {
                     window.voicesDatabase = voicesDatabase;
                 }
                 
                 showMessage('✅ Даббер удалён');
-                
-                // Обновляем отображение
                 renderVoices();
                 updateRoleSelects();
                 
@@ -441,24 +407,17 @@
                 episodes: ''
             };
             
-            // Добавляем в локальный массив
             rolesDatabase.push(newRole);
             
             try {
-                // Сохраняем в Firebase
                 await set(ref(database, 'roles'), rolesDatabase);
                 
-                // Обновляем глобальные переменные
                 if (window.rolesDatabase) {
                     window.rolesDatabase = rolesDatabase;
                 }
                 
                 showMessage('✅ Роль успешно добавлена!');
-                
-                // Очищаем форму
                 document.getElementById('roleForm').reset();
-                
-                // Обновляем отображение
                 renderRoles();
                 
             } catch (error) {
@@ -470,21 +429,16 @@
         window.deleteRole = async (index) => {
             if (!confirm('Вы уверены, что хотите удалить эту роль?')) return;
             
-            // Удаляем из локального массива
             rolesDatabase.splice(index, 1);
             
             try {
-                // Сохраняем в Firebase
                 await set(ref(database, 'roles'), rolesDatabase);
                 
-                // Обновляем глобальные переменные
                 if (window.rolesDatabase) {
                     window.rolesDatabase = rolesDatabase;
                 }
                 
                 showMessage('✅ Роль удалена');
-                
-                // Обновляем отображение
                 renderRoles();
                 
             } catch (error) {
@@ -523,63 +477,47 @@
             window.location.href = 'admin-login.html';
         };
         
-        // ===== ЗАГРУЗКА ДАННЫХ ИЗ FIREBASE =====
+        // ===== ЗАГРУЗКА ДАННЫХ =====
         async function loadData() {
             try {
-                // Загружаем тайтлы
+                // Загружаем из Firebase
                 const titlesSnap = await get(child(ref(database), 'titles'));
                 if (titlesSnap.exists()) {
                     const data = titlesSnap.val();
                     titlesDatabase = Array.isArray(data) ? data : Object.values(data);
-                    
-                    // Обновляем глобальные переменные
-                    if (window.titlesDatabase) {
-                        window.titlesDatabase = titlesDatabase;
-                    }
+                    if (window.titlesDatabase) window.titlesDatabase = titlesDatabase;
                 }
                 
-                // Загружаем дабберов
                 const voicesSnap = await get(child(ref(database), 'voices'));
                 if (voicesSnap.exists()) {
                     const data = voicesSnap.val();
                     voicesDatabase = Array.isArray(data) ? data : Object.values(data);
-                    
-                    // Обновляем глобальные переменные
-                    if (window.voicesDatabase) {
-                        window.voicesDatabase = voicesDatabase;
-                    }
+                    if (window.voicesDatabase) window.voicesDatabase = voicesDatabase;
                 }
                 
-                // Загружаем роли
                 const rolesSnap = await get(child(ref(database), 'roles'));
                 if (rolesSnap.exists()) {
                     const data = rolesSnap.val();
                     rolesDatabase = Array.isArray(data) ? data : Object.values(data);
-                    
-                    // Обновляем глобальные переменные
-                    if (window.rolesDatabase) {
-                        window.rolesDatabase = rolesDatabase;
-                    }
+                    if (window.rolesDatabase) window.rolesDatabase = rolesDatabase;
                 }
                 
-                console.log('Данные загружены из Firebase:');
+                console.log('Данные загружены:');
                 console.log('- Тайтлы:', titlesDatabase.length);
                 console.log('- Дабберы:', voicesDatabase.length);
                 console.log('- Роли:', rolesDatabase.length);
                 
-                // Обновляем отображение
                 renderTitles();
                 renderVoices();
                 renderRoles();
                 updateRoleSelects();
                 
             } catch (error) {
-                console.error('Ошибка загрузки данных:', error);
+                console.error('Ошибка загрузки:', error);
                 showMessage('❌ Ошибка загрузки данных', false);
             }
         }
         
-        // Запускаем загрузку
         loadData();
     </script>
 </body>
