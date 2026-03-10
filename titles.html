@@ -3,100 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тайтлы VAT</title>
+    <title>Тайтлы - VAT</title>
     <link rel="stylesheet" href="style.css">
+    <script src="data.js"></script>
 </head>
 <body>
     <!-- Навигация -->
-<div class="container">
-    <div class="navigation-buttons">
-        <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-            🏠 Главная
-        </a>
-        <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-            🎭 Состав
-        </a>
+    <div class="container">
+        <div class="navigation-buttons">
+            <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+                🏠 Главная
+            </a>
+            <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+                🎭 Состав
+            </a>
+        </div>
+        
+        <!-- Поиск -->
+        <div style="margin-top: 15px; display: flex; justify-content: center;">
+            <form action="search.html" method="get" style="display: flex; width: 100%; max-width: 500px; gap: 10px;">
+                <input type="text" name="q" placeholder="🔍 Поиск..." 
+                       style="flex: 1; padding: 12px 20px; border: 2px solid #001a8c; border-radius: 50px; font-size: 16px; outline: none;"
+                       required>
+                <button type="submit" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%); color: white; border: none; padding: 0 25px; border-radius: 50px; font-weight: bold; cursor: pointer;">
+                    Найти
+                </button>
+            </form>
+        </div>
     </div>
-    
-    <!-- ПОИСКОВАЯ СТРОКА -->
-    <div style="margin-top: 15px; display: flex; justify-content: center;">
-        <form action="search.html" method="get" style="display: flex; width: 100%; max-width: 500px; gap: 10px;">
-            <input type="text" name="q" placeholder="🔍 Поиск по тайтлам и дабберам..." 
-                   style="flex: 1; padding: 12px 20px; border: 2px solid #001a8c; border-radius: 50px; font-size: 16px; outline: none;"
-                   required>
-            <button type="submit" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%); color: white; border: none; padding: 0 25px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
-                Найти
-            </button>
-        </form>
-    </div>
-</div>
-<div class="container">
+
+    <div class="container">
         <div class="header">
             <a href="index.html">
-                <img src="logo.jpg" alt="Логотип Вата" class="avatar" width="240" height="240">
+                <img src="logo.jpg" alt="Логотип VAT" class="avatar" width="240" height="240">
             </a>
             <h1 class="title">Наши тайтлы</h1>
-            <p class="text">Обложки кликабельны (ведут на страницу тайтла)</p>
+            <p class="text">Нажмите на обложку, чтобы перейти к тайтлу</p>
             <hr>
         </div>
         
         <div class="content-box">
-            <div class="titles-grid">
-                <!-- Карточка Молчаливая ведьма (теперь ведет на страницу аниме, а не на главную) -->
-                <a href="molchalivaya_vedma.html" class="title-card">
-                    <img src="молч_ведьм.jpg" alt="Молчание ведьм" class="title-card-image">
-                    <div class="title-card-info">
-                        <div class="title-card-name">Молчаливая ведьма</div>
-                        <div class="title-card-meta">
-                            <span>⚡️ 13 серий</span>
-                            <span>⭐️ 4.8</span>
-                        </div>
-                    </div>
-                </a>
-                
-                <!-- Заглушки для примера. Добавите свои карточки -->
-                <a href="zvezdnoe_ditya.html" class="title-card">
-                    <img src="ЗД.png" alt="Звёздное дитя" class="title-card-image">
-                    <div class="title-card-info">
-                        <div class="title-card-name">Звёздное дитя</div>
-                        <div class="title-card-meta">
-                            <span>⚡️ 35 серий</span>
-                            <span>⭐️ 4.5</span>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="hellsing.html" class="title-card">
-                    <img src="hellsing.jpg" alt="hellsing" class="title-card-image">
-                    <div class="title-card-info">
-                        <div class="title-card-name">Хеллсинг: Война с нечистью</div>
-                        <div class="title-card-meta">
-                            <span>⚡️ 13 серий</span>
-                            <span>⭐️ 4.9</span>
-                        </div>
-                    </div>
-                </a>
+            <div class="titles-grid" id="titlesGrid">
+                <div class="loading">Загрузка...</div>
             </div>
         </div>
     </div>
-    <!-- Футер (подвал) -->
-<div class="container" style="margin-top: 20px; padding: 20px; text-align: center;">
-    <hr style="margin: 20px 0;">
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-bottom: 15px;">
-        <a href="index.html" style="color: #001a8c; text-decoration: none;">Главная</a>
-        <a href="titles.html" style="color: #001a8c; text-decoration: none;">Тайтлы</a>
-        <a href="sostav.html" style="color: #001a8c; text-decoration: none;">Состав</a>
-        <a href="privacy.html" style="color: #001a8c; text-decoration: none;">Политика конфиденциальности</a>
+    
+    <!-- Футер -->
+    <div class="container" style="margin-top: 20px; padding: 20px; text-align: center;">
+        <hr style="margin: 20px 0;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+            <a href="index.html" style="color: #001a8c;">Главная</a>
+            <a href="titles.html" style="color: #001a8c;">Тайтлы</a>
+            <a href="sostav.html" style="color: #001a8c;">Состав</a>
+            <a href="privacy.html" style="color: #001a8c;">Политика</a>
+        </div>
+        <p style="font-size: 14px; color: #666;">© 2026 VAT</p>
     </div>
-    <p style="font-size: 14px; color: #666; margin: 5px 0;">
-        © 2026 VAT - Voice Acting Team. Все права защищены.
-    </p>
-    <p style="font-size: 12px; color: #999; margin: 5px 0;">
-        Любое копирование материалов без согласия правообладателя запрещено.
-    </p>
-    <p style="font-size: 12px; color: #999; margin: 5px 0;">
-        Сайт создан фанатами для фанатов. Все видео и материалы принадлежат их законным владельцам.
-    </p>
-</div>
+
+    <script>
+        function loadTitles() {
+            setTimeout(() => {
+                if (window.titlesDatabase && window.titlesDatabase.length > 0) {
+                    const grid = document.getElementById('titlesGrid');
+                    
+                    grid.innerHTML = window.titlesDatabase.map(title => `
+                        <a href="${title.id}.html" class="title-card">
+                            <img src="${title.image}" alt="${title.name}" class="title-card-image" onerror="this.src='https://via.placeholder.com/200x280/001a8c/ffffff?text=${title.name}'">
+                            <div class="title-card-info">
+                                <div class="title-card-name">${title.name}</div>
+                                <div class="title-card-meta">
+                                    <span>⚡ ${title.episodes} серий</span>
+                                    <span>⭐ ${title.rating || '4.5'}</span>
+                                </div>
+                            </div>
+                        </a>
+                    `).join('');
+                }
+            }, 500);
+        }
+        
+        window.onload = loadTitles;
+    </script>
 </body>
 </html>

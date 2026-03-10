@@ -6,7 +6,6 @@
     <title>Даббер - VAT</title>
     <link rel="stylesheet" href="style.css">
     <script src="data.js"></script>
-    <script type="module" src="firebase-config.js"></script>
     <style>
         .voice-profile {
             display: flex;
@@ -16,49 +15,71 @@
             border-radius: 15px;
             flex-wrap: wrap;
         }
-        .voice-avatar {
+        
+        .voice-avatar-large {
             width: 200px;
             height: 200px;
             border-radius: 50%;
             object-fit: cover;
             border: 5px solid #001a8c;
         }
-        .voice-info { flex: 1; min-width: 300px; }
-        .voice-name { font-size: 36px; color: #001a8c; margin: 0; }
+        
+        .voice-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .voice-name {
+            font-size: 36px;
+            color: #001a8c;
+            margin: 0 0 10px;
+        }
+        
         .voice-status {
-            display: inline-block;
             background: #001a8c;
             color: white;
             padding: 5px 15px;
             border-radius: 25px;
+            display: inline-block;
         }
+        
         .role-badge {
             display: inline-block;
-            padding: 5px 10px;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 14px;
+            font-size: 13px;
             margin: 3px;
-            background: #001a8c;
-            color: white;
         }
+        
+        .role-main { background: #001a8c; color: white; }
+        .role-supporting { background: #666; color: white; }
+        
         .not-found {
             text-align: center;
             padding: 50px;
-            background: #f5f5f5;
-            border-radius: 15px;
         }
-        .back-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #001a8c;
-            color: white;
+        
+        .title-card-voice {
+            display: flex;
+            gap: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
             text-decoration: none;
-            border-radius: 25px;
+            color: inherit;
+        }
+        
+        .title-card-voice-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            object-fit: cover;
         }
     </style>
 </head>
 <body>
+    <!-- Навигация -->
     <div class="container">
         <div class="navigation-buttons">
             <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">🏠 Главная</a>
@@ -67,9 +88,10 @@
         </div>
     </div>
 
+    <!-- Основной контент -->
     <div class="container">
         <div class="header">
-            <img src="logo.jpg" class="avatar" width="240" height="240" onerror="this.src='https://via.placeholder.com/240/001a8c/ffffff?text=VAT'">
+            <img src="logo.jpg" class="avatar" width="240" height="240">
             <hr>
         </div>
         
@@ -78,59 +100,74 @@
         </div>
     </div>
 
+    <!-- Футер -->
+    <div class="container" style="margin-top: 20px; padding: 20px; text-align: center;">
+        <hr>
+        <p>© 2026 VAT</p>
+    </div>
+
     <script>
-    function getUrlParam(name) {
-        return new URLSearchParams(window.location.search).get(name);
-    }
-    
-    function displayVoice() {
-        const id = getUrlParam('id');
-        const content = document.getElementById('voiceContent');
+        function getParam(name) {
+            return new URLSearchParams(window.location.search).get(name);
+        }
         
-        setTimeout(() => {
-            const voice = window.getVoiceById ? window.getVoiceById(id) : null;
-            
-            if (!voice) {
-                content.innerHTML = `
-                    <div class="not-found">
-                        <h2>😕 Даббер не найден</h2>
-                        <a href="sostav.html" class="back-button">← Назад к составу</a>
-                    </div>
-                `;
-                return;
-            }
-            
-            const titles = window.getTitlesByVoiceId ? window.getTitlesByVoiceId(id) : [];
-            
-            let rolesHtml = '';
-            if (titles.length > 0) {
-                titles.forEach(title => {
-                    rolesHtml += `<h3>${title.name}</h3>`;
-                    title.roles.forEach(role => {
-                        rolesHtml += `<span class="role-badge">${role.character || 'Роль'}</span> `;
+        function loadVoice() {
+            setTimeout(() => {
+                const id = getParam('id');
+                const content = document.getElementById('voiceContent');
+                
+                if (!id) {
+                    content.innerHTML = '<div class="not-found">ID не указан</div>';
+                    return;
+                }
+                
+                const voice = window.getVoiceById ? window.getVoiceById(id) : null;
+                
+                if (!voice) {
+                    content.innerHTML = '<div class="not-found">Даббер не найден</div>';
+                    return;
+                }
+                
+                document.title = voice.name + ' - VAT';
+                
+                const titles = window.getTitlesByVoiceId ? window.getTitlesByVoiceId(id) : [];
+                
+                let rolesHtml = '';
+                if (titles.length > 0) {
+                    rolesHtml = '<h2>🎬 Участие в проектах</h2>';
+                    titles.forEach(title => {
+                        rolesHtml += `
+                            <a href="${title.id}.html" class="title-card-voice">
+                                <img src="${title.image}" class="title-card-voice-image">
+                                <div>
+                                    <h3>${title.name}</h3>
+                                    <div>
+                                        ${title.roles.map(r => 
+                                            `<span class="role-badge role-${r.type}">${r.character || 'Роль'}</span>`
+                                        ).join('')}
+                                    </div>
+                                </div>
+                            </a>
+                        `;
                     });
-                });
-            } else {
-                rolesHtml = '<p>Пока нет ролей</p>';
-            }
-            
-            content.innerHTML = `
-                <div class="voice-profile">
-                    <img src="${voice.image}" class="voice-avatar" onerror="this.src='https://via.placeholder.com/200/001a8c/ffffff?text=${voice.name.charAt(0)}'">
-                    <div class="voice-info">
-                        <h1 class="voice-name">${voice.name}</h1>
-                        <span class="voice-status">${voice.status}</span>
-                        <p>${voice.bio || 'Актёр озвучки'}</p>
-                        <h3>Роли:</h3>
-                        ${rolesHtml}
-                        <a href="sostav.html" class="back-button">← Назад к составу</a>
+                }
+                
+                content.innerHTML = `
+                    <div class="voice-profile">
+                        <img src="${voice.image}" class="voice-avatar-large" onerror="this.src='https://via.placeholder.com/200/001a8c/ffffff?text=${voice.name.charAt(0)}'">
+                        <div class="voice-info">
+                            <h1 class="voice-name">${voice.name}</h1>
+                            <span class="voice-status">${voice.status}</span>
+                            <p>${voice.bio || ''}</p>
+                            <p>В команде с ${voice.joinDate || '2023'}</p>
+                        </div>
                     </div>
-                </div>
-            `;
-        }, 500);
-    }
-    
-    window.onload = displayVoice;
+                    ${rolesHtml || '<p>Пока нет ролей</p>'}
+                `;
+            }, 500);
+        }
+        
+        window.onload = loadVoice;
     </script>
 </body>
 </html>
