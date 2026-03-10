@@ -87,6 +87,13 @@
             width: 100%;
             color: #666;
         }
+        
+        .error-message {
+            text-align: center;
+            padding: 30px;
+            color: #d43f6b;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -174,47 +181,61 @@
 
     <script>
         function loadVoices() {
-            setTimeout(() => {
-                if (window.voicesDatabase && window.voicesDatabase.length > 0) {
-                    const mainList = document.getElementById('mainTeamList');
-                    const extraList = document.getElementById('extraTeamList');
-                    
-                    const mainVoices = window.voicesDatabase.filter(v => v.status === 'Основной состав');
-                    const extraVoices = window.voicesDatabase.filter(v => v.status === 'Доп. состав');
-                    
-                    document.getElementById('mainCount').textContent = mainVoices.length;
-                    document.getElementById('extraCount').textContent = extraVoices.length;
-                    document.getElementById('totalCount').textContent = window.voicesDatabase.length;
-                    
-                    if (mainVoices.length > 0) {
-                        mainList.innerHTML = mainVoices.map(voice => `
-                            <a href="voice.html?id=${voice.id}" class="team-card-link">
-                                <div class="team-card">
-                                    <img src="${voice.image}" alt="${voice.name}" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=${voice.name.charAt(0)}'">
-                                    <div class="team-card-name">${voice.name}</div>
-                                    <div class="team-card-roles">${voice.bio || 'Актёр дубляжа'}</div>
-                                    <div class="team-card-popular">🎭 Основной состав</div>
-                                </div>
-                            </a>
-                        `).join('');
-                    }
-                    
-                    if (extraVoices.length > 0) {
-                        extraList.innerHTML = extraVoices.map(voice => `
-                            <a href="voice.html?id=${voice.id}" class="team-card-link">
-                                <div class="team-card">
-                                    <img src="${voice.image}" alt="${voice.name}" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/666666/ffffff?text=${voice.name.charAt(0)}'">
-                                    <div class="team-card-name">${voice.name}</div>
-                                    <div class="team-card-roles">${voice.bio || 'Актёр дубляжа'}</div>
-                                    <div class="team-card-popular">🔹 Доп. состав</div>
-                                </div>
-                            </a>
-                        `).join('');
-                    }
-                    
-                    highlightFromSearch();
-                }
-            }, 500);
+            const mainList = document.getElementById('mainTeamList');
+            const extraList = document.getElementById('extraTeamList');
+            
+            // Проверяем, загрузились ли данные
+            if (!window.voicesDatabase || window.voicesDatabase.length === 0) {
+                console.log('Ожидание загрузки данных...');
+                // Пробуем снова через 100 мс
+                setTimeout(loadVoices, 100);
+                return;
+            }
+            
+            console.log('Данные загружены, дабберов:', window.voicesDatabase.length);
+            
+            const mainVoices = window.voicesDatabase.filter(v => v.status === 'Основной состав');
+            const extraVoices = window.voicesDatabase.filter(v => v.status === 'Доп. состав');
+            
+            document.getElementById('mainCount').textContent = mainVoices.length;
+            document.getElementById('extraCount').textContent = extraVoices.length;
+            document.getElementById('totalCount').textContent = window.voicesDatabase.length;
+            
+            // Основной состав
+            if (mainVoices.length > 0) {
+                mainList.innerHTML = mainVoices.map(voice => `
+                    <a href="voice.html?id=${voice.id}" class="team-card-link">
+                        <div class="team-card">
+                            <img src="${voice.image}" alt="${voice.name}" class="team-card-avatar" 
+                                 onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=${voice.name.charAt(0)}'">
+                            <div class="team-card-name">${voice.name}</div>
+                            <div class="team-card-roles">${voice.bio || 'Актёр дубляжа'}</div>
+                            <div class="team-card-popular">🎭 Основной состав</div>
+                        </div>
+                    </a>
+                `).join('');
+            } else {
+                mainList.innerHTML = '<p class="loading">Основной состав пока пуст</p>';
+            }
+            
+            // Дополнительный состав
+            if (extraVoices.length > 0) {
+                extraList.innerHTML = extraVoices.map(voice => `
+                    <a href="voice.html?id=${voice.id}" class="team-card-link">
+                        <div class="team-card">
+                            <img src="${voice.image}" alt="${voice.name}" class="team-card-avatar" 
+                                 onerror="this.src='https://via.placeholder.com/100/666666/ffffff?text=${voice.name.charAt(0)}'">
+                            <div class="team-card-name">${voice.name}</div>
+                            <div class="team-card-roles">${voice.bio || 'Актёр дубляжа'}</div>
+                            <div class="team-card-popular">🔹 Доп. состав</div>
+                        </div>
+                    </a>
+                `).join('');
+            } else {
+                extraList.innerHTML = '<p class="loading">Дополнительный состав пока пуст</p>';
+            }
+            
+            highlightFromSearch();
         }
         
         function highlightFromSearch() {
@@ -226,7 +247,7 @@
             
             cards.forEach(card => {
                 const nameEl = card.querySelector('.team-card-name');
-                if (nameEl && nameEl.textContent === name) {
+                if (nameEl && nameEl.textContent.trim() === name) {
                     card.classList.add('highlight');
                     const badge = document.createElement('div');
                     badge.className = 'search-badge';
@@ -236,12 +257,13 @@
                     
                     setTimeout(() => {
                         card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 100);
+                    }, 300);
                 }
             });
         }
         
-        window.onload = loadVoices;
+        // Запускаем загрузку
+        loadVoices();
     </script>
 </body>
 </html>
