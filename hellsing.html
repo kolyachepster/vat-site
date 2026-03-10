@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Молчаливая ведьма - VAT</title>
     <link rel="stylesheet" href="style.css">
-    <script src="data.js"></script>
-<script type="module" src="firebase-config.js"></script>
     <style>
         .anime-header {
             display: flex;
@@ -128,8 +126,7 @@
         </form>
     </div>
 </div>
-
-    <!-- Основной контент -->
+<!-- Основной контент -->
     <div class="container">
         <div class="header">
             <a href="index.html">
@@ -148,7 +145,7 @@
                         <span class="anime-tag">Аниме</span>
                         <span class="anime-tag">2001</span>
                         <span class="anime-tag">13 серий</span>
-                        <span class="anime-tag">⭐ 4.8</span>
+                        <span class="anime-tag">⭐️ 4.8</span>
                     </div>
                     <p><strong>Жанры:</strong> Фэнтези, Драма, Комедия, Школьная жизнь</p>
                     <div class="anime-description">
@@ -269,7 +266,6 @@
                     <span class="episode-status">Скоро</span>
                     <button class="episode-button" disabled style="opacity: 0.5;">Скоро</button>
                 </div>
-
                 <div class="episode-item" id="episode-13">
                     <span class="episode-number">Серия 13</span>
                     <span class="episode-title"></span>
@@ -333,7 +329,7 @@
         currentEpisode = episodeNumber;
         
         // Обновляем подпись над плеером
-        document.getElementById('current-episode-label').textContent = `(Серия ${episodeNumber})`;
+        document.getElementById('current-episode-label').textContent = (Серия ${episodeNumber});
         
         // Убираем класс active у всех кнопок
         const allButtons = document.querySelectorAll('.episode-button');
@@ -362,7 +358,7 @@
         }
         
         // Сохраняем в историю браузера, чтобы при перезагрузке страницы серия не сбросилась
-        history.pushState({ episode: episodeNumber }, '', `?episode=${episodeNumber}`);
+        history.pushState({ episode: episodeNumber }, '', ?episode=${episodeNumber});
     }
     
     // При загрузке страницы проверяем, есть ли параметр episode в URL
@@ -373,7 +369,7 @@
         if (episodeParam) {
             // Находим кнопку для этой серии и "нажимаем" её
             const episodeNum = parseInt(episodeParam);
-            const episodeDiv = document.getElementById(`episode-${episodeNum}`);
+            const episodeDiv = document.getElementById(episode-${episodeNum});
             if (episodeDiv) {
                 const button = episodeDiv.querySelector('.episode-button');
                 if (button && !button.disabled) {
@@ -422,4 +418,4 @@
     </p>
 </div>
 </body>
-</html>
+</html

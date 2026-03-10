@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Звёздное дитя - VAT</title>
     <link rel="stylesheet" href="style.css">
-    <script src="data.js"></script>
-<script type="module" src="firebase-config.js"></script>
     <style>
         .anime-header {
             display: flex;
@@ -128,8 +126,7 @@
         </form>
     </div>
 </div>
-
-    <!-- Основной контент -->
+<!-- Основной контент -->
     <div class="container">
         <div class="header">
             <a href="index.html">
@@ -148,7 +145,7 @@
                         <span class="anime-tag">Аниме</span>
                         <span class="anime-tag">2023</span>
                         <span class="anime-tag">35 серий</span>
-                        <span class="anime-tag">⭐ 4.8</span>
+                        <span class="anime-tag">⭐️ 4.8</span>
                     </div>
                     <p><strong>Жанры:</strong> Психологическая драма, Детектив, Комедия</p>
                     <div class="anime-description">
@@ -179,7 +176,6 @@
             
             <!-- Список серий -->
 <h2>Список серий</h2>
-
 <!-- СЕЗОН 1 (Серии 1-12) -->
 <div style="margin-top: 30px; margin-bottom: 15px;">
     <h3 style="color: #001a8c; border-left: 5px solid #320063; padding-left: 15px; font-size: 22px;">
@@ -278,7 +274,6 @@
     
     
 </div>
-
 <!-- СЕЗОН 2 (Серии 13-24) -->
 <div style="margin-top: 40px; margin-bottom: 15px;">
     <h3 style="color: #001a8c; border-left: 5px solid #320063; padding-left: 15px; font-size: 22px;">
@@ -531,7 +526,6 @@
             </div>
         </div>
     </div>
-
     <script>
         // Текущая серия
         let currentEpisode = 1;
@@ -555,7 +549,7 @@
             currentEpisode = episodeNumber;
             
             // Обновляем подпись над плеером
-            document.getElementById('current-episode-label').textContent = `(Серия ${episodeNumber})`;
+            document.getElementById('current-episode-label').textContent = (Серия ${episodeNumber});
             
             // Убираем класс active у всех кнопок
             const allButtons = document.querySelectorAll('.episode-button');
@@ -581,7 +575,7 @@
             }
             
             // Сохраняем в историю браузера, чтобы при перезагрузке страницы серия не сбросилась
-            history.pushState({ episode: episodeNumber }, '', `?episode=${episodeNumber}`);
+            history.pushState({ episode: episodeNumber }, '', ?episode=${episodeNumber});
         }
         
         // При загрузке страницы проверяем, есть ли параметр episode в URL
@@ -592,7 +586,7 @@
             if (episodeParam) {
                 // Находим кнопку для этой серии и "нажимаем" её
                 const episodeNum = parseInt(episodeParam);
-                const episodeDiv = document.getElementById(`episode-${episodeNum}`);
+                const episodeDiv = document.getElementById(episode-${episodeNum});
                 if (episodeDiv) {
                     const button = episodeDiv.querySelector('.episode-button');
                     if (button && !button.disabled) {
@@ -616,7 +610,7 @@
                     alert('Функция Skip появится позже! Сейчас вы можете перемотать видео вручную.');
                     // В идеале здесь должен быть код для перемотки видео
                     // но ВК iframe не даёт доступа к управлению плеером из-за безопасности
-                });
+                    });
             }
         });
     </script>
