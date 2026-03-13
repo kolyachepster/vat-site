@@ -6,6 +6,137 @@
     <title>Тайтлы - VAT</title>
     <link rel="stylesheet" href="style.css">
     <script src="data.js"></script>
+    <style>
+        .type-section {
+            margin-bottom: 40px;
+        }
+        
+        .type-title {
+            color: #001a8c;
+            border-left: 5px solid #320063;
+            padding-left: 15px;
+            margin: 30px 0 20px 0;
+            font-size: 24px;
+        }
+        
+        .type-title:first-of-type {
+            margin-top: 0;
+        }
+        
+        .type-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #001a8c, #320063);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-size: 14px;
+            margin-left: 15px;
+        }
+        
+        .titles-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .title-card {
+            width: 200px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid #eee;
+        }
+        
+        .title-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .title-card-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .title-card-info {
+            padding: 12px;
+        }
+        
+        .title-card-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+            color: #001a8c;
+        }
+        
+        .title-card-meta {
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .title-type-icon {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: #f0f0f0;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            width: 100%;
+        }
+        
+        .empty-message {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+            width: 100%;
+            font-style: italic;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .filter-btn {
+            padding: 8px 20px;
+            border: 2px solid #001a8c;
+            background: transparent;
+            color: #001a8c;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn.active {
+            background: #001a8c;
+            color: white;
+        }
+        
+        .filter-btn:hover {
+            background: #320063;
+            border-color: #320063;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <!-- Навигация -->
@@ -43,9 +174,14 @@
         </div>
         
         <div class="content-box">
-            <div class="titles-grid" id="titlesGrid">
-                <div class="loading">Загрузка...</div>
+            <!-- Фильтры по типам -->
+            <div class="filters" id="filters">
+                <button class="filter-btn active" onclick="filterTitles('all')">Все</button>
+                <button class="filter-btn" onclick="filterTitles('anime')">Аниме</button>
+                <button class="filter-btn" onclick="filterTitles('movie')">Фильмы</button>
             </div>
+            
+            <div id="titlesContainer"></div>
         </div>
     </div>
     
@@ -70,25 +206,138 @@
     </div>
 
     <script>
-        function loadTitles() {
-            setTimeout(() => {
-                if (window.titlesDatabase && window.titlesDatabase.length > 0) {
-                    const grid = document.getElementById('titlesGrid');
-                    
-                    grid.innerHTML = window.titlesDatabase.map(title => `
-                        <a href="${title.id}.html" class="title-card">
-                            <img src="${title.image}" alt="${title.name}" class="title-card-image" onerror="this.src='https://via.placeholder.com/200x280/001a8c/ffffff?text=${title.name}'">
-                            <div class="title-card-info">
-                                <div class="title-card-name">${title.name}</div>
-                                <div class="title-card-meta">
-                                    <span>⚡ ${title.episodes} серий</span>
-                                    <span>⭐ ${title.rating || '4.5'}</span>
+        let currentFilter = 'all';
+        
+        function getTypeIcon(type) {
+            switch(type) {
+                case 'anime': return '📺';
+                case 'movie': return '🎬';
+                default: return '📺';
+            }
+        }
+        
+        function getTypeName(type) {
+            switch(type) {
+                case 'anime': return 'Аниме';
+                case 'movie': return 'Фильм';
+                default: return type;
+            }
+        }
+        
+        function renderTitles(filterType = 'all') {
+            const container = document.getElementById('titlesContainer');
+            
+            if (!window.titlesDatabase || window.titlesDatabase.length === 0) {
+                container.innerHTML = '<div class="loading">Загрузка...</div>';
+                return;
+            }
+            
+            let html = '';
+            
+            if (filterType === 'all') {
+                // Группируем по типам
+                const types = {};
+                window.titlesDatabase.forEach(title => {
+                    const type = title.type || 'anime';
+                    if (!types[type]) types[type] = [];
+                    types[type].push(title);
+                });
+                
+                // Сортируем типы
+                const typeOrder = ['anime', 'movie', 'manhwa', 'gacha'];
+                
+                typeOrder.forEach(type => {
+                    if (types[type] && types[type].length > 0) {
+                        html += `
+                            <div class="type-section">
+                                <h2 class="type-title">
+                                    ${getTypeIcon(type)} ${getTypeName(type)}
+                                    <span class="type-badge">${types[type].length}</span>
+                                </h2>
+                                <div class="titles-grid">
+                                    ${types[type].map(title => `
+                                        <a href="${title.id}.html" class="title-card">
+                                            <img src="${title.image}" alt="${title.name}" class="title-card-image" 
+                                                 onerror="this.src='https://via.placeholder.com/200x280/001a8c/ffffff?text=${encodeURIComponent(title.name)}'">
+                                            <div class="title-card-info">
+                                                <div class="title-card-name">${title.name}</div>
+                                                <div class="title-card-meta">
+                                                    <span>⚡ ${title.episodes || '?'} ${title.type === 'movie' ? 'мин' : 'серий'}</span>
+                                                    <span>⭐ ${title.rating || '4.5'}</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    `).join('')}
                                 </div>
                             </div>
-                        </a>
-                    `).join('');
+                        `;
+                    }
+                });
+            } else {
+                // Фильтруем по конкретному типу
+                const filtered = window.titlesDatabase.filter(t => (t.type || 'anime') === filterType);
+                
+                if (filtered.length > 0) {
+                    html = `
+                        <div class="type-section">
+                            <h2 class="type-title">
+                                ${getTypeIcon(filterType)} ${getTypeName(filterType)}
+                                <span class="type-badge">${filtered.length}</span>
+                            </h2>
+                            <div class="titles-grid">
+                                ${filtered.map(title => `
+                                    <a href="${title.id}.html" class="title-card">
+                                        <img src="${title.image}" alt="${title.name}" class="title-card-image" 
+                                             onerror="this.src='https://via.placeholder.com/200x280/001a8c/ffffff?text=${encodeURIComponent(title.name)}'">
+                                        <div class="title-card-info">
+                                            <div class="title-card-name">${title.name}</div>
+                                            <div class="title-card-meta">
+                                                <span>⚡ ${title.episodes || '?'} ${filterType === 'movie' ? 'мин' : 'серий'}</span>
+                                                <span>⭐ ${title.rating || '4.5'}</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    html = `<div class="empty-message">Нет тайтлов этого типа</div>`;
                 }
-            }, 500);
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function filterTitles(type) {
+            currentFilter = type;
+            
+            // Обновляем активный класс у кнопок
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderTitles(type);
+        }
+        
+        function loadTitles() {
+            // Ждем загрузки данных
+            const checkData = setInterval(() => {
+                if (window.titlesDatabase && window.titlesDatabase.length > 0) {
+                    clearInterval(checkData);
+                    renderTitles('all');
+                }
+            }, 100);
+            
+            // Таймаут на случай ошибки
+            setTimeout(() => {
+                clearInterval(checkData);
+                if (!window.titlesDatabase || window.titlesDatabase.length === 0) {
+                    document.getElementById('titlesContainer').innerHTML = 
+                        '<div class="loading">Не удалось загрузить данные</div>';
+                }
+            }, 3000);
         }
         
         window.onload = loadTitles;
