@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Молчаливая ведьма - VAT</title>
     <link rel="stylesheet" href="style.css">
+    <script src="data.js"></script>
+<script type="module" src="firebase-config.js"></script>
     <style>
         .anime-header {
             display: flex;
@@ -126,7 +128,8 @@
         </form>
     </div>
 </div>
-<!-- Основной контент -->
+
+    <!-- Основной контент -->
     <div class="container">
         <div class="header">
             <a href="index.html">
@@ -145,7 +148,7 @@
                         <span class="anime-tag">Аниме</span>
                         <span class="anime-tag">2025</span>
                         <span class="anime-tag">13 серий</span>
-                        <span class="anime-tag">⭐️ 4.8</span>
+                        <span class="anime-tag">⭐ 4.8</span>
                     </div>
                     <p><strong>Жанры:</strong> Фэнтези, Драма, Комедия, Школьная жизнь</p>
                     <div class="anime-description">
@@ -182,7 +185,9 @@
                     <span class="episode-number">Серия 1</span>
                     <span class="episode-title"></span>
                     <span class="episode-status">Озвучено</span>
-                    <button class="episode-button" disabled style="opacity: 0.5;">Скоро</button>
+                    <button class="episode-button" onclick='playEpisode(1,"https://vkvideo.ru/video_ext.php?oid=-236477189&id=456239025&hash=9dd09ab7c7e7cd85&hd=3", false)'>
+                        Смотреть
+                    </button>
                 </div>
                 
                 <!-- Серия 2 -->
@@ -190,7 +195,9 @@
                     <span class="episode-number">Серия 2</span>
                     <span class="episode-title"></span>
                     <span class="episode-status">Озвучено</span>
-                    <button class="episode-button" disabled style="opacity: 0.5;">Скоро</button>
+                    <button class="episode-button" onclick='playEpisode(2,"https://vkvideo.ru/video_ext.php?oid=-236477189&id=456239024&hash=f13dae465dd6e8dc&hd=3", false)'>
+                        Смотреть
+                    </button>
                 </div>
                 
                 <!-- Серия 3 -->
@@ -198,7 +205,9 @@
                     <span class="episode-number">Серия 3</span>
                     <span class="episode-title"></span>
                     <span class="episode-status">Озвучено</span>
-                    <button class="episode-button" disabled style="opacity: 0.5;">Скоро</button>
+                    <button class="episode-button" onclick='playEpisode(3,"https://vkvideo.ru/video_ext.php?oid=-236477189&id=456239022&hash=2a5a41c4fd637234&hd=3", false)'>
+                        Смотреть
+                    </button>
                 </div>
                 
                 <!-- Серия 4 -->
@@ -206,7 +215,9 @@
                     <span class="episode-number">Серия 4</span>
                     <span class="episode-title"></span>
                     <span class="episode-status">Озвучено</span>
-                    <button class="episode-button" disabled style="opacity: 0.5;">Скоро</button>
+                    <button class="episode-button" onclick='playEpisode(4,"https://vkvideo.ru/video_ext.php?oid=-236477189&id=456239020&hash=27165a0f4ff6e350&hd=3", false)'>
+                        Смотреть
+                    </button>
                 </div>
                 
                 <!-- Серия 5 (ещё не вышла) -->
@@ -214,7 +225,9 @@
                     <span class="episode-number">Серия 5</span>
                     <span class="episode-title"></span>
                     <span class="episode-status">Озвучено</span>
-                    <button class="episode-button" disabled style="opacity: 0.5;">Скоро</button>
+                    <button class="episode-button" onclick='playEpisode(5,"https://vkvideo.ru/video_ext.php?oid=-236477189&id=456239020&hash=27165a0f4ff6e350&hd=3", false)'>
+                        Смотреть
+                    </button>
                 </div>
                 
                 <!-- Серия 6 -->
@@ -222,7 +235,9 @@
                     <span class="episode-number">Серия 6</span>
                     <span class="episode-title"></span>
                     <span class="episode-status">Озвучено</span>
-                    <button class="episode-button" disabled style="opacity: 0.5;">Скоро</button>
+                    <button class="episode-button" onclick="playEpisode(6, 'https://vkvideo.ru/video_ext.php?oid=-236477189&id=456239019&hd=3', false)">
+                        Смотреть
+                    </button>
                 </div>
 
                 <div class="episode-item" id="episode-7">
@@ -268,6 +283,7 @@
                     <span class="episode-status">Скоро</span>
                     <button class="episode-button" disabled style="opacity: 0.5;">Скоро</button>
                 </div>
+
                 <div class="episode-item" id="episode-13">
                     <span class="episode-number">Серия 13</span>
                     <span class="episode-title"></span>
@@ -439,7 +455,7 @@
         const episodeParam = urlParams.get('episode');
         
         if (episodeParam) {
-        // Находим кнопку для этой серии и "нажимаем" её
+            // Находим кнопку для этой серии и "нажимаем" её
             const episodeNum = parseInt(episodeParam);
             const episodeDiv = document.getElementById(`episode-${episodeNum}`);
             if (episodeDiv) {
