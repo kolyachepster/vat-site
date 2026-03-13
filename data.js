@@ -190,7 +190,7 @@ const voicesDatabase = [
         image: 'ава-kolli.jpg',
         status: 'Основной состав',
         joinDate: '2025',
-        bio: '',
+        bio: 'Девиз: "Человек неисправим"',
         social: {}
     },
     { 
