@@ -17,6 +17,10 @@
             padding-left: 15px;
             margin: 30px 0 20px 0;
             font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         
         .type-title:first-of-type {
@@ -30,7 +34,6 @@
             padding: 5px 15px;
             border-radius: 25px;
             font-size: 14px;
-            margin-left: 15px;
         }
         
         .titles-grid {
@@ -136,6 +139,16 @@
             border-color: #320063;
             color: white;
         }
+        
+        .debug-info {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #666;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -179,7 +192,12 @@
                 <button class="filter-btn active" onclick="filterTitles('all')">Все</button>
                 <button class="filter-btn" onclick="filterTitles('anime')">Аниме</button>
                 <button class="filter-btn" onclick="filterTitles('movie')">Фильмы</button>
+                <button class="filter-btn" onclick="filterTitles('manhwa')">Манхва</button>
+                <button class="filter-btn" onclick="filterTitles('gacha')">Гача</button>
             </div>
+            
+            <!-- Отладочная информация (будет видна только если есть проблемы) -->
+            <div id="debugInfo" class="debug-info"></div>
             
             <div id="titlesContainer"></div>
         </div>
@@ -219,16 +237,41 @@
         function getTypeName(type) {
             switch(type) {
                 case 'anime': return 'Аниме';
-                case 'movie': return 'Фильм';
+                case 'movie': return 'Фильмы';
                 default: return type;
+            }
+        }
+        
+        function getEpisodeText(title) {
+            const type = title.type || 'anime';
+            const episodes = title.episodes || '?';
+            
+            switch(type) {
+                case 'movie': return `🎬 ${episodes} мин`;
+                case 'anime': return `📺 ${episodes} сер.`;
+                default: return `⚡ ${episodes}`;
             }
         }
         
         function renderTitles(filterType = 'all') {
             const container = document.getElementById('titlesContainer');
+            const debugDiv = document.getElementById('debugInfo');
             
-            if (!window.titlesDatabase || window.titlesDatabase.length === 0) {
+            if (!window.titlesDatabase) {
                 container.innerHTML = '<div class="loading">Загрузка...</div>';
+                return;
+            }
+            
+            // Отладка - показываем типы тайтлов
+            const types = {};
+            window.titlesDatabase.forEach(t => {
+                const type = t.type || 'anime';
+                types[type] = (types[type] || 0) + 1;
+            });
+            debugDiv.innerHTML = 'Найденные типы: ' + JSON.stringify(types);
+            
+            if (window.titlesDatabase.length === 0) {
+                container.innerHTML = '<div class="empty-message">Нет тайтлов</div>';
                 return;
             }
             
@@ -236,33 +279,33 @@
             
             if (filterType === 'all') {
                 // Группируем по типам
-                const types = {};
+                const grouped = {};
                 window.titlesDatabase.forEach(title => {
                     const type = title.type || 'anime';
-                    if (!types[type]) types[type] = [];
-                    types[type].push(title);
+                    if (!grouped[type]) grouped[type] = [];
+                    grouped[type].push(title);
                 });
                 
                 // Сортируем типы
                 const typeOrder = ['anime', 'movie', 'manhwa', 'gacha'];
                 
                 typeOrder.forEach(type => {
-                    if (types[type] && types[type].length > 0) {
+                    if (grouped[type] && grouped[type].length > 0) {
                         html += `
                             <div class="type-section">
                                 <h2 class="type-title">
                                     ${getTypeIcon(type)} ${getTypeName(type)}
-                                    <span class="type-badge">${types[type].length}</span>
+                                    <span class="type-badge">${grouped[type].length}</span>
                                 </h2>
                                 <div class="titles-grid">
-                                    ${types[type].map(title => `
+                                    ${grouped[type].map(title => `
                                         <a href="${title.id}.html" class="title-card">
                                             <img src="${title.image}" alt="${title.name}" class="title-card-image" 
                                                  onerror="this.src='https://via.placeholder.com/200x280/001a8c/ffffff?text=${encodeURIComponent(title.name)}'">
                                             <div class="title-card-info">
                                                 <div class="title-card-name">${title.name}</div>
                                                 <div class="title-card-meta">
-                                                    <span>⚡ ${title.episodes || '?'} ${title.type === 'movie' ? 'мин' : 'серий'}</span>
+                                                    <span>${getEpisodeText(title)}</span>
                                                     <span>⭐ ${title.rating || '4.5'}</span>
                                                 </div>
                                             </div>
@@ -292,7 +335,7 @@
                                         <div class="title-card-info">
                                             <div class="title-card-name">${title.name}</div>
                                             <div class="title-card-meta">
-                                                <span>⚡ ${title.episodes || '?'} ${filterType === 'movie' ? 'мин' : 'серий'}</span>
+                                                <span>${getEpisodeText(title)}</span>
                                                 <span>⭐ ${title.rating || '4.5'}</span>
                                             </div>
                                         </div>
@@ -302,7 +345,7 @@
                         </div>
                     `;
                 } else {
-                    html = `<div class="empty-message">Нет тайтлов этого типа</div>`;
+                    html = `<div class="empty-message">Нет тайтлов типа "${getTypeName(filterType)}"</div>`;
                 }
             }
             
@@ -324,7 +367,7 @@
         function loadTitles() {
             // Ждем загрузки данных
             const checkData = setInterval(() => {
-                if (window.titlesDatabase && window.titlesDatabase.length > 0) {
+                if (window.titlesDatabase) {
                     clearInterval(checkData);
                     renderTitles('all');
                 }
@@ -333,7 +376,7 @@
             // Таймаут на случай ошибки
             setTimeout(() => {
                 clearInterval(checkData);
-                if (!window.titlesDatabase || window.titlesDatabase.length === 0) {
+                if (!window.titlesDatabase) {
                     document.getElementById('titlesContainer').innerHTML = 
                         '<div class="loading">Не удалось загрузить данные</div>';
                 }
