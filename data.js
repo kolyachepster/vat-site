@@ -42,6 +42,19 @@ const titlesDatabase = [
         genres: ['Вампиры', 'Боевик', 'Фэнтези'],
         description: ''
     },
+    {
+        id: 'hellsing',
+        name: 'Хеллсинг: Война с нечистью',
+        nameEng: 'Hellsing',
+        image: 'hellsing.jpg',
+        type: 'movie',
+        seasons: 1,
+        episodes: 13,
+        year: 2001,
+        rating: 4.5,
+        genres: ['Вампиры', 'Боевик', 'Фэнтези'],
+        description: ''
+    },
     ];
 
 // ========== ДАББЕРЫ (АКТЁРЫ ОЗВУЧКИ) ==========
