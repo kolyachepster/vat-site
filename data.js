@@ -30,7 +30,7 @@ const titlesDatabase = [
         description: ''
     },
     {
-        id: 'Hellsing',
+        id: 'hellsing',
         name: 'Хеллсинг: Война с нечистью',
         nameEng: 'Hellsing',
         image: 'hellsing.jpg',
@@ -39,7 +39,7 @@ const titlesDatabase = [
         episodes: 13,
         year: 2001,
         rating: 4.5,
-        genres: ['Психологическая драма', 'Детектив', 'Комедия'],
+        genres: ['Вампиры', 'Боевик', 'Фэнтези'],
         description: ''
     },
     ];
