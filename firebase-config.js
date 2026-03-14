@@ -22,18 +22,25 @@ console.log('✅ Firebase инициализирован');
 // ===== АУТЕНТИФИКАЦИЯ =====
 async function register(email, password, name) {
     try {
+        // 1. Создаем пользователя в Authentication
         const res = await createUserWithEmailAndPassword(auth, email, password);
+        
+        // 2. Обновляем профиль (имя)
         await updateProfile(res.user, { displayName: name });
+        
+        // 3. СОЗДАЕМ ЗАПИСЬ В БАЗЕ ДАННЫХ
         await set(ref(database, 'users/' + res.user.uid), {
             name: name,
             email: email,
             role: 'user',
             achievements: ['newbie'],
             friends: {},
-            joinDate: new Date().toISOString()
+            joinDate: new Date().toISOString().split('T')[0]
         });
+        
         return { success: true, user: res.user };
     } catch (error) {
+        console.error('Ошибка регистрации:', error);
         return { success: false, error: error.message };
     }
 }
