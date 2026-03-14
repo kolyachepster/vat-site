@@ -3,47 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тайтлы - VAT</title>
+    <title>Тайтлы VAT</title>
     <link rel="stylesheet" href="style.css">
     <script src="data.js"></script>
+    <script type="module" src="firebase-config.js"></script>
     <style>
-        .type-section {
-            margin-bottom: 40px;
-        }
-        
-        .type-title {
-            color: #001a8c;
-            border-left: 5px solid #320063;
-            padding-left: 15px;
-            margin: 30px 0 20px 0;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .type-title:first-of-type {
-            margin-top: 0;
-        }
-        
-        .type-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #001a8c, #320063);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 25px;
-            font-size: 14px;
-        }
-        
         .titles-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 25px;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 30px;
         }
-        
         .title-card {
             width: 200px;
             background: white;
@@ -55,99 +26,35 @@
             color: inherit;
             border: 1px solid #eee;
         }
-        
         .title-card:hover {
             transform: scale(1.05);
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
-        
         .title-card-image {
             width: 100%;
             height: 280px;
             object-fit: cover;
             display: block;
         }
-        
         .title-card-info {
             padding: 12px;
         }
-        
         .title-card-name {
             font-size: 18px;
             font-weight: bold;
             margin: 0 0 5px 0;
             color: #001a8c;
         }
-        
         .title-card-meta {
             font-size: 14px;
             color: #666;
             display: flex;
             justify-content: space-between;
         }
-        
-        .title-type-icon {
-            font-size: 12px;
-            padding: 2px 8px;
-            border-radius: 12px;
-            background: #f0f0f0;
-            display: inline-block;
-            margin-bottom: 5px;
-        }
-        
         .loading {
             text-align: center;
-            padding: 30px;
+            padding: 50px;
             color: #666;
-            width: 100%;
-        }
-        
-        .empty-message {
-            text-align: center;
-            padding: 30px;
-            color: #999;
-            width: 100%;
-            font-style: italic;
-        }
-        
-        .filters {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-        
-        .filter-btn {
-            padding: 8px 20px;
-            border: 2px solid #001a8c;
-            background: transparent;
-            color: #001a8c;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .filter-btn.active {
-            background: #001a8c;
-            color: white;
-        }
-        
-        .filter-btn:hover {
-            background: #320063;
-            border-color: #320063;
-            color: white;
-        }
-        
-        .debug-info {
-            background: #f0f0f0;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            font-size: 12px;
-            color: #666;
-            display: none;
         }
     </style>
 </head>
@@ -155,18 +62,27 @@
     <!-- Навигация -->
     <div class="container">
         <div class="navigation-buttons">
-            <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🏠 Главная
-            </a>
-            <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🎭 Состав
-            </a>
-        </div>
+    <a href="index.html" class="nav-button">🏠 Главная</a>
+    <a href="titles.html" class="nav-button">🎦 Тайтлы</a>
+    <a href="sostav.html" class="nav-button">🎭 Состав</a>
+    <a href="login.html" class="nav-button" id="navAuthBtn">👤 Войти</a>
+</div>
+
+<script>
+    setTimeout(() => {
+        const user = window.firebase?.getCurrentUser();
+        const btn = document.getElementById('navAuthBtn');
+        if (user && btn) {
+            btn.textContent = `👤 ${user.displayName || 'Профиль'}`;
+            btn.href = 'profile.html';
+        }
+    }, 1000);
+</script>
         
-        <!-- Поиск -->
+        <!-- ПОИСКОВАЯ СТРОКА -->
         <div style="margin-top: 15px; display: flex; justify-content: center;">
             <form action="search.html" method="get" style="display: flex; width: 100%; max-width: 500px; gap: 10px;">
-                <input type="text" name="q" placeholder="🔍 Поиск..." 
+                <input type="text" name="q" placeholder="🔍 Поиск по тайтлам и дабберам..." 
                        style="flex: 1; padding: 12px 20px; border: 2px solid #001a8c; border-radius: 50px; font-size: 16px; outline: none;"
                        required>
                 <button type="submit" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%); color: white; border: none; padding: 0 25px; border-radius: 50px; font-weight: bold; cursor: pointer;">
@@ -179,211 +95,81 @@
     <div class="container">
         <div class="header">
             <a href="index.html">
-                <img src="logo.jpg" alt="Логотип VAT" class="avatar" width="240" height="240">
+                <img src="logo.jpg" alt="Логотип Вата" class="avatar" width="240" height="240" onerror="this.src='https://via.placeholder.com/240/001a8c/ffffff?text=VAT'">
             </a>
             <h1 class="title">Наши тайтлы</h1>
-            <p class="text">Нажмите на обложку, чтобы перейти к тайтлу</p>
+            <p class="text">Обложки кликабельны (ведут на страницу тайтла)</p>
             <hr>
         </div>
         
         <div class="content-box">
-            <!-- Фильтры по типам -->
-            <div class="filters" id="filters">
-                <button class="filter-btn active" onclick="filterTitles('all')">Все</button>
-                <button class="filter-btn" onclick="filterTitles('anime')">Аниме</button>
-                <button class="filter-btn" onclick="filterTitles('movie')">Фильмы</button>
-                <button class="filter-btn" onclick="filterTitles('manhwa')">Манхва</button>
-                <button class="filter-btn" onclick="filterTitles('gacha')">Гача</button>
+            <div class="titles-grid" id="titles-container">
+                <div class="loading">Загрузка...</div>
             </div>
-            
-            <!-- Отладочная информация (будет видна только если есть проблемы) -->
-            <div id="debugInfo" class="debug-info"></div>
-            
-            <div id="titlesContainer"></div>
         </div>
     </div>
     
     <!-- Футер -->
     <div class="container" style="margin-top: 20px; padding: 20px; text-align: center;">
         <hr style="margin: 20px 0;">
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
-            <a href="index.html" style="color: #001a8c;">Главная</a>
-            <a href="titles.html" style="color: #001a8c;">Тайтлы</a>
-            <a href="sostav.html" style="color: #001a8c;">Состав</a>
-            <a href="privacy.html" style="color: #001a8c;">Политика</a>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-bottom: 15px;">
+            <a href="index.html" style="color: #001a8c; text-decoration: none;">Главная</a>
+            <a href="titles.html" style="color: #001a8c; text-decoration: none;">Тайтлы</a>
+            <a href="sostav.html" style="color: #001a8c; text-decoration: none;">Состав</a>
+            <a href="privacy.html" style="color: #001a8c; text-decoration: none;">Политика конфиденциальности</a>
         </div>
         <p style="font-size: 14px; color: #666; margin: 5px 0;">
             © 2026 VAT - Voice Acting Team. Все права защищены.
         </p>
-        <p style="font-size: 12px; color: #999; margin: 5px 0;">
-            Любое копирование материалов без согласия правообладателя запрещено.
-        </p>
-        <p style="font-size: 12px; color: #999; margin: 5px 0;">
-            Сайт создан фанатами для фанатов. Все видео и материалы принадлежат их законным владельцам.
-        </p>
     </div>
 
     <script>
-        let currentFilter = 'all';
+    function loadTitles() {
+        const container = document.getElementById('titles-container');
         
-        function getTypeIcon(type) {
-            switch(type) {
-                case 'anime': return '📺';
-                case 'movie': return '🎬';
-                default: return '📺';
-            }
-        }
-        
-        function getTypeName(type) {
-            switch(type) {
-                case 'anime': return 'Аниме';
-                case 'movie': return 'Фильмы';
-                default: return type;
-            }
-        }
-        
-        function getEpisodeText(title) {
-            const type = title.type || 'anime';
-            const episodes = title.episodes || '?';
-            
-            switch(type) {
-                case 'movie': return `🎬 ${episodes} мин`;
-                case 'anime': return `📺 ${episodes} сер.`;
-                default: return `⚡ ${episodes}`;
-            }
-        }
-        
-        function renderTitles(filterType = 'all') {
-            const container = document.getElementById('titlesContainer');
-            const debugDiv = document.getElementById('debugInfo');
-            
-            if (!window.titlesDatabase) {
-                container.innerHTML = '<div class="loading">Загрузка...</div>';
-                return;
-            }
-            
-            // Отладка - показываем типы тайтлов
-            const types = {};
-            window.titlesDatabase.forEach(t => {
-                const type = t.type || 'anime';
-                types[type] = (types[type] || 0) + 1;
-            });
-            debugDiv.innerHTML = 'Найденные типы: ' + JSON.stringify(types);
-            
-            if (window.titlesDatabase.length === 0) {
-                container.innerHTML = '<div class="empty-message">Нет тайтлов</div>';
-                return;
-            }
-            
-            let html = '';
-            
-            if (filterType === 'all') {
-                // Группируем по типам
-                const grouped = {};
-                window.titlesDatabase.forEach(title => {
-                    const type = title.type || 'anime';
-                    if (!grouped[type]) grouped[type] = [];
-                    grouped[type].push(title);
-                });
-                
-                // Сортируем типы
-                const typeOrder = ['anime', 'movie', 'manhwa', 'gacha'];
-                
-                typeOrder.forEach(type => {
-                    if (grouped[type] && grouped[type].length > 0) {
-                        html += `
-                            <div class="type-section">
-                                <h2 class="type-title">
-                                    ${getTypeIcon(type)} ${getTypeName(type)}
-                                    <span class="type-badge">${grouped[type].length}</span>
-                                </h2>
-                                <div class="titles-grid">
-                                    ${grouped[type].map(title => `
-                                        <a href="${title.id}.html" class="title-card">
-                                            <img src="${title.image}" alt="${title.name}" class="title-card-image" 
-                                                 onerror="this.src='https://via.placeholder.com/200x280/001a8c/ffffff?text=${encodeURIComponent(title.name)}'">
-                                            <div class="title-card-info">
-                                                <div class="title-card-name">${title.name}</div>
-                                                <div class="title-card-meta">
-                                                    <span>${getEpisodeText(title)}</span>
-                                                    <span>⭐ ${title.rating || '4.5'}</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        `;
-                    }
-                });
-            } else {
-                // Фильтруем по конкретному типу
-                const filtered = window.titlesDatabase.filter(t => (t.type || 'anime') === filterType);
-                
-                if (filtered.length > 0) {
-                    html = `
-                        <div class="type-section">
-                            <h2 class="type-title">
-                                ${getTypeIcon(filterType)} ${getTypeName(filterType)}
-                                <span class="type-badge">${filtered.length}</span>
-                            </h2>
-                            <div class="titles-grid">
-                                ${filtered.map(title => `
-                                    <a href="${title.id}.html" class="title-card">
-                                        <img src="${title.image}" alt="${title.name}" class="title-card-image" 
-                                             onerror="this.src='https://via.placeholder.com/200x280/001a8c/ffffff?text=${encodeURIComponent(title.name)}'">
-                                        <div class="title-card-info">
-                                            <div class="title-card-name">${title.name}</div>
-                                            <div class="title-card-meta">
-                                                <span>${getEpisodeText(title)}</span>
-                                                <span>⭐ ${title.rating || '4.5'}</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                `).join('')}
+        setTimeout(() => {
+            if (window.titlesDatabase && window.titlesDatabase.length > 0) {
+                container.innerHTML = window.titlesDatabase.map(title => `
+                    <a href="${title.id}.html" class="title-card">
+                        <img src="${title.image}" alt="${title.name}" class="title-card-image" onerror="this.src='https://via.placeholder.com/200x280/001a8c/ffffff?text=${encodeURIComponent(title.name)}'">
+                        <div class="title-card-info">
+                            <div class="title-card-name">${title.name}</div>
+                            <div class="title-card-meta">
+                                <span>⚡ ${title.episodes || '?'} серий</span>
+                                <span>⭐ 4.8</span>
                             </div>
                         </div>
-                    `;
-                } else {
-                    html = `<div class="empty-message">Нет тайтлов типа "${getTypeName(filterType)}"</div>`;
-                }
+                    </a>
+                `).join('');
+            } else {
+                container.innerHTML = `
+                    <a href="molchalivaya_vedma.html" class="title-card">
+                        <img src="молч_ведьм.jpg" alt="Молчаливая ведьма" class="title-card-image">
+                        <div class="title-card-info">
+                            <div class="title-card-name">Молчаливая ведьма</div>
+                            <div class="title-card-meta"><span>⚡ 13 серий</span><span>⭐ 4.8</span></div>
+                        </div>
+                    </a>
+                    <a href="zvezdnoe_ditya.html" class="title-card">
+                        <img src="ЗД.png" alt="Звёздное дитя" class="title-card-image">
+                        <div class="title-card-info">
+                            <div class="title-card-name">Звёздное дитя</div>
+                            <div class="title-card-meta"><span>⚡ 35 серий</span><span>⭐ 4.5</span></div>
+                        </div>
+                    </a>
+                    <a href="hellsing.html" class="title-card">
+                        <img src="hellsing.jpg" alt="Хеллсинг" class="title-card-image">
+                        <div class="title-card-info">
+                            <div class="title-card-name">Хеллсинг</div>
+                            <div class="title-card-meta"><span>⚡ 13 серий</span><span>⭐ 4.9</span></div>
+                        </div>
+                    </a>
+                `;
             }
-            
-            container.innerHTML = html;
-        }
-        
-        function filterTitles(type) {
-            currentFilter = type;
-            
-            // Обновляем активный класс у кнопок
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            renderTitles(type);
-        }
-        
-        function loadTitles() {
-            // Ждем загрузки данных
-            const checkData = setInterval(() => {
-                if (window.titlesDatabase) {
-                    clearInterval(checkData);
-                    renderTitles('all');
-                }
-            }, 100);
-            
-            // Таймаут на случай ошибки
-            setTimeout(() => {
-                clearInterval(checkData);
-                if (!window.titlesDatabase) {
-                    document.getElementById('titlesContainer').innerHTML = 
-                        '<div class="loading">Не удалось загрузить данные</div>';
-                }
-            }, 3000);
-        }
-        
-        window.onload = loadTitles;
+        }, 500);
+    }
+    
+    document.addEventListener('DOMContentLoaded', loadTitles);
     </script>
 </body>
 </html>

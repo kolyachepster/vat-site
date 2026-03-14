@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просмотр - VAT</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="data.js"></script>
+    <script type="module" src="firebase-config.js"></script>
+    <style>
+        .anime-header {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .anime-poster {
+            width: 250px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .anime-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        .anime-title {
+            font-size: 32px;
+            color: #001a8c;
+            margin: 0 0 10px 0;
+        }
+        .anime-meta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        .anime-tag {
+            background: #001a8c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-size: 14px;
+        }
+        .player-container {
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 30px 0;
+            aspect-ratio: 16/9;
+            width: 100%;
+        }
+        iframe {
+            border: none;
+        }
+        .episode-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        .episode-number {
+            font-weight: bold;
+            color: #001a8c;
+            min-width: 60px;
+        }
+        .episode-status {
+            background: #4CAF50;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        .episode-button {
+            background: #001a8c;
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: auto;
+        }
+        .comment-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 5px solid #001a8c;
+        }
+        .rating-stars {
+            color: #ffaa00;
+            font-size: 18px;
+        }
+        .auth-message {
+            text-align: center;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+        .character-card {
+            width: 180px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            padding-bottom: 15px;
+        }
+        .character-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .character-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+            color: #001a8c;
+        }
+        .characters-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="navigation-buttons">
+    <a href="index.html" class="nav-button">🏠 Главная</a>
+    <a href="titles.html" class="nav-button">🎦 Тайтлы</a>
+    <a href="sostav.html" class="nav-button">🎭 Состав</a>
+    <a href="login.html" class="nav-button" id="navAuthBtn">👤 Войти</a>
+</div>
+
+<script>
+    setTimeout(() => {
+        const user = window.firebase?.getCurrentUser();
+        const btn = document.getElementById('navAuthBtn');
+        if (user && btn) {
+            btn.textContent = `👤 ${user.displayName || 'Профиль'}`;
+            btn.href = 'profile.html';
+        }
+    }, 1000);
+</script>
+        
+        <!-- Поиск -->
+        <div style="margin-top: 15px; display: flex; justify-content: center;">
+            <form action="search.html" method="get" style="display: flex; width: 100%; max-width: 500px; gap: 10px;">
+                <input type="text" name="q" placeholder="🔍 Поиск..." 
+                       style="flex: 1; padding: 12px 20px; border: 2px solid #001a8c; border-radius: 50px; font-size: 16px; outline: none;"
+                       required>
+                <button type="submit" class="nav-button" style="padding: 12px 25px;">Найти</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <a href="index.html">
+                <img src="logo.jpg" alt="Логотип" class="avatar" width="240" height="240" onerror="this.src='https://via.placeholder.com/240/001a8c/ffffff?text=VAT'">
+            </a>
+            <hr>
+        </div>
+        
+        <div class="content-box" id="title-content">
+            <div class="loading">Загрузка...</div>
+        </div>
+    </div>
+
+    <script>
+        const titleId = new URLSearchParams(window.location.search).get('id');
+
+        async function loadTitle() {
+            const content = document.getElementById('title-content');
+            
+            // Ждем загрузки данных
+            setTimeout(async () => {
+                const title = window.titlesDatabase?.find(t => t.id === titleId);
+                
+                if (!title) {
+                    content.innerHTML = '<div style="text-align:center; padding:50px;">Тайтл не найден</div>';
+                    return;
+                }
+
+                // Загружаем комментарии из Firebase
+                let commentsHtml = '';
+                if (window.firebase) {
+                    const comments = await window.firebase.getComments(titleId);
+                    if (comments.length > 0) {
+                        commentsHtml = comments.map(c => `
+                            <div class="comment-card">
+                                <b>${c.name}</b> 
+                                <span class="rating-stars">${'⭐'.repeat(c.rating || 5)}</span>
+                                <p>${c.text}</p>
+                                <small>${new Date(c.time).toLocaleDateString()}</small>
+                            </div>
+                        `).join('');
+                    } else {
+                        commentsHtml = '<p>Пока нет комментариев</p>';
+                    }
+                }
+
+                // Получаем роли для этого тайтла
+                const roles = window.rolesDatabase?.filter(r => r.titleId === titleId) || [];
+                
+                let charactersHtml = '';
+                if (roles.length > 0) {
+                    charactersHtml = '<h2>Персонажи и озвучка</h2><div class="characters-grid">';
+                    roles.forEach(role => {
+                        const voice = window.voicesDatabase?.find(v => v.id === role.voiceId);
+                        charactersHtml += `
+                            <div class="character-card">
+                                <img src="${role.characterImage || 'https://via.placeholder.com/180x150'}" class="character-image" onerror="this.src='https://via.placeholder.com/180x150'">
+                                <div class="character-name">${role.character}</div>
+                                <p>Озвучивает: <a href="voice.html?id=${role.voiceId}" style="color:#320063;">${voice?.name || role.voiceId}</a></p>
+                            </div>
+                        `;
+                    });
+                    charactersHtml += '</div>';
+                }
+
+                // Форма для комментариев (если пользователь авторизован)
+                let commentForm = '';
+                const user = window.firebase?.getCurrentUser();
+                if (user) {
+                    commentForm = `
+                        <div style="margin:20px 0;">
+                            <textarea id="commentText" class="admin-input" placeholder="Ваш комментарий..." style="width:100%; padding:10px; border-radius:8px;"></textarea>
+                            <select id="commentRating" class="admin-input" style="width:100px; margin:10px 0;">
+                                <option value="5">5 ⭐</option>
+                                <option value="4">4 ⭐</option>
+                                <option value="3">3 ⭐</option>
+                                <option value="2">2 ⭐</option>
+                                <option value="1">1 ⭐</option>
+                            </select>
+                            <button class="nav-button" onclick="addComment()">Отправить</button>
+                        </div>
+                    `;
+                } else {
+                    commentForm = '<div class="auth-message"><a href="login.html">Войдите</a>, чтобы оставить комментарий</div>';
+                }
+
+                content.innerHTML = `
+                    <div class="anime-header">
+                        <img src="${title.image}" alt="${title.name}" class="anime-poster" onerror="this.src='https://via.placeholder.com/250/001a8c/ffffff?text=${title.name}'">
+                        <div class="anime-info">
+                            <h1 class="anime-title">${title.name}</h1>
+                            <div class="anime-meta">
+                                <span class="anime-tag">${title.type || 'Аниме'}</span>
+                                <span class="anime-tag">${title.year || '2025'}</span>
+                                <span class="anime-tag">${title.episodes || '?'} серий</span>
+                                <span class="anime-tag">⭐ ${title.rating || '4.5'}</span>
+                            </div>
+                            <p><strong>Жанры:</strong> ${title.genres?.join(', ') || 'Не указаны'}</p>
+                            <div class="anime-description">${title.description || 'Описание отсутствует'}</div>
+                        </div>
+                    </div>
+                    
+                    <h2>Смотреть онлайн</h2>
+                    <div class="player-container">
+                        <iframe width="100%" height="100%" src="https://vkvideo.ru/video_ext.php?oid=-236477189&id=456239025&hash=9dd09ab7c7e7cd85&hd=3" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    
+                    <h2>Список серий</h2>
+                    <div class="episodes-list" id="episodes-list">
+                        ${Array.from({length: title.episodes || 13}, (_, i) => `
+                            <div class="episode-item">
+                                <span class="episode-number">Серия ${i+1}</span>
+                                <span class="episode-status">${i < 7 ? 'Озвучено' : 'Скоро'}</span>
+                                <button class="episode-button" ${i < 7 ? '' : 'disabled'}>Смотреть</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    ${charactersHtml}
+                    
+                    <h2>Комментарии</h2>
+                    ${commentForm}
+                    <div id="comments-list">${commentsHtml}</div>
+                `;
+            }, 500);
+        }
+
+        window.addComment = async () => {
+            const text = document.getElementById('commentText').value;
+            const rating = document.getElementById('commentRating').value;
+            
+            if (!text) return;
+            
+            const result = await window.firebase.addComment(titleId, text, parseInt(rating));
+            if (result.success) {
+                location.reload();
+            } else {
+                alert('Ошибка: ' + result.error);
+            }
+        };
+
+        // Обновляем кнопку авторизации
+        setTimeout(() => {
+            const user = window.firebase?.getCurrentUser();
+            const authBtn = document.getElementById('authButton');
+            if (user) {
+                authBtn.textContent = `👤 ${user.displayName || 'Профиль'}`;
+                authBtn.href = 'profile.html';
+            }
+        }, 1000);
+
+        loadTitle();
+    </script>
+</body>
+</html>

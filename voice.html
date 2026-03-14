@@ -241,16 +241,22 @@
     <!-- Навигация -->
     <div class="container">
         <div class="navigation-buttons">
-            <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🏠 Главная
-            </a>
-            <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🎦 Тайтлы
-            </a>
-            <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-                🎭 Состав
-            </a>
-        </div>
+    <a href="index.html" class="nav-button">🏠 Главная</a>
+    <a href="titles.html" class="nav-button">🎦 Тайтлы</a>
+    <a href="sostav.html" class="nav-button">🎭 Состав</a>
+    <a href="login.html" class="nav-button" id="navAuthBtn">👤 Войти</a>
+</div>
+
+<script>
+    setTimeout(() => {
+        const user = window.firebase?.getCurrentUser();
+        const btn = document.getElementById('navAuthBtn');
+        if (user && btn) {
+            btn.textContent = `👤 ${user.displayName || 'Профиль'}`;
+            btn.href = 'profile.html';
+        }
+    }, 1000);
+</script>
         
         <!-- Поиск -->
         <div style="margin-top: 15px; display: flex; justify-content: center;">
@@ -292,15 +298,8 @@
             <a href="sostav.html" style="color: #001a8c; text-decoration: none;">Состав</a>
             <a href="privacy.html" style="color: #001a8c; text-decoration: none;">Политика конфиденциальности</a>
         </div>
-        <p style="font-size: 14px; color: #666; margin: 5px 0;">
-            © 2026 VAT - Voice Acting Team. Все права защищены.
-        </p>
-        <p style="font-size: 12px; color: #999; margin: 5px 0;">
-            Любое копирование материалов без согласия правообладателя запрещено.
-        </p>
-        <p style="font-size: 12px; color: #999; margin: 5px 0;">
-            Сайт создан фанатами для фанатов. Все видео и материалы принадлежат их законным владельцам.
-        </p>
+        <p style="font-size: 14px; color: #666;">© 2026 VAT - Voice Acting Team. Все права защищены.</p>
+        <p style="font-size: 12px; color: #999;">Сайт создан фанатами для фанатов.</p>
     </div>
 
     <script>

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Политика конфиденциальности - VAT</title>
     <link rel="stylesheet" href="style.css">
+    <script src="data.js"></script>
+<script type="module" src="firebase-config.js"></script>
     <style>
         .privacy-content {
             background: white;
@@ -63,17 +65,22 @@
     <!-- Навигация -->
 <div class="container">
     <div class="navigation-buttons">
-        <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-            🏠 Главная
-        </a>
-        <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-            🎦 Тайтлы
-        </a>
-        <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
-            🎭 Состав
-        </a>
-    </div>
-    
+    <a href="index.html" class="nav-button">🏠 Главная</a>
+    <a href="titles.html" class="nav-button">🎦 Тайтлы</a>
+    <a href="sostav.html" class="nav-button">🎭 Состав</a>
+    <a href="login.html" class="nav-button" id="navAuthBtn">👤 Войти</a>
+</div>
+
+<script>
+    setTimeout(() => {
+        const user = window.firebase?.getCurrentUser();
+        const btn = document.getElementById('navAuthBtn');
+        if (user && btn) {
+            btn.textContent = `👤 ${user.displayName || 'Профиль'}`;
+            btn.href = 'profile.html';
+        }
+    }, 1000);
+</script>
     <!-- ПОИСКОВАЯ СТРОКА -->
     <div style="margin-top: 15px; display: flex; justify-content: center;">
         <form action="search.html" method="get" style="display: flex; width: 100%; max-width: 500px; gap: 10px;">
@@ -86,7 +93,8 @@
         </form>
     </div>
 </div>
-<!-- Основной контент -->
+
+    <!-- Основной контент -->
     <div class="container">
         <div class="header">
             <a href="index.html">

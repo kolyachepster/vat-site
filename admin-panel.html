@@ -55,12 +55,17 @@
             margin-bottom: 5px;
             font-weight: bold;
         }
-        .form-group input, .form-group select {
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 10px;
             border: 2px solid #ddd;
             border-radius: 8px;
             box-sizing: border-box;
+            font-family: inherit;
+        }
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
         }
         .admin-button {
             background: #001a8c;
@@ -70,9 +75,18 @@
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
+            transition: all 0.3s;
+        }
+        .admin-button:hover {
+            background: #320063;
+            transform: translateY(-2px);
         }
         .admin-button.secondary { background: #666; }
         .admin-button.danger { background: #d43f6b; }
+        .admin-button.small {
+            padding: 6px 15px;
+            font-size: 14px;
+        }
         .item-card {
             background: #f9f9f9;
             border-radius: 10px;
@@ -81,10 +95,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-left: 4px solid #001a8c;
         }
         .item-name {
             font-weight: bold;
             color: #001a8c;
+            font-size: 16px;
+        }
+        .item-details {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
         }
         .delete-btn {
             background: #d43f6b;
@@ -93,6 +114,10 @@
             padding: 5px 15px;
             border-radius: 20px;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+        .delete-btn:hover {
+            background: #b32d52;
         }
         .success-message {
             background: #4CAF50;
@@ -101,10 +126,45 @@
             border-radius: 8px;
             display: none;
             margin-bottom: 20px;
+            animation: fadeIn 0.5s;
+        }
+        .error-message {
+            background: #d43f6b;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s;
         }
         .loading {
             text-align: center;
             padding: 30px;
+            color: #666;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #001a8c10, #32006310);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #001a8c;
+        }
+        .stat-label {
+            font-size: 14px;
             color: #666;
         }
     </style>
@@ -117,6 +177,22 @@
         </div>
         
         <div id="successMessage" class="success-message"></div>
+        <div id="errorMessage" class="error-message"></div>
+        
+        <div class="stats-panel" id="statsPanel">
+            <div class="stat-card">
+                <div class="stat-number" id="statTitles">0</div>
+                <div class="stat-label">Тайтлов</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="statVoices">0</div>
+                <div class="stat-label">Дабберов</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="statRoles">0</div>
+                <div class="stat-label">Ролей</div>
+            </div>
+        </div>
         
         <div class="admin-tabs">
             <button class="admin-tab active" onclick="switchTab('titles')">📺 Тайтлы</button>
@@ -129,14 +205,32 @@
             <h2>➕ Добавить тайтл</h2>
             <form id="titleForm">
                 <div class="form-grid">
-                    <div class="form-group"><label>ID</label><input id="titleId" placeholder="molchalivaya_vedma" required></div>
-                    <div class="form-group"><label>Название (рус)</label><input id="titleName" placeholder="Молчаливая ведьма" required></div>
-                    <div class="form-group"><label>Название (англ)</label><input id="titleNameEn" placeholder="The Silent Witch"></div>
-                    <div class="form-group"><label>Изображение</label><input id="titleImage" placeholder="молч_ведьм.jpg"></div>
-                    <div class="form-group"><label>Кол-во серий</label><input id="titleEpisodes" placeholder="13" value="13"></div>
+                    <div class="form-group">
+                        <label>ID *</label>
+                        <input id="titleId" placeholder="molchalivaya_vedma" required>
+                        <small style="color:#666;">Уникальный идентификатор (латиница, без пробелов)</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Название (рус) *</label>
+                        <input id="titleName" placeholder="Молчаливая ведьма" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Название (англ)</label>
+                        <input id="titleNameEn" placeholder="The Silent Witch">
+                    </div>
+                    <div class="form-group">
+                        <label>Изображение</label>
+                        <input id="titleImage" placeholder="молч_ведьм.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label>Кол-во серий</label>
+                        <input id="titleEpisodes" type="number" placeholder="13" value="13">
+                    </div>
                 </div>
                 <button type="submit" class="admin-button">➕ Добавить тайтл</button>
             </form>
+            
+            <h3 style="margin-top: 30px;">Существующие тайтлы</h3>
             <div id="titlesList" class="items-list">
                 <div class="loading">Загрузка...</div>
             </div>
@@ -147,19 +241,35 @@
             <h2>➕ Добавить даббера</h2>
             <form id="voiceForm">
                 <div class="form-grid">
-                    <div class="form-group"><label>ID</label><input id="voiceId" placeholder="miki-angel" required></div>
-                    <div class="form-group"><label>Имя</label><input id="voiceName" placeholder="Miki-angel" required></div>
-                    <div class="form-group"><label>Изображение</label><input id="voiceImage" placeholder="ава-miki.jpg"></div>
-                    <div class="form-group"><label>Статус</label>
+                    <div class="form-group">
+                        <label>ID *</label>
+                        <input id="voiceId" placeholder="miki-angel" required>
+                        <small style="color:#666;">Уникальный идентификатор (латиница, без пробелов)</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Имя *</label>
+                        <input id="voiceName" placeholder="Miki-angel" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Изображение</label>
+                        <input id="voiceImage" placeholder="ава-miki.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label>Статус</label>
                         <select id="voiceStatus">
                             <option value="Основной состав">Основной состав</option>
                             <option value="Доп. состав">Доп. состав</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>Био</label><input id="voiceBio" placeholder="Краткая информация"></div>
+                    <div class="form-group">
+                        <label>Био</label>
+                        <textarea id="voiceBio" placeholder="Краткая информация о даббере"></textarea>
+                    </div>
                 </div>
                 <button type="submit" class="admin-button">➕ Добавить даббера</button>
             </form>
+            
+            <h3 style="margin-top: 30px;">Существующие дабберы</h3>
             <div id="voicesList" class="items-list">
                 <div class="loading">Загрузка...</div>
             </div>
@@ -170,12 +280,27 @@
             <h2>➕ Добавить роль</h2>
             <form id="roleForm">
                 <div class="form-grid">
-                    <div class="form-group"><label>Тайтл</label><select id="roleTitleId" required></select></div>
-                    <div class="form-group"><label>Даббер</label><select id="roleVoiceId" required></select></div>
-                    <div class="form-group"><label>Персонаж</label><input id="roleCharacter" placeholder="Имя персонажа" required></div>
+                    <div class="form-group">
+                        <label>Тайтл *</label>
+                        <select id="roleTitleId" required>
+                            <option value="">Загрузка...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Даббер *</label>
+                        <select id="roleVoiceId" required>
+                            <option value="">Загрузка...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Персонаж *</label>
+                        <input id="roleCharacter" placeholder="Имя персонажа" required>
+                    </div>
                 </div>
                 <button type="submit" class="admin-button">➕ Добавить роль</button>
             </form>
+            
+            <h3 style="margin-top: 30px;">Существующие роли</h3>
             <div id="rolesList" class="items-list">
                 <div class="loading">Загрузка...</div>
             </div>
@@ -194,140 +319,270 @@
         let voicesDatabase = [];
         let rolesDatabase = [];
         
-        function showMessage(text, isSuccess = true) {
+        // Функции для сообщений
+        function showSuccess(text) {
             const msg = document.getElementById('successMessage');
             msg.textContent = text;
             msg.style.display = 'block';
-            msg.style.background = isSuccess ? '#4CAF50' : '#d43f6b';
+            document.getElementById('errorMessage').style.display = 'none';
             setTimeout(() => {
                 msg.style.display = 'none';
-            }, 2000);
+            }, 3000);
         }
         
+        function showError(text) {
+            const msg = document.getElementById('errorMessage');
+            msg.textContent = '❌ ' + text;
+            msg.style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Обновление статистики
+        function updateStats() {
+            document.getElementById('statTitles').textContent = titlesDatabase.length;
+            document.getElementById('statVoices').textContent = voicesDatabase.length;
+            document.getElementById('statRoles').textContent = rolesDatabase.length;
+        }
+        
+        // Переключение вкладок
         window.switchTab = function(tab) {
             document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
+            
             document.getElementById('titlesSection').style.display = tab === 'titles' ? 'block' : 'none';
             document.getElementById('voicesSection').style.display = tab === 'voices' ? 'block' : 'none';
             document.getElementById('rolesSection').style.display = tab === 'roles' ? 'block' : 'none';
-            if (tab === 'roles') updateRoleSelects();
+            
+            if (tab === 'roles') {
+                updateRoleSelects();
+            }
         };
         
-        // Тайтлы
+        // ===== ТАЙТЛЫ =====
         document.getElementById('titleForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const titleId = document.getElementById('titleId').value.trim();
+            
+            // Проверка на дубликат
+            if (titlesDatabase.some(t => t.id === titleId)) {
+                showError('Тайтл с таким ID уже существует');
+                return;
+            }
+            
             const newTitle = {
-                id: document.getElementById('titleId').value,
-                name: document.getElementById('titleName').value,
-                nameEng: document.getElementById('titleNameEn').value || '',
-                image: document.getElementById('titleImage').value || 'ава-',
+                id: titleId,
+                name: document.getElementById('titleName').value.trim(),
+                nameEng: document.getElementById('titleNameEn').value.trim() || '',
+                image: document.getElementById('titleImage').value.trim() || titleId + '.jpg',
                 type: 'anime',
                 seasons: 1,
                 episodes: parseInt(document.getElementById('titleEpisodes').value) || 13
             };
             
-            titlesDatabase.push(newTitle);
-            
             try {
-                await window.firebase.saveTitles(titlesDatabase);
-                window.titlesDatabase = titlesDatabase;
-                showMessage('✅ Тайтл добавлен!');
-                document.getElementById('titleForm').reset();
-                renderTitles();
-                updateRoleSelects();
+                // Добавляем в локальный массив
+                titlesDatabase.push(newTitle);
+                
+                // Сохраняем в Firebase
+                const saveResult = await window.firebase.saveTitles(titlesDatabase);
+                
+                if (saveResult) {
+                    // Обновляем глобальную переменную
+                    window.titlesDatabase = titlesDatabase;
+                    
+                    showSuccess('✅ Тайтл успешно добавлен!');
+                    document.getElementById('titleForm').reset();
+                    
+                    // Обновляем отображение
+                    renderTitles();
+                    updateRoleSelects();
+                    updateStats();
+                } else {
+                    // Если не удалось сохранить, откатываем
+                    titlesDatabase = titlesDatabase.filter(t => t.id !== titleId);
+                    showError('Ошибка сохранения в Firebase');
+                }
             } catch (error) {
-                showMessage('❌ Ошибка', false);
+                console.error('Ошибка:', error);
+                showError('Ошибка при добавлении');
             }
         });
         
         window.deleteTitle = async (id) => {
-            if (!confirm('Удалить?')) return;
+            if (!confirm('Вы уверены, что хотите удалить этот тайтл?')) return;
+            
+            const oldData = [...titlesDatabase];
             titlesDatabase = titlesDatabase.filter(t => t.id !== id);
-            await window.firebase.saveTitles(titlesDatabase);
-            window.titlesDatabase = titlesDatabase;
-            showMessage('✅ Тайтл удалён');
-            renderTitles();
-            updateRoleSelects();
+            
+            try {
+                const saveResult = await window.firebase.saveTitles(titlesDatabase);
+                
+                if (saveResult) {
+                    window.titlesDatabase = titlesDatabase;
+                    
+                    // Также удаляем связанные роли
+                    rolesDatabase = rolesDatabase.filter(r => r.titleId !== id);
+                    await window.firebase.saveRoles(rolesDatabase);
+                    window.rolesDatabase = rolesDatabase;
+                    
+                    showSuccess('✅ Тайтл удалён');
+                    renderTitles();
+                    renderRoles();
+                    updateRoleSelects();
+                    updateStats();
+                } else {
+                    titlesDatabase = oldData;
+                    showError('Ошибка удаления');
+                }
+            } catch (error) {
+                titlesDatabase = oldData;
+                showError('Ошибка при удалении');
+            }
         };
         
         function renderTitles() {
             const list = document.getElementById('titlesList');
+            
             if (titlesDatabase.length === 0) {
-                list.innerHTML = '<p class="loading">Нет тайтлов</p>';
+                list.innerHTML = '<p class="loading">Нет тайтлов. Добавьте первый!</p>';
                 return;
             }
+            
             list.innerHTML = titlesDatabase.map(t => `
                 <div class="item-card">
-                    <div><div class="item-name">${t.name}</div><small>ID: ${t.id}</small></div>
+                    <div>
+                        <div class="item-name">${t.name}</div>
+                        <div class="item-details">
+                            ID: ${t.id} | Серий: ${t.episodes || '?'}
+                        </div>
+                    </div>
                     <button class="delete-btn" onclick="deleteTitle('${t.id}')">Удалить</button>
                 </div>
             `).join('');
         }
         
-        // Дабберы
+        // ===== ДАББЕРЫ =====
         document.getElementById('voiceForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const voiceId = document.getElementById('voiceId').value.trim();
+            
+            // Проверка на дубликат
+            if (voicesDatabase.some(v => v.id === voiceId)) {
+                showError('Даббер с таким ID уже существует');
+                return;
+            }
+            
             const newVoice = {
-                id: document.getElementById('voiceId').value,
-                name: document.getElementById('voiceName').value,
-                image: document.getElementById('voiceImage').value || 'ава-',
+                id: voiceId,
+                name: document.getElementById('voiceName').value.trim(),
+                image: document.getElementById('voiceImage').value.trim() || 'ава-' + voiceId + '.jpg',
                 status: document.getElementById('voiceStatus').value,
-                bio: document.getElementById('voiceBio').value || '',
+                bio: document.getElementById('voiceBio').value.trim() || '',
                 joinDate: new Date().toISOString().split('T')[0]
             };
             
-            voicesDatabase.push(newVoice);
-            
             try {
-                await window.firebase.saveVoices(voicesDatabase);
-                window.voicesDatabase = voicesDatabase;
-                showMessage('✅ Даббер добавлен!');
-                document.getElementById('voiceForm').reset();
-                renderVoices();
-                updateRoleSelects();
+                voicesDatabase.push(newVoice);
+                
+                const saveResult = await window.firebase.saveVoices(voicesDatabase);
+                
+                if (saveResult) {
+                    window.voicesDatabase = voicesDatabase;
+                    
+                    showSuccess('✅ Даббер успешно добавлен!');
+                    document.getElementById('voiceForm').reset();
+                    
+                    renderVoices();
+                    updateRoleSelects();
+                    updateStats();
+                } else {
+                    voicesDatabase = voicesDatabase.filter(v => v.id !== voiceId);
+                    showError('Ошибка сохранения в Firebase');
+                }
             } catch (error) {
-                showMessage('❌ Ошибка', false);
+                console.error('Ошибка:', error);
+                showError('Ошибка при добавлении');
             }
         });
         
         window.deleteVoice = async (id) => {
-            if (!confirm('Удалить?')) return;
+            if (!confirm('Вы уверены, что хотите удалить этого даббера?')) return;
+            
+            const oldData = [...voicesDatabase];
             voicesDatabase = voicesDatabase.filter(v => v.id !== id);
-            await window.firebase.saveVoices(voicesDatabase);
-            window.voicesDatabase = voicesDatabase;
-            showMessage('✅ Даббер удалён');
-            renderVoices();
-            updateRoleSelects();
+            
+            try {
+                const saveResult = await window.firebase.saveVoices(voicesDatabase);
+                
+                if (saveResult) {
+                    window.voicesDatabase = voicesDatabase;
+                    
+                    // Удаляем связанные роли
+                    rolesDatabase = rolesDatabase.filter(r => r.voiceId !== id);
+                    await window.firebase.saveRoles(rolesDatabase);
+                    window.rolesDatabase = rolesDatabase;
+                    
+                    showSuccess('✅ Даббер удалён');
+                    renderVoices();
+                    renderRoles();
+                    updateRoleSelects();
+                    updateStats();
+                } else {
+                    voicesDatabase = oldData;
+                    showError('Ошибка удаления');
+                }
+            } catch (error) {
+                voicesDatabase = oldData;
+                showError('Ошибка при удалении');
+            }
         };
         
         function renderVoices() {
             const list = document.getElementById('voicesList');
+            
             if (voicesDatabase.length === 0) {
-                list.innerHTML = '<p class="loading">Нет дабберов</p>';
+                list.innerHTML = '<p class="loading">Нет дабберов. Добавьте первого!</p>';
                 return;
             }
+            
             list.innerHTML = voicesDatabase.map(v => `
                 <div class="item-card">
-                    <div><div class="item-name">${v.name}</div><small>${v.status}</small></div>
+                    <div>
+                        <div class="item-name">${v.name}</div>
+                        <div class="item-details">
+                            ${v.status} | ID: ${v.id}
+                        </div>
+                    </div>
                     <button class="delete-btn" onclick="deleteVoice('${v.id}')">Удалить</button>
                 </div>
             `).join('');
         }
         
-        // Роли
+        // ===== РОЛИ =====
         function updateRoleSelects() {
             const titleSelect = document.getElementById('roleTitleId');
             const voiceSelect = document.getElementById('roleVoiceId');
             
-            titleSelect.innerHTML = titlesDatabase.map(t => 
-                `<option value="${t.id}">${t.name}</option>`
-            ).join('') || '<option value="">Нет тайтлов</option>';
+            if (titlesDatabase.length > 0) {
+                titleSelect.innerHTML = titlesDatabase.map(t => 
+                    `<option value="${t.id}">${t.name}</option>`
+                ).join('');
+            } else {
+                titleSelect.innerHTML = '<option value="">Нет тайтлов</option>';
+            }
             
-            voiceSelect.innerHTML = voicesDatabase.map(v => 
-                `<option value="${v.id}">${v.name}</option>`
-            ).join('') || '<option value="">Нет дабберов</option>';
+            if (voicesDatabase.length > 0) {
+                voiceSelect.innerHTML = voicesDatabase.map(v => 
+                    `<option value="${v.id}">${v.name}</option>`
+                ).join('');
+            } else {
+                voiceSelect.innerHTML = '<option value="">Нет дабберов</option>';
+            }
         }
         
         document.getElementById('roleForm').addEventListener('submit', async (e) => {
@@ -336,38 +591,70 @@
             const newRole = {
                 titleId: document.getElementById('roleTitleId').value,
                 voiceId: document.getElementById('roleVoiceId').value,
-                character: document.getElementById('roleCharacter').value,
+                character: document.getElementById('roleCharacter').value.trim(),
                 type: 'main'
             };
             
-            rolesDatabase.push(newRole);
+            if (!newRole.titleId || !newRole.voiceId || !newRole.character) {
+                showError('Заполните все поля');
+                return;
+            }
             
             try {
-                await window.firebase.saveRoles(rolesDatabase);
-                window.rolesDatabase = rolesDatabase;
-                showMessage('✅ Роль добавлена!');
-                document.getElementById('roleForm').reset();
-                renderRoles();
+                rolesDatabase.push(newRole);
+                
+                const saveResult = await window.firebase.saveRoles(rolesDatabase);
+                
+                if (saveResult) {
+                    window.rolesDatabase = rolesDatabase;
+                    
+                    showSuccess('✅ Роль успешно добавлена!');
+                    document.getElementById('roleForm').reset();
+                    
+                    renderRoles();
+                    updateStats();
+                } else {
+                    rolesDatabase.pop();
+                    showError('Ошибка сохранения в Firebase');
+                }
             } catch (error) {
-                showMessage('❌ Ошибка', false);
+                console.error('Ошибка:', error);
+                showError('Ошибка при добавлении');
             }
         });
         
         window.deleteRole = async (index) => {
-            if (!confirm('Удалить?')) return;
+            if (!confirm('Вы уверены, что хотите удалить эту роль?')) return;
+            
+            const oldData = [...rolesDatabase];
             rolesDatabase.splice(index, 1);
-            await window.firebase.saveRoles(rolesDatabase);
-            window.rolesDatabase = rolesDatabase;
-            showMessage('✅ Роль удалена');
-            renderRoles();
+            
+            try {
+                const saveResult = await window.firebase.saveRoles(rolesDatabase);
+                
+                if (saveResult) {
+                    window.rolesDatabase = rolesDatabase;
+                    showSuccess('✅ Роль удалена');
+                    renderRoles();
+                    updateStats();
+                } else {
+                    rolesDatabase = oldData;
+                    showError('Ошибка удаления');
+                }
+            } catch (error) {
+                rolesDatabase = oldData;
+                showError('Ошибка при удалении');
+            }
         };
         
         function renderRoles() {
             const list = document.getElementById('rolesList');
+            
             if (rolesDatabase.length === 0) {
-                list.innerHTML = '<p class="loading">Нет ролей</p>';
+                list.innerHTML = '<p class="loading">Нет ролей. Добавьте первую!</p>';
                 return;
             }
+            
             list.innerHTML = rolesDatabase.map((r, i) => {
                 const title = titlesDatabase.find(t => t.id === r.titleId);
                 const voice = voicesDatabase.find(v => v.id === r.voiceId);
@@ -375,7 +662,9 @@
                     <div class="item-card">
                         <div>
                             <div class="item-name">${title?.name || '?'} → ${voice?.name || '?'}</div>
-                            <small>Персонаж: ${r.character}</small>
+                            <div class="item-details">
+                                Персонаж: ${r.character}
+                            </div>
                         </div>
                         <button class="delete-btn" onclick="deleteRole(${i})">Удалить</button>
                     </div>
@@ -383,31 +672,49 @@
             }).join('');
         }
         
+        // ===== ВЫХОД =====
         window.logout = async () => {
             await window.firebase.logoutAdmin();
             window.location.href = 'admin-login.html';
         };
         
-        // Загрузка данных
+        // ===== ЗАГРУЗКА ДАННЫХ =====
         async function loadData() {
             try {
+                // Показываем загрузку
+                document.getElementById('titlesList').innerHTML = '<div class="loading">Загрузка...</div>';
+                document.getElementById('voicesList').innerHTML = '<div class="loading">Загрузка...</div>';
+                document.getElementById('rolesList').innerHTML = '<div class="loading">Загрузка...</div>';
+                
+                // Загружаем данные из Firebase
                 titlesDatabase = await window.firebase.loadTitles();
                 voicesDatabase = await window.firebase.loadVoices();
                 rolesDatabase = await window.firebase.loadRoles();
                 
+                // Обновляем глобальные переменные
                 window.titlesDatabase = titlesDatabase;
                 window.voicesDatabase = voicesDatabase;
                 window.rolesDatabase = rolesDatabase;
                 
+                console.log('✅ Данные загружены:');
+                console.log('- Тайтлы:', titlesDatabase.length);
+                console.log('- Дабберы:', voicesDatabase.length);
+                console.log('- Роли:', rolesDatabase.length);
+                
+                // Обновляем отображение
                 renderTitles();
                 renderVoices();
                 renderRoles();
                 updateRoleSelects();
+                updateStats();
+                
             } catch (error) {
-                console.error('Ошибка загрузки:', error);
+                console.error('❌ Ошибка загрузки:', error);
+                showError('Ошибка загрузки данных');
             }
         }
         
+        // Запускаем загрузку
         loadData();
     </script>
 </body>

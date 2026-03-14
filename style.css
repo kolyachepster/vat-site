@@ -205,7 +205,7 @@ hr {
 }
 
 .team-card-roles {
-    font-size: 14px;
+    font-size: 16px;
     color: #555;
     margin: 5px 0;
     font-style: italic;
@@ -421,4 +421,21 @@ hr {
         width: 100%;
         margin-top: 8px;
     }
+}
+.season-title {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: #001a8c;
+    border-left: 5px solid #320063;
+    padding-left: 15px;
+    font-size: 22px;
+}
+
+.season-badge {
+    background: linear-gradient(135deg, #001a8c, #320063);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 25px;
+    font-size: 14px;
+    margin-left: 10px;
 }

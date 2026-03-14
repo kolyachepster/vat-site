@@ -1,9 +1,8 @@
 // firebase-config.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getDatabase, ref, set, get, child, push, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Конфигурация Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyC-LWCtieKF69kWRRY53Snvor_1KGgCY_A",
   authDomain: "vat-site-43783.firebaseapp.com",
@@ -14,14 +13,58 @@ const firebaseConfig = {
   databaseURL: "https://vat-site-43783-default-rtdb.firebaseio.com/"
 };
 
-// Инициализация Firebase (только один раз!)
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const auth = getAuth(app);
 
 console.log('✅ Firebase инициализирован');
 
-// ===== ФУНКЦИИ ДЛЯ РАБОТЫ С ДАННЫМИ =====
+// ===== АУТЕНТИФИКАЦИЯ =====
+async function register(email, password, name) {
+    try {
+        const res = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(res.user, { displayName: name });
+        await set(ref(database, 'users/' + res.user.uid), {
+            name: name,
+            email: email,
+            role: 'user',
+            achievements: ['newbie'],
+            friends: {},
+            joinDate: new Date().toISOString()
+        });
+        return { success: true, user: res.user };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+}
+
+async function login(email, password) {
+    try {
+        const res = await signInWithEmailAndPassword(auth, email, password);
+        return { success: true, user: res.user };
+    } catch (error) {
+        let message = 'Ошибка входа';
+        if (error.code === 'auth/user-not-found') message = 'Пользователь не найден';
+        if (error.code === 'auth/wrong-password') message = 'Неверный пароль';
+        if (error.code === 'auth/invalid-email') message = 'Неверный email';
+        return { success: false, error: message };
+    }
+}
+
+async function logout() {
+    await signOut(auth);
+    localStorage.removeItem('adminLoggedIn');
+}
+
+function getCurrentUser() {
+    return auth.currentUser;
+}
+
+function isAdminLoggedIn() {
+    return auth.currentUser !== null;
+}
+
+// ===== РАБОТА С ДАННЫМИ =====
 async function loadTitles() {
     try {
         const snapshot = await get(child(ref(database), 'titles'));
@@ -94,57 +137,163 @@ async function saveRoles(data) {
     }
 }
 
-// ===== АУТЕНТИФИКАЦИЯ =====
-async function loginAdmin(email, password) {
+// ===== ПОЛЬЗОВАТЕЛИ =====
+async function getUserData(uid) {
     try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        return { success: true, user: userCredential.user };
+        const snapshot = await get(child(ref(database), `users/${uid}`));
+        return snapshot.exists() ? snapshot.val() : null;
     } catch (error) {
-        let message = 'Ошибка входа';
-        if (error.code === 'auth/user-not-found') message = 'Пользователь не найден';
-        if (error.code === 'auth/wrong-password') message = 'Неверный пароль';
-        if (error.code === 'auth/invalid-email') message = 'Неверный email';
-        if (error.code === 'auth/too-many-requests') message = 'Слишком много попыток';
-        return { success: false, error: message };
+        console.error('Ошибка загрузки пользователя:', error);
+        return null;
     }
 }
 
-async function logoutAdmin() {
-    await signOut(auth);
-    localStorage.removeItem('adminLoggedIn');
+// ===== КОММЕНТАРИИ И ОЦЕНКИ =====
+async function addComment(titleId, text, rating) {
+    if (!auth.currentUser) return { success: false, error: 'Не авторизован' };
+    
+    try {
+        const user = auth.currentUser;
+        const userData = await getUserData(user.uid);
+        const newRef = push(ref(database, `comments/${titleId}`));
+        
+        await set(newRef, {
+            uid: user.uid,
+            name: user.displayName || userData?.name || 'Пользователь',
+            text: text,
+            rating: rating,
+            time: Date.now()
+        });
+        
+        // Даем достижение за первый комментарий
+        await grantAchievement(user.uid, 'critic');
+        
+        return { success: true };
+    } catch (error) {
+        console.error('Ошибка добавления комментария:', error);
+        return { success: false, error: error.message };
+    }
 }
 
-function isAdminLoggedIn() {
-    return auth.currentUser !== null;
+async function getComments(titleId) {
+    try {
+        const snapshot = await get(child(ref(database), `comments/${titleId}`));
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            return Object.values(data).sort((a, b) => b.time - a.time);
+        }
+        return [];
+    } catch (error) {
+        console.error('Ошибка загрузки комментариев:', error);
+        return [];
+    }
 }
 
-// Отслеживание состояния авторизации
+// ===== ДОСТИЖЕНИЯ =====
+async function grantAchievement(uid, achId) {
+    try {
+        const userRef = ref(database, `users/${uid}/achievements`);
+        const snapshot = await get(userRef);
+        let list = snapshot.exists() ? snapshot.val() : [];
+        
+        if (!list.includes(achId)) {
+            list.push(achId);
+            await set(userRef, list);
+        }
+    } catch (error) {
+        console.error('Ошибка добавления достижения:', error);
+    }
+}
+
+// ===== ДРУЗЬЯ =====
+async function addFriend(friendUid) {
+    if (!auth.currentUser) return false;
+    
+    try {
+        await update(ref(database, `users/${auth.currentUser.uid}/friends`), {
+            [friendUid]: true
+        });
+        return true;
+    } catch (error) {
+        console.error('Ошибка добавления друга:', error);
+        return false;
+    }
+}
+
+async function getFriends(uid) {
+    try {
+        const snapshot = await get(child(ref(database), `users/${uid}/friends`));
+        if (snapshot.exists()) {
+            const friendIds = Object.keys(snapshot.val());
+            const friends = [];
+            
+            for (const id of friendIds) {
+                const friendData = await getUserData(id);
+                if (friendData) {
+                    friends.push({ uid: id, ...friendData });
+                }
+            }
+            return friends;
+        }
+        return [];
+    } catch (error) {
+        console.error('Ошибка загрузки друзей:', error);
+        return [];
+    }
+}
+
+// ===== АДМИН-ФУНКЦИИ =====
+async function loginAdmin(email, password) {
+    return login(email, password);
+}
+
+// Отслеживание состояния
 onAuthStateChanged(auth, (user) => {
     if (user) {
         localStorage.setItem('adminLoggedIn', 'true');
-        console.log('✅ Админ авторизован:', user.email);
+        console.log('✅ Пользователь авторизован:', user.email);
     } else {
         localStorage.removeItem('adminLoggedIn');
-        console.log('❌ Админ не авторизован');
+        console.log('❌ Пользователь не авторизован');
     }
 });
 
 // Экспорт API
 const firebaseAPI = {
+    // Аутентификация
+    register,
+    login,
+    logout,
+    getCurrentUser,
+    isAdminLoggedIn,
+    loginAdmin,
+    
+    // Данные
     loadTitles,
     loadVoices,
     loadRoles,
     saveTitles,
     saveVoices,
     saveRoles,
-    loginAdmin,
-    logoutAdmin,
-    isAdminLoggedIn,
+    
+    // Пользователи
+    getUserData,
+    
+    // Комментарии
+    addComment,
+    getComments,
+    
+    // Достижения
+    grantAchievement,
+    
+    // Друзья
+    addFriend,
+    getFriends,
+    
+    // База данных
     database,
     auth
 };
 
-// Делаем доступным глобально
 window.firebase = firebaseAPI;
-
 export default firebaseAPI;

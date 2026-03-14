@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация - VAT</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="firebase-config.js"></script>
+    <style>
+        .auth-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .auth-tab.active {
+            background: #001a8c;
+            color: white;
+        }
+        .auth-form {
+            display: none;
+        }
+        .auth-form.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .auth-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #001a8c, #320063);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .message {
+            text-align: center;
+            margin-top: 15px;
+            color: #d43f6b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="navigation-buttons">
+            <a href="index.html" class="nav-button">🏠 Главная</a>
+            <a href="titles.html" class="nav-button">🎦 Тайтлы</a>
+            <a href="sostav.html" class="nav-button">🎭 Состав</a>
+        </div>
+    </div>
+
+    <div class="auth-container">
+        <div class="auth-tabs">
+            <button class="auth-tab active" onclick="switchTab('login')">Вход</button>
+            <button class="auth-tab" onclick="switchTab('register')">Регистрация</button>
+        </div>
+
+        <!-- Форма входа -->
+        <div id="loginForm" class="auth-form active">
+            <h2 style="text-align:center;">🔐 Вход</h2>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="loginEmail" placeholder="email@example.com">
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" id="loginPassword" placeholder="••••••••">
+            </div>
+            <button class="auth-button" onclick="handleLogin()">Войти</button>
+            <div id="loginMessage" class="message"></div>
+        </div>
+
+        <!-- Форма регистрации -->
+        <div id="registerForm" class="auth-form">
+            <h2 style="text-align:center;">📝 Регистрация</h2>
+            <div class="form-group">
+                <label>Имя</label>
+                <input type="text" id="regName" placeholder="Ваше имя">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="regEmail" placeholder="email@example.com">
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" id="regPassword" placeholder="••••••••">
+            </div>
+            <button class="auth-button" onclick="handleRegister()">Зарегистрироваться</button>
+            <div id="regMessage" class="message"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import firebase from './firebase-config.js';
+        window.firebase = firebase;
+
+        window.switchTab = function(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'login') {
+                document.querySelector('.auth-tab').classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            } else {
+                document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+            }
+        };
+
+        window.handleLogin = async () => {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const msg = document.getElementById('loginMessage');
+            
+            msg.textContent = '⏳ Загрузка...';
+            
+            const result = await firebase.login(email, password);
+            
+            if (result.success) {
+                msg.textContent = '✅ Успешно! Перенаправление...';
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            } else {
+                msg.textContent = '❌ ' + result.error;
+            }
+        };
+
+        window.handleRegister = async () => {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const msg = document.getElementById('regMessage');
+            
+            if (!name || !email || !password) {
+                msg.textContent = '❌ Заполните все поля';
+                return;
+            }
+            
+            msg.textContent = '⏳ Регистрация...';
+            
+            const result = await firebase.register(email, password, name);
+            
+            if (result.success) {
+                msg.textContent = '✅ Успешно! Перенаправление...';
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            } else {
+                msg.textContent = '❌ ' + result.error;
+            }
+        };
+    </script>
+</body>
+</html>
