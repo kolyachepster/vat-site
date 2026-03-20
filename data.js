@@ -493,7 +493,7 @@ const voicesDatabase = [
         id: 'rayko',
         name: 'Rayko',
         nameRu: 'Райко',
-        image: 'ава-rayko.jpg',
+        image: 'ава-Rayko.jpg',
         status: 'Доп. состав',
         joinDate: '42/52/67/69/666/777/1488',
         bio: 'Актёр дубляжа',
