@@ -267,7 +267,7 @@ const voicesDatabase = [
         status: 'Доп. состав',
         joinDate: '2026',
         bio: 'Актёр дубляжа, разработчик',
-        social: { telegram: '@chepsdub' }
+        social: { telegram: 'chepsdub' }
     },
     { 
         id: 'juri',
