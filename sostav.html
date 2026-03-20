@@ -15,6 +15,7 @@
             border-left: 5px solid #320063;
             padding-left: 15px;
         }
+        
         .stats-box {
             display: flex;
             justify-content: space-around;
@@ -25,18 +26,22 @@
             flex-wrap: wrap;
             gap: 15px;
         }
+        
         .stat-item {
             text-align: center;
         }
+        
         .stat-number {
             font-size: 32px;
             font-weight: bold;
             color: #001a8c;
         }
+        
         .stat-label {
             font-size: 14px;
             color: #666;
         }
+        
         .team-list {
             display: flex;
             flex-wrap: wrap;
@@ -44,6 +49,7 @@
             justify-content: center;
             margin-top: 20px;
         }
+        
         .team-card {
             background: linear-gradient(145deg, #ffffff, #f0f0f0);
             border-radius: 15px;
@@ -57,10 +63,12 @@
             color: inherit;
             display: block;
         }
+        
         .team-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 25px rgba(0,0,0,0.2);
         }
+        
         .team-card-avatar {
             width: 100px;
             height: 100px;
@@ -69,18 +77,21 @@
             border: 3px solid #001a8c;
             margin-bottom: 15px;
         }
+        
         .team-card-name {
             font-size: 20px;
             font-weight: bold;
             color: #001a8c;
             margin: 0 0 10px 0;
         }
+        
         .team-card-roles {
             font-size: 14px;
             color: #555;
             margin: 5px 0;
             font-style: italic;
         }
+        
         .team-card-popular {
             font-size: 13px;
             color: #666;
@@ -89,12 +100,14 @@
             border-radius: 8px;
             margin: 10px 0 0 0;
         }
+        
         .loading {
             text-align: center;
             padding: 30px;
             width: 100%;
             color: #666;
         }
+        
         .welcome-banner {
             background: linear-gradient(135deg, #001a8c20, #32006320);
             padding: 20px;
@@ -102,28 +115,33 @@
             text-align: center;
             margin-bottom: 20px;
         }
+        
+        @media (max-width: 768px) {
+            .team-card {
+                width: 160px;
+                padding: 15px 10px;
+            }
+            .team-card-avatar {
+                width: 80px;
+                height: 80px;
+            }
+            .team-card-name {
+                font-size: 18px;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Навигация -->
     <div class="container">
         <div class="navigation-buttons">
-    <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">🏠 Главная</a>
-    <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">🎦 Тайтлы</a>
-    <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">🎭 Состав</a>
-    <a href="login.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);" id="navAuthBtn">👤 Войти</a>
-</div>
-
-<script>
-    setTimeout(() => {
-        const user = window.firebase?.getCurrentUser();
-        const btn = document.getElementById('navAuthBtn');
-        if (user && btn) {
-            btn.textContent = `👤 ${user.displayName || 'Профиль'}`;
-            btn.href = 'profile.html';
-        }
-    }, 1000);
-</script>
+            <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+                🏠 Главная
+            </a>
+            <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+                🎦 Тайтлы
+            </a>
+        </div>
         
         <!-- ПОИСКОВАЯ СТРОКА -->
         <div style="margin-top: 15px; display: flex; justify-content: center;">
@@ -150,36 +168,392 @@
         
         <div class="welcome-banner">
             <h2>Здесь указаны все дабберы VAT</h2>
-            <p class="text">При нажатии на карточку даббера открывается его страница</p>
+            <p class="text">Всего: <span id="totalVoicesCount">45</span> человек</p>
         </div>
 
         <div class="content-box">
             <!-- Статистика -->
             <div class="stats-box" id="statsBox">
                 <div class="stat-item">
-                    <div class="stat-number" id="mainCount">0</div>
+                    <div class="stat-number" id="mainCount">17</div>
                     <div class="stat-label">Основной состав</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number" id="extraCount">0</div>
+                    <div class="stat-number" id="extraCount">28</div>
                     <div class="stat-label">Доп. состав</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number" id="totalCount">0</div>
+                    <div class="stat-number" id="totalCount">45</div>
                     <div class="stat-label">Всего дабберов</div>
                 </div>
             </div>
 
             <!-- Основной состав -->
-            <h2 class="team-section-title">🌟 Основной состав</h2>
+            <h2 class="team-section-title">🌟 Основной состав (17 человек)</h2>
             <div class="team-list" id="mainTeamList">
-                <div class="loading">Загрузка...</div>
+                <!-- Miki-angel -->
+                <a href="voice.html?id=miki-angel" class="team-card">
+                    <img src="ава-miki.jpg" alt="Miki-angel" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=M'">
+                    <div class="team-card-name">Miki-angel</div>
+                    <div class="team-card-roles">Основатель, сводчик</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- Раскольников -->
+                <a href="voice.html?id=raskolnikov" class="team-card">
+                    <img src="ава-raskolnikov.jpg" alt="Раскольников" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/320063/ffffff?text=Р'">
+                    <div class="team-card-name">Раскольников</div>
+                    <div class="team-card-roles">Совладелец, актёр дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- DNT -->
+                <a href="voice.html?id=dnt" class="team-card">
+                    <img src="ава-dnt.jpg" alt="DNT" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/4a0072/ffffff?text=D'">
+                    <div class="team-card-name">DNT</div>
+                    <div class="team-card-roles">Ст.админ, сводчик, актёр дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+
+                <!-- Nemo -->
+                <a href="voice.html?id=nemo" class="team-card">
+                    <img src="ава-nemo.jpg" alt="Nemo" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=N'">
+                    <div class="team-card-name">Nemo</div>
+                    <div class="team-card-roles">Админ, актриса дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- Atari -->
+                <a href="voice.html?id=atari" class="team-card">
+                    <img src="ава-atari.jpg" alt="Atari" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/4a0072/ffffff?text=A'">
+                    <div class="team-card-name">Atari</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- Миндаль -->
+                <a href="voice.html?id=mindal" class="team-card">
+                    <img src="ава-mindal.jpg" alt="Миндаль" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=М'">
+                    <div class="team-card-name">Миндаль</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- Наталья Тарасюк -->
+                <a href="voice.html?id=natalya" class="team-card">
+                    <img src="ава-nat.jpg" alt="Наталья Тарасюк" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/320063/ffffff?text=Н'">
+                    <div class="team-card-name">Наталья Тарасюк</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- Руни -->
+                <a href="voice.html?id=runi" class="team-card">
+                    <img src="ава-runi.jpg" alt="Руни" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/4a0072/ffffff?text=Р'">
+                    <div class="team-card-name">Руни</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- Amaryllis -->
+                <a href="voice.html?id=amaryllis" class="team-card">
+                    <img src="ава-amaryllis.jpg" alt="Amaryllis" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=A'">
+                    <div class="team-card-name">Amaryllis</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- Алекс Фостер -->
+                <a href="voice.html?id=alex" class="team-card">
+                    <img src="ава-alex.jpg" alt="Алекс Фостер" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/320063/ffffff?text=А'">
+                    <div class="team-card-name">Алекс Фостер</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- Юный Спартанец -->
+                <a href="voice.html?id=spartans" class="team-card">
+                    <img src="ава-spart.jpg" alt="Юный Спартанец" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/4a0072/ffffff?text=Ю'">
+                    <div class="team-card-name">Юный Спартанец</div>
+                    <div class="team-card-roles">Админ, сводчик, актёр дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- Fury -->
+                <a href="voice.html?id=fury" class="team-card">
+                    <img src="ава-fury.jpg" alt="Fury" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=F'">
+                    <div class="team-card-name">Fury</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- Titch -->
+                <a href="voice.html?id=titch" class="team-card">
+                    <img src="ава-titch.jpg" alt="Titch" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/320063/ffffff?text=T'">
+                    <div class="team-card-name">Titch</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- Sakura Hashimoto -->
+                <a href="voice.html?id=sakura" class="team-card">
+                    <img src="ава-sakura.jpg" alt="Sakura Hashimoto" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/4a0072/ffffff?text=S'">
+                    <div class="team-card-name">Sakura Hashimoto</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- Майс -->
+                <a href="voice.html?id=mays" class="team-card">
+                    <img src="ава-mays.jpg" alt="Майс" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=М'">
+                    <div class="team-card-name">Майс</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- Kolli -->
+                <a href="voice.html?id=kolli" class="team-card">
+                    <img src="ава-kolli.jpg" alt="Kolli" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/320063/ffffff?text=K'">
+                    <div class="team-card-name">Kolli</div>
+                    <div class="team-card-roles">Звукорежиссёр, актёр дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
+                
+                <!-- Persik -->
+                <a href="voice.html?id=persik" class="team-card">
+                    <img src="ава-persik.jpg" alt="Persik" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/4a0072/ffffff?text=P'">
+                    <div class="team-card-name">Persik</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🎭 Основной состав</div>
+                </a>
             </div>
 
             <!-- Дополнительный состав -->
-            <h2 class="team-section-title">✨ Дополнительный состав</h2>
+            <h2 class="team-section-title">✨ Дополнительный состав (28 человек)</h2>
             <div class="team-list" id="extraTeamList">
-                <div class="loading">Загрузка...</div>
+                <!-- Enineke -->
+                <a href="voice.html?id=enineke" class="team-card">
+                    <img src="ава-enineke.jpg" alt="Enineke" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/666666/ffffff?text=E'">
+                    <div class="team-card-name">Enineke</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Traxyn -->
+                <a href="voice.html?id=traxyn" class="team-card">
+                    <img src="ава-traxyn.jpg" alt="Traxyn" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/555555/ffffff?text=T'">
+                    <div class="team-card-name">Traxyn</div>
+                    <div class="team-card-roles">Милфа дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Денис Груздов -->
+                <a href="voice.html?id=denis" class="team-card">
+                    <img src="ава-denis.jpg" alt="Денис Груздов" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/333333/ffffff?text=Д'">
+                    <div class="team-card-name">Денис Груздов</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Тушканчик -->
+                <a href="voice.html?id=tushkan" class="team-card">
+                    <img src="ава-tuchkan.jpg" alt="Тушканчик" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/666666/ffffff?text=Т'">
+                    <div class="team-card-name">Тушканчик</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- chep -->
+                <a href="voice.html?id=chep" class="team-card">
+                    <img src="ава-chep.jpg" alt="chep" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=Ч'">
+                    <div class="team-card-name">chep</div>
+                    <div class="team-card-roles">Актёр дубляжа, разработчик</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Juri -->
+                <a href="voice.html?id=juri" class="team-card">
+                    <img src="ава-jury.jpg" alt="Juri" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/555555/ffffff?text=J'">
+                    <div class="team-card-name">Juri</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Doza_Narkoza -->
+                <a href="voice.html?id=doza_narkoza" class="team-card">
+                    <img src="ава-doza.jpg" alt="Doza_Narkoza" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/444444/ffffff?text=D'">
+                    <div class="team-card-name">Doza_Narkoza</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Пенёк -->
+                <a href="voice.html?id=penek" class="team-card">
+                    <img src="ава-penek.jpg" alt="Пенёк" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/333333/ffffff?text=П'">
+                    <div class="team-card-name">Пенёк</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Sirius -->
+                <a href="voice.html?id=sirius" class="team-card">
+                    <img src="ава-sirius.jpg" alt="Sirius" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/666666/ffffff?text=S'">
+                    <div class="team-card-name">Sirius</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Генерал Бибизян -->
+                <a href="voice.html?id=general_bibizyan" class="team-card">
+                    <img src="ава-general.jpg" alt="Генерал Бибизян" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/555555/ffffff?text=Б'">
+                    <div class="team-card-name">Генерал Бибизян</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Parz -->
+                <a href="voice.html?id=parz" class="team-card">
+                    <img src="ава-parz.jpg" alt="Parz" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/444444/ffffff?text=P'">
+                    <div class="team-card-name">Parz</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Evangeline -->
+                <a href="voice.html?id=evangeline" class="team-card">
+                    <img src="ава-evangeline.jpg" alt="Evangeline" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/333333/ffffff?text=E'">
+                    <div class="team-card-name">Evangeline</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Redmonox -->
+                <a href="voice.html?id=redmonox" class="team-card">
+                    <img src="ава-redmonox.jpg" alt="Redmonox" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/666666/ffffff?text=R'">
+                    <div class="team-card-name">Redmonox</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Hina -->
+                <a href="voice.html?id=hina" class="team-card">
+                    <img src="ава-tut_hini.jpg" alt="Hina" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/555555/ffffff?text=H'">
+                    <div class="team-card-name">Hina</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Люмин -->
+                <a href="voice.html?id=lumin" class="team-card">
+                    <img src="ава-lumin.jpg" alt="Люмин" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/444444/ffffff?text=Л'">
+                    <div class="team-card-name">Люмин</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Фемчик -->
+                <a href="voice.html?id=femchik" class="team-card">
+                    <img src="ава-фемчик.jpg" alt="Фемчик" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/333333/ffffff?text=Ф'">
+                    <div class="team-card-name">Фемчик</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Иф -->
+                <a href="voice.html?id=if" class="team-card">
+                    <img src="ава-if.jpg" alt="Иф" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/666666/ffffff?text=И'">
+                    <div class="team-card-name">Иф</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Akva -->
+                <a href="voice.html?id=akva" class="team-card">
+                    <img src="ава-akva.jpg" alt="Akva" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/555555/ffffff?text=A'">
+                    <div class="team-card-name">Akva</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Dizzel -->
+                <a href="voice.html?id=dizzel" class="team-card">
+                    <img src="ава-dizzel.jpg" alt="Dizzel" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/444444/ffffff?text=D'">
+                    <div class="team-card-name">Dizzel</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Kr9k -->
+                <a href="voice.html?id=kr9k" class="team-card">
+                    <img src="ава-kr9k.jpg" alt="Kr9k" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/333333/ffffff?text=K'">
+                    <div class="team-card-name">Kr9k</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Takoto -->
+                <a href="voice.html?id=takoto" class="team-card">
+                    <img src="ава-takoto.jpg" alt="Takoto" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/666666/ffffff?text=T'">
+                    <div class="team-card-name">Takoto</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Never -->
+                <a href="voice.html?id=never" class="team-card">
+                    <img src="ава-never.jpg" alt="Never" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/555555/ffffff?text=N'">
+                    <div class="team-card-name">Never</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Sabal -->
+                <a href="voice.html?id=sabal" class="team-card">
+                    <img src="ава-sabal.jpg" alt="Sabal" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/444444/ffffff?text=S'">
+                    <div class="team-card-name">Sabal</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Жека -->
+                <a href="voice.html?id=zheka" class="team-card">
+                    <img src="ава-zheka.jpg" alt="Жека" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/333333/ffffff?text=Ж'">
+                    <div class="team-card-name">Жека</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- koffess -->
+                <a href="voice.html?id=koffess" class="team-card">
+                    <img src="ава-putin.jpg" alt="koffess" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/666666/ffffff?text=K'">
+                    <div class="team-card-name">koffess</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- ActoRsssS -->
+                <a href="voice.html?id=actorssss" class="team-card">
+                    <img src="ава-actorssss.jpg" alt="ActoRsssS" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/555555/ffffff?text=A'">
+                    <div class="team-card-name">ActoRsssS</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Mary -->
+                <a href="voice.html?id=mary" class="team-card">
+                    <img src="ава-mary.jpg" alt="Mary" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/444444/ffffff?text=M'">
+                    <div class="team-card-name">Mary</div>
+                    <div class="team-card-roles">Актриса дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
+                
+                <!-- Rayko -->
+                <a href="voice.html?id=rayko" class="team-card">
+                    <img src="ава-rayko.jpg" alt="Rayko" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/333333/ffffff?text=R'">
+                    <div class="team-card-name">Rayko</div>
+                    <div class="team-card-roles">Актёр дубляжа</div>
+                    <div class="team-card-popular">🔹 Доп. состав</div>
+                </a>
             </div>
         </div>
     </div>
@@ -191,7 +565,7 @@
             <a href="index.html" style="color: #001a8c; text-decoration: none;">Главная</a>
             <a href="titles.html" style="color: #001a8c; text-decoration: none;">Тайтлы</a>
             <a href="sostav.html" style="color: #001a8c; text-decoration: none;">Состав</a>
-            <a href="privacy.html" style="color: #001a8c; text-decoration: none;">Политика конфиденциальности</a>
+            <a href="privacy.html" style="color: #001a8c; text-decoration: none;">Политика</a>
         </div>
         <p style="font-size: 14px; color: #666; margin: 5px 0;">
             © 2026 VAT - Voice Acting Team. Все права защищены.
@@ -199,76 +573,17 @@
     </div>
 
     <script>
-    function loadVoices() {
-        const mainList = document.getElementById('mainTeamList');
-        const extraList = document.getElementById('extraTeamList');
-        
+        // Обновление кнопки авторизации
         setTimeout(() => {
-            if (window.voicesDatabase && window.voicesDatabase.length > 0) {
-                const mainVoices = window.voicesDatabase.filter(v => v.status === 'Основной состав');
-                const extraVoices = window.voicesDatabase.filter(v => v.status === 'Доп. состав');
-                
-                document.getElementById('mainCount').textContent = mainVoices.length;
-                document.getElementById('extraCount').textContent = extraVoices.length;
-                document.getElementById('totalCount').textContent = window.voicesDatabase.length;
-                
-                if (mainVoices.length > 0) {
-                    mainList.innerHTML = mainVoices.map(voice => `
-                        <a href="voice.html?id=${voice.id}" class="team-card">
-                            <img src="${voice.image}" alt="${voice.name}" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=${voice.name.charAt(0)}'">
-                            <div class="team-card-name">${voice.name}</div>
-                            <div class="team-card-roles">${voice.bio || 'Актёр озвучки'}</div>
-                            <div class="team-card-popular">🎭 Основной состав</div>
-                        </a>
-                    `).join('');
-                } else {
-                    mainList.innerHTML = '<p class="loading">Основной состав пока пуст</p>';
+            if (window.firebase) {
+                const user = window.firebase.getCurrentUser?.();
+                const authBtn = document.querySelector('a[href="login.html"]');
+                if (user && authBtn) {
+                    authBtn.textContent = `👤 ${user.displayName || 'Профиль'}`;
+                    authBtn.href = 'profile.html';
                 }
-                
-                if (extraVoices.length > 0) {
-                    extraList.innerHTML = extraVoices.map(voice => `
-                        <a href="voice.html?id=${voice.id}" class="team-card">
-                            <img src="${voice.image}" alt="${voice.name}" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/666666/ffffff?text=${voice.name.charAt(0)}'">
-                            <div class="team-card-name">${voice.name}</div>
-                            <div class="team-card-roles">${voice.bio || 'Актёр озвучки'}</div>
-                            <div class="team-card-popular">🔹 Доп. состав</div>
-                        </a>
-                    `).join('');
-                } else {
-                    extraList.innerHTML = '<p class="loading">Дополнительный состав пока пуст</p>';
-                }
-            } else {
-                // Заглушки
-                document.getElementById('mainCount').textContent = '8';
-                document.getElementById('extraCount').textContent = '0';
-                document.getElementById('totalCount').textContent = '8';
-                
-                mainList.innerHTML = `
-                    <a href="voice.html?id=miki-angel" class="team-card">
-                        <img src="ава-miki.jpg" alt="Miki-angel" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=M'">
-                        <div class="team-card-name">Miki-angel</div>
-                        <div class="team-card-roles">Основатель</div>
-                        <div class="team-card-popular">🎭 Основной состав</div>
-                    </a>
-                    <a href="voice.html?id=raskolnikov" class="team-card">
-                        <img src="ава-raskolnikov.jpg" alt="Раскольников" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=Р'">
-                        <div class="team-card-name">Раскольников</div>
-                        <div class="team-card-roles">Совладелец</div>
-                        <div class="team-card-popular">🎭 Основной состав</div>
-                    </a>
-                    <a href="voice.html?id=dnt" class="team-card">
-                        <img src="ава-dnt.jpg" alt="DNT" class="team-card-avatar" onerror="this.src='https://via.placeholder.com/100/001a8c/ffffff?text=D'">
-                        <div class="team-card-name">DNT</div>
-                        <div class="team-card-roles">Админ</div>
-                        <div class="team-card-popular">🎭 Основной состав</div>
-                    </a>
-                `;
-                extraList.innerHTML = '<p class="loading">Дополнительный состав пока пуст</p>';
             }
-        }, 500);
-    }
-    
-    document.addEventListener('DOMContentLoaded', loadVoices);
+        }, 1000);
     </script>
 </body>
 </html>
