@@ -495,7 +495,7 @@ const voicesDatabase = [
         nameRu: 'Райко',
         image: 'ава-rayko.jpg',
         status: 'Доп. состав',
-        joinDate: '2025',
+        joinDate: '42/52/67/69/666/777/1488',
         bio: 'Актёр дубляжа',
         social: {}
     }
