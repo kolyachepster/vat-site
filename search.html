@@ -79,11 +79,30 @@
 </head>
 <body>
     <div class="container">
-        <div class="navigation-buttons">
-    <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">🏠 Главная</a>
-    <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">🎦 Тайтлы</a>
-    <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">🎭 Состав</a>
+    <div class="navigation-buttons">
+        <a href="index.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+            🏠 Главная
+        </a>
+        <a href="titles.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+            🎦 Тайтлы
+        </a>
+        <a href="sostav.html" class="nav-button" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%);">
+            🎭 Состав
+        </a>
+    </div>
+    <!-- ПОИСКОВАЯ СТРОКА -->
+    <div style="margin-top: 15px; display: flex; justify-content: center;">
+        <form action="search.html" method="get" style="display: flex; width: 100%; max-width: 500px; gap: 10px;">
+            <input type="text" name="q" placeholder="🔍 Поиск по тайтлам и дабберам..." 
+                   style="flex: 1; padding: 12px 20px; border: 2px solid #001a8c; border-radius: 50px; font-size: 16px; outline: none;"
+                   required>
+            <button type="submit" style="background: linear-gradient(135deg, #001a8c 0%, #320063 100%); color: white; border: none; padding: 0 25px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                Найти
+            </button>
+        </form>
+    </div>
 </div>
+
 
 <script>
     setTimeout(() => {
